@@ -13,8 +13,8 @@
     <div class="col-lg mb-lg-0 mb-4">
       <div class="card z-index-2 mb-4">
         <div class="card-header pb-0">
-          <a href="{{route('product.create')}}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-          <h6>Products Table</h6>
+          <a href="{{route('customer.create')}}" class="btn btn-sm btn-success float-end">Tambah Data</a>
+          <h6>Customers Table</h6>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive p-0">
@@ -22,44 +22,30 @@
               <thead>
                 <tr>
                   <th class="text-center">#</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama Prodak</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Stok</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Satuan</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Harga Satuan</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Kategori</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Nama</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Email</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Kontak</th>
                   <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Opsi</th>
                 </tr>
               </thead>
               <tbody>
-                @foreach ($products as $key => $data)   
+                @foreach ($customers as $key => $data)
                 <tr>
                   <td>
                     <h6 class="mb-0 text-sm text-center">{{$key+1}}</h6>
                   </td>
-                  <td>
-                    <h6 class="mb-0 text-sm">{{$data->name}}</h6>
+                  <td class="align-middle text-sm">
+                    <span class="text-xs font-weight-bold">{{$data->name}}</span>
                   </td>
-                  <td>
-                    <p class="text-xs font-weight-bold">{{!$data->qty ? '-' : $data->qty}}</p>
+                  <td class="align-middle text-sm">
+                    <span class="text-xs font-weight-bold">{{$data->email ? $data->email : "-"}}</span>
                   </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-secondary text-xs font-weight-bold">{{!$data->uom ? '-' : $data->uom}}</span>
-                  </td>
-                  <td class="align-middle text-center">
-                    <span class="text-secondary text-xs font-weight-bold">Rp. {{$data->price}}</span>
-                  </td>
-                  <td class="align-end text-center text-sm">
-                    <span class="text-secondary text-xs font-weight-bold">{{$data->category->name}}</span>
+                  <td class="align-middle text-sm">
+                    <span class="text-xs font-weight-bold">{{$data->phone ? $data->phone : "Belum ada"}}</span>
                   </td>
                   <td class="text-center align-end">
-                    <a href="{{route('product.stock', ['product' => $data->id])}}" class="badge badge-sm bg-gradient-warning">
-                      Tambah Stok
-                    </a>
-                    {{-- <a href="javascript:;" class="badge badge-sm bg-gradient-warning">
-                      Edit Prodak
-                    </a> --}}
-                    <a href="{{route('product.delete', ['product' => $data->id])}}" class="badge badge-sm bg-gradient-danger" onclick="return confirm('Apakah anda yakin ingin menghapus data {{$data->name}} ?')">
-                      Hapus Prodak
+                    <a href="{{route('user.customer.show', ['customer' => $data->id])}}" class="badge badge-sm bg-gradient-warning">
+                      Detail
                     </a>
                   </td>
                 </tr>

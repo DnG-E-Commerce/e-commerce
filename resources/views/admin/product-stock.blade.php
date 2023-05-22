@@ -19,20 +19,6 @@
               <small class="text-danger">{{$errors->first('qty')}}</small>
               @endif
             </div>
-            <div class="form-group mb-3">
-              <label for="desc">Satuan Barang</label>
-              <input type="text" name="uom" class="form-control" value="{{old('uom')}}">
-              @if ($errors->has('uom'))
-                  <small class="text-danger">{{$errors->first('uom')}}</small>
-              @endif
-            </div>
-            <div class="form-group mb-3">
-              <label for="desc">Berat Barang</label>
-              <input type="text" name="weight" class="form-control" value="{{old('weight')}}">
-              @if ($errors->has('weight'))
-                  <small class="text-danger">{{$errors->first('weight')}}</small>
-              @endif
-            </div>
             <div class="d-grid">
               <button type="submit" class="btn btn-sm btn-success">Tambah</button>
             </div>

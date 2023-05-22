@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -25,7 +26,7 @@ class ProductController extends Controller
         return view('admin.product', [
             'title' => 'DnG Store | Product',
             'user' => $user,
-            'products' => Product::all()
+            'products' => Product::all(),
         ]);
     }
 
@@ -40,6 +41,7 @@ class ProductController extends Controller
         return view('admin.create-product', [
             'title' => 'DnG Store | Create Product',
             'user' => $user,
+            'categories' => Category::all(),
         ]);
     }
 
@@ -53,19 +55,22 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'desc' => 'required',
             'price' => 'required',
             'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png,image/gif|max:8192'
         ]);
         $photo = $request->file('photo');
         $fileName = $photo->getClientOriginalName();
-        Storage::put('storage/upload', $photo);
+        Storage::putFile('upload/img', $photo);
         DB::table('products')->insert([
             'name' => $request->name,
             'desc' => $request->desc,
             'price' => $request->price,
             'photo' => $fileName,
-            'status' => 'tidak ready'
+            'uom' => $request->uom,
+            'weight' => $request->weight ? $request->weight : 0,
+            'qty' => $request->qty ? $request->qty : 0,
+            'status' => $request->qty ? 'Ready' : 'Tidak Ready',
+            'category_id' => $request->category,
         ]);
         $session = [
             'message' => 'Berhasil menambahkan prodak baru!',
@@ -90,14 +95,10 @@ class ProductController extends Controller
     {
         $request->validate([
             'qty' => 'required',
-            'uom' => 'required',
-            'weight' => 'required'
+
         ]);
-        DB::table('stocks')->insert([
-            'product_id' => $product->id,
-            'qty' => $request->qty,
-            'uom' => $request->uom,
-            'weight' => $request->weight
+        DB::table('products')->where('id', $product->id)->update([
+            'qty' => intval($product->qty + $request->qty)
         ]);
         $session = [
             'message' => "berhasil menambahkan stock pada $product->name!",
@@ -148,8 +149,15 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function delete($id)
     {
-        //
+        DB::table('products')->delete($id);
+        $session = [
+            'message' => "berhasil menghapus data!",
+            'type' => 'Hapus barang',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->intended('product')->with($session);
     }
 }

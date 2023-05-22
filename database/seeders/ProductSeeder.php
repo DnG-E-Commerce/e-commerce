@@ -21,6 +21,10 @@ class ProductSeeder extends Seeder
             'price' => 70000,
             'photo' => 'curved-6.jpg',
             'status' => 'ready',
+            'uom' => 'Kilogram',
+            'weight' => 4,
+            'qty' => 100,
+            'category_id' => 1
         ]);
         DB::table('products')->insert([
             'name' => 'Teh Pucuk Harum',
@@ -28,6 +32,10 @@ class ProductSeeder extends Seeder
             'price' => 45000,
             'photo' => 'curved-6.jpg',
             'status' => 'ready',
+            'uom' => 'Box',
+            'weight' => 2,
+            'qty' => 100,
+            'category_id' => 4
         ]);
         DB::table('products')->insert([
             'name' => 'Chitato',
@@ -35,6 +43,10 @@ class ProductSeeder extends Seeder
             'price' => 25000,
             'photo' => 'curved-6.jpg',
             'status' => 'ready',
+            'uom' => 'Box',
+            'weight' => 1,
+            'qty' => 100,
+            'category_id' => 2
         ]);
         DB::table('products')->insert([
             'name' => 'SOOOOOOOO NICEEEE',
@@ -42,6 +54,10 @@ class ProductSeeder extends Seeder
             'price' => 30000,
             'photo' => 'curved-6.jpg',
             'status' => 'ready',
+            'uom' => 'Box',
+            'weight' => 3,
+            'qty' => 100,
+            'category_id' => 2
         ]);
         DB::table('products')->insert([
             'name' => 'Crab Stick',
@@ -49,6 +65,10 @@ class ProductSeeder extends Seeder
             'price' => 23000,
             'photo' => 'curved-6.jpg',
             'status' => 'ready',
+            'uom' => 'Kilogram',
+            'weight' => 1,
+            'qty' => 100,
+            'category_id' => 3
         ]);
     }
 }

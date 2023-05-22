@@ -19,7 +19,11 @@ return new class extends Migration
             $table->text('desc')->nullable();
             $table->double('price');
             $table->string('photo');
-            $table->string('status');
+            $table->string('uom')->nullable();
+            $table->float('weight')->nullable();
+            $table->integer('qty')->default(0);
+            $table->string('status')->nullable();
+            $table->foreignId('category_id');
             $table->timestamps();
         });
     }
