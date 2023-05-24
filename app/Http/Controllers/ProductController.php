@@ -56,16 +56,14 @@ class ProductController extends Controller
         $request->validate([
             'name' => 'required',
             'price' => 'required',
-            'photo' => 'required|mimetypes:image/jpg,image/jpeg,image/png,image/gif|max:8192'
+            'photo' => 'required|image|file|max:8192'
         ]);
-        $photo = $request->file('photo');
-        $fileName = $photo->getClientOriginalName();
-        Storage::putFile('upload/img', $photo);
+        $photo = $request->file('photo')->store('image');
         DB::table('products')->insert([
             'name' => $request->name,
             'desc' => $request->desc,
             'price' => $request->price,
-            'photo' => $fileName,
+            'photo' => $photo,
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
             'qty' => $request->qty ? $request->qty : 0,

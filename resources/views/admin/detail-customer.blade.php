@@ -11,7 +11,11 @@
         <div class="card-header">
           Detail Informasi
         </div>
-        <div class="card-body">
+        {{-- <img src="{{asset('storage/'.$customer->photo)}}" alt="Photo {{$customer->name}}" style="width: 12rem; background-size: cover;"> --}}
+        <div class="card-body mt-0">
+            <div class="d-grid justify-content-center" style="width: 100%; height: 15rem;">
+              <img src="{{asset('storage/'.$customer->photo)}}" style="width:12rem;height: 12rem; border-radius: 100%; object-fit: cover; border:1px solid black" alt="Photo {{$customer->name}}">
+            </div>
           <div class="input-group">
             <span for="nama" class="input-group-text border-0">Nama :</span>
             <input type="text" class="form-control border-0 text-center bg-transparent" value="{{$customer->name}}"readonly>

@@ -65,11 +65,9 @@ class UserController extends Controller
             'password' => 'min:6|required',
             'address' => 'required',
             'phone' => 'required|numeric',
-            'photo' => 'mimes:jpg,png,jpeg,gif|required|max:8192'
+            'photo' => 'image|file|required|max:8192'
         ]);
-        $photo = $request->file('photo');
-        $fileName = $photo->getClientOriginalName();
-        Storage::putFile('upload/img', $photo);
+        $photo = $request->file('photo')->store('image');
         DB::table('users')->insert([
             'name' => $request->name,
             'email' => $request->email,
@@ -77,7 +75,7 @@ class UserController extends Controller
             'address' => $request->address,
             'phone' => $request->phone,
             'role' => 4,
-            'photo' => $fileName
+            'photo' => $photo
         ]);
         $session = [
             'message' => 'Berhasil menambahkan customer baru!',
