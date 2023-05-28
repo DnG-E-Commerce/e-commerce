@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -51,3 +52,8 @@ Route::post('/login', [CustomAuthController::class, 'credentials'])->name('crede
 Route::get('/register', [CustomAuthController::class, 'create'])->name('register');
 Route::post('/register', [CustomAuthController::class, 'store'])->name('register.store');
 Route::get('/logout', [CustomAuthController::class, 'logout'])->name('logout');
+
+// Route Midtrans
+Route::get('/item', [OrderController::class, 'item']);
+Route::post('/checkout', [OrderController::class, 'checkout']);
+Route::post('/invoice/{id}', [OrderController::class, 'invoice']);
