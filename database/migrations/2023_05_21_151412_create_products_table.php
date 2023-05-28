@@ -17,7 +17,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('desc')->nullable();
-            $table->double('price');
+            $table->double('customer_price');
+            $table->double('reseller_price');
             $table->string('photo');
             $table->string('uom')->nullable();
             $table->float('weight')->nullable();

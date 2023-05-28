@@ -1,11 +1,14 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
+use App\Models\Category;
 use Illuminate\Support\Facades\Route;
+use Monolog\Handler\RotatingFileHandler;
 
 /*
 |--------------------------------------------------------------------------
@@ -19,35 +22,53 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('home');
 });
 
-Route::resource('home', HomeController::class);
-Route::get('/home/profile/{home}', [HomeController::class, 'profile']);
+Route::controller(HomeController::class)->group(function () {
+    Route::get('/home', 'index')->name('home');
+});
 
-Route::resource('admin', AdminController::class);
-Route::get('/admin/user/reseller', [UserController::class, 'reseller'])->name('user.reseller');
-Route::get('/admin/user/customer', [UserController::class, 'customer'])->name('user.customer');
-Route::get('/admin/user/customer/create', [UserController::class, 'customerCreate'])->name('customer.create');
-Route::get('/admin/user/customer/{customer}', [UserController::class, 'customerShow'])->name('user.customer.show');
-Route::post('/admin/user/customer/create', [UserController::class, 'customerStore'])->name('customer.create');
-Route::resource('product', ProductController::class);
+Route::controller(AdminController::class)->group(function () {
+    Route::get('/admin', 'index')->name('admin');
+    Route::get('/admin/profile/{self}', 'show')->name('admin.profile');
+});
 
-// Route::get('/admin/product', [ProductController::class, 'index'])->name('product.index');
-// Route::get('/admin/product/create', [ProductController::class, 'create'])->name('product.create');
-// Route::post('/admin/product/create', [ProductController::class, 'store'])->name('product.create');
-Route::get('/admin/product/stock/{product}', [ProductController::class, 'stock'])->name('product.stock');
-Route::put('/admin/product/stock/{product}', [ProductController::class, 'stockStore'])->name('stock.store');
-Route::get('/admin/product/delete/{product}', [ProductController::class, 'delete'])->name('product.delete');
-// Route::get('/product', [AdminController::class, 'product'])->name('admin.product');
-// Route::get('/product/create', [AdminController::class, 'productCreate'])->name('admin.product-create');
-// Route::post('/admin/create/product', [AdminController::class, 'productStore'])->name('admin.product-store');
-// Route::resource('product', ProductController::class);
-// Route::resource('auth', CustomAuthController::class);
+Route::controller(UserController::class)->group(function () {
+    Route::get('/user/customer', 'customer')->name('customer');
+    Route::get('/user/customer/create', 'customerCreate')->name('customer.create');
+    Route::get('/user/show/{user}', 'show')->name('user.show');
+    Route::get('/user/edit/{user}', 'edit')->name('user.edit');
+    Route::get('/user/customer/update/{user}', 'update')->name('customer.update');
 
-// Custom Authenticaion
-Route::get('/login', [CustomAuthController::class, 'index'])->name('login');
-Route::post('/login', [CustomAuthController::class, 'credentials'])->name('credentials');
-Route::get('/register', [CustomAuthController::class, 'create'])->name('register');
-Route::post('/register', [CustomAuthController::class, 'store'])->name('register.store');
-Route::get('/logout', [CustomAuthController::class, 'logout'])->name('logout');
+    Route::get('/user/reseller', 'reseller')->name('reseller');
+    Route::post('/user/customer', 'customerStore')->name('customer.store');
+});
+
+Route::controller(ProductController::class)->group(function () {
+    Route::get('/product', 'index')->name('product');
+    Route::get('/product/create', 'create')->name('product.create');
+    Route::get('/product/stock/{product}', 'stock')->name('product.stock');
+    Route::get('/product/delete/{product}', 'delete')->name('product.delete');
+    Route::get('/product/edit/{product}', 'edit')->name('product.edit');
+    Route::put('/product/edit/{product}', 'update')->name('product.update');
+    Route::post('/product', 'store')->name('product');
+    Route::post('/product/stock/{product}', 'stockStore')->name('stock.store');
+});
+
+Route::controller(CategoryController::class)->group(function () {
+    Route::get('/category', 'index')->name('category');
+    Route::get('/category/create', 'create')->name('category.create');
+    Route::get('/category/edit/{category}', 'edit')->name('category.edit');
+    Route::post('/category', 'store')->name('category.store');
+    Route::put('/category/edit/{category}', 'update')->name('category.update');
+    Route::post('/category/delete/{category}', 'destroy')->name('category.delete');
+});
+
+Route::controller(CustomAuthController::class)->group(function () {
+    Route::get('/login', 'index')->name('login');
+    Route::get('/register', 'create')->name('register');
+    Route::get('/logout', 'logout')->name('logout');
+    Route::post('/login', 'credentials')->name('login');
+    Route::post('/register', 'store')->name('register');
+});
