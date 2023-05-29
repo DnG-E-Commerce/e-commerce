@@ -36,10 +36,10 @@ class CustomAuthController extends Controller
         if (Auth::attempt($credentials)) {
             if ($user->role < 4) {
                 session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-                return redirect()->intended('admin')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
+                return redirect()->route('admin')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
             }
             session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-            return redirect()->intended('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
+            return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
         }
         return redirect()->back()->with(['message' => 'Email atau password salah, harap login kembali!', 'type' => 'Credentials Error', 'alert' => 'Notifikasi Gagal!', 'class' => 'success']);
     }
@@ -50,12 +50,14 @@ class CustomAuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
+            'phone' => 'required|numeric|unique:users',
             'password' => 'required|min:6',
             'repeat-password' => 'required|same:password|required_with:password'
         ]);
         User::create([
             'name' => $request->name,
             'email' => $request->email,
+            'phone' => $request->phone,
             'password' => Hash::make($request->password)
         ]);
         $session = [
@@ -77,6 +79,6 @@ class CustomAuthController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return Redirect()->intended('login')->with($session);
+        return Redirect()->route('login')->with($session);
     }
 }

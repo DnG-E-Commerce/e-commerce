@@ -9,20 +9,20 @@
         </script>
     @endif
     <div class="container-fluid py-4">
-        <div class="row mt-4">
-            <div class="col-lg mb-lg-0 mb-4">
+        <div class="row justify-content-center mt-4">
+            <div class="col-lg-8 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('product.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-                        <h6>Resellers Table</h6>
+                        <a href="{{ route('category.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
+                        <h6>Tabel Kategori</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="row justify-content-end mx-2">
-                            <div class="col-lg-4 col-md-6 col-sm-4">
+                            <div class="col-lg-4 col-mg-6 col-sm-4">
                                 <form action="" method="get">
                                     <div class="input-group">
                                         <input type="text" name="search" class="form-control">
-                                        <button class="input-group-text bg-success text-white" type="submit">Cari</button>
+                                        <button type="submit" class="input-group-text bg-success text-white">Cari</button>
                                     </div>
                                 </form>
                             </div>
@@ -32,40 +32,29 @@
                                 <thead>
                                     <tr>
                                         <th class="text-center">#</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama
-                                        </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Email</th>
-                                        <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Kontak</th>
+                                            Kategori</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($resellers as $key => $data)
+                                    @foreach ($categories as $key => $data)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->name }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span
-                                                    class="text-xs font-weight-bold">{{ $data->email ? $data->email : '-' }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span
-                                                    class="text-xs font-weight-bold">{{ $data->phone ? $data->phone : 'Belum ada' }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->category }}</span>
                                             </td>
                                             <td class="text-center align-end">
-                                                <a href="{{ route('user.show', ['user' => $data->id]) }}"
-                                                    class="btn btn-sm bg-gradient-warning">
-                                                    Detail
+                                                <a class="btn btn-sm bg-gradient-warning"
+                                                    href="{{ route('category.edit', ['category' => $data->id]) }}">Edit</a>
+                                                <a href="{{ route('category.delete', ['category' => $data->id]) }}"
+                                                    class="btn btn-sm bg-gradient-danger">
+                                                    Hapus
                                                 </a>
                                             </td>
                                         </tr>
@@ -78,7 +67,6 @@
             </div>
         </div>
     </div>
-
     {{-- Modal Notification --}}
     <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
         aria-hidden="true">

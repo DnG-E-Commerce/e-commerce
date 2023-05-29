@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -21,12 +22,12 @@ class UserController extends Controller
      */
     public function index()
     {
-        // 
+        //
     }
 
     public function reseller()
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
+        $user = auth()->user();
         return view('admin.reseller', [
             'title' => 'DnG Store | Reseller',
             'user' => $user,
@@ -34,13 +35,22 @@ class UserController extends Controller
         ]);
     }
 
-    public function customer()
+    public function customer(Request $request)
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
+        $user = auth()->user();
+        $query = $request->search;
+        if ($query) {
+            $customers = DB::table('users')->where([
+                ['role', '=', 4],
+                ['name', 'LIKE', "%$query%"]
+            ])->get()->all();
+        } else {
+            $customers = DB::table('users')->where('role', 4)->get()->all();
+        }
         return view('admin.customer', [
             'title' => 'DnG Store | Customer',
             'user' => $user,
-            'customers' => DB::table('users')->where('role', 4)->get()->all()
+            'customers' => $customers,
         ]);
     }
     /**
@@ -50,7 +60,7 @@ class UserController extends Controller
      */
     public function customerCreate()
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
+        $user = auth()->user();
         return view('admin.create-customer', [
             'title' => 'DnG Store | Tambah Customer',
             'user' => $user
@@ -83,18 +93,18 @@ class UserController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('user.customer')->with($session);
+        return redirect()->route('customer')->with($session);
     }
 
     public function customerShow($id)
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
+        $user = auth()->user();
         $customer = DB::table('users')->where('id', $id)->first();
-        return view('admin.detail-customer', [
+        return view('admin.detail-user', [
             'title' => 'DnG Store | Detail',
             'user' => $user,
             'customer' => $customer,
-            'role' => ['Owner', 'Admin', 'Reseller', 'Customer']
+            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
         ]);
     }
 
@@ -106,7 +116,7 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // 
+        //
     }
 
     /**
@@ -117,7 +127,14 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = auth()->user();
+        $select_user = DB::table('users')->where('id', $id)->first();
+        return view('admin.detail-user', [
+            'title' => 'DnG Store | Detail',
+            'user' => $user,
+            'select_user' => $select_user,
+            'role' => ['Owner', 'Admin', 'Drive', 'Reseller', 'Customer']
+        ]);
     }
 
     /**
@@ -138,9 +155,18 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        DB::table('users')->where('id', $user->id)->update([
+            'role' => 3,
+        ]);
+        $session = [
+            'message' => 'Berhasil mengupgrade customer!',
+            'type' => 'Upgrade Customer',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('customer')->with($session);
     }
 
     /**

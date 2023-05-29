@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('address')->nullable();
             $table->string('phone', 15)->nullable();
             $table->tinyInteger('role')->default(4);
-            $table->string('photo')->default('default.png');
+            $table->string('photo')->default('image/default.png');
             $table->rememberToken();
             $table->timestamps();
         });

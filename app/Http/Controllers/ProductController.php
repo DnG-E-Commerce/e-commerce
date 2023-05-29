@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
+use function PHPSTORM_META\map;
+
 class ProductController extends Controller
 {
     public function __construct()
@@ -20,13 +22,18 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
+        $query = $request->search;
+        if ($query) {
+            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.id')->where('products', 'LIKE', "%$query%")->orWhere('category', 'LIKE', "%$query%")->get()->all();
+        } else {
+            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.id')->get()->all();
+        }
         return view('admin.product', [
             'title' => 'DnG Store | Product',
-            'user' => $user,
-            'products' => Product::all(),
+            'user' => auth()->user(),
+            'products' => $products,
         ]);
     }
 
@@ -37,10 +44,9 @@ class ProductController extends Controller
      */
     public function create()
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
         return view('admin.create-product', [
             'title' => 'DnG Store | Create Product',
-            'user' => $user,
+            'user' => auth()->user(),
             'categories' => Category::all(),
         ]);
     }
@@ -55,14 +61,16 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'price' => 'required',
+            'customer_price' => 'required',
+            'reseller_price' => 'required',
             'photo' => 'required|image|file|max:8192'
         ]);
         $photo = $request->file('photo')->store('image');
         DB::table('products')->insert([
             'name' => $request->name,
             'desc' => $request->desc,
-            'price' => $request->price,
+            'customer_price' => $request->customer_price,
+            'reseller_price' => $request->reseller_price,
             'photo' => $photo,
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
@@ -76,15 +84,14 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->intended('product')->with($session);
+        return redirect()->route('product')->with($session);
     }
 
     public function stock($id)
     {
-        $user = DB::table('users')->where('email', session('email'))->first();
         return view('admin.product-stock', [
             'title' => 'DnG Store | Product Stock',
-            'user' => $user,
+            'user' => auth()->user(),
             'product' => DB::table('products')->where('id', $id)->first()
         ]);
     }
@@ -96,7 +103,8 @@ class ProductController extends Controller
 
         ]);
         DB::table('products')->where('id', $product->id)->update([
-            'qty' => intval($product->qty + $request->qty)
+            'qty' => intval($product->qty + $request->qty),
+            'status' => 'ready',
         ]);
         $session = [
             'message' => "berhasil menambahkan stock pada $product->name!",
@@ -104,7 +112,7 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->intended('product')->with($session);
+        return redirect()->route('product')->with($session);
     }
 
     /**
@@ -126,7 +134,12 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        //
+        return view('admin.edit-product', [
+            'title' => 'DnG Store | Edit Product',
+            'user' => auth()->user(),
+            'product' => DB::table('products')->where('id', $product->id)->first(),
+            'categories' => DB::table('categories')->get()->all()
+        ]);
     }
 
     /**
@@ -138,7 +151,30 @@ class ProductController extends Controller
      */
     public function update(Request $request, Product $product)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'customer_price' => 'required',
+            'reseller_price' => 'required',
+            'photo' => 'required|image|file|max:8192'
+        ]);
+        $photo = $request->file('photo')->store('image');
+        DB::table('products')->where('id', $product->id)->update([
+            'name' => $request->name,
+            'desc' => $request->desc,
+            'customer_price' => $request->customer_price,
+            'reseller_price' => $request->reseller_price,
+            'photo' => $photo,
+            'uom' => $request->uom,
+            'weight' => $request->weight ? $request->weight : 0,
+            'category_id' => $request->category,
+        ]);
+        $session = [
+            'message' => 'Berhasil mengupdate produk!',
+            'type' => 'Tambah Produk',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('product')->with($session);
     }
 
     /**
@@ -156,6 +192,6 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->intended('product')->with($session);
+        return redirect()->route('product')->with($session);
     }
 }
