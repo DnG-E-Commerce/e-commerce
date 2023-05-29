@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Models\Category;
@@ -72,3 +73,8 @@ Route::controller(CustomAuthController::class)->group(function () {
     Route::post('/login', 'credentials')->name('login');
     Route::post('/register', 'store')->name('register');
 });
+
+// Route Midtrans
+Route::get('/item', [OrderController::class, 'item']);
+Route::post('/checkout', [OrderController::class, 'checkout']);
+Route::post('/invoice/{id}', [OrderController::class, 'invoice']);
