@@ -31,9 +31,9 @@
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">#</th>
+                                        <th class="text-uppercase text-secondary text-xxs">No</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama
-                                            Prodak</th>
+                                            Produk</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Stok</th>
@@ -89,12 +89,16 @@
                                                 </a>
                                                 <a href="{{ route('product.edit', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
-                                                    Edit Produk
+                                                    Edit 
+                                                </a>
+                                                <a href="{{ route('product.edit', ['product' => $data->id]) }}"
+                                                    class="badge badge-sm bg-gradient-warning">
+                                                    Detail 
                                                 </a>
                                                 <a href="{{ route('product.delete', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $data->name }} ?')">
-                                                    Hapus Produk
+                                                    Hapus 
                                                 </a>
                                             </td>
                                         </tr>
