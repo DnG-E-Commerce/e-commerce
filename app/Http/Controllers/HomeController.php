@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -21,17 +22,10 @@ class HomeController extends Controller
     {
         $query = $request->search;
         if ($query) {
-            //
-            $products = DB::table('products')->select('products.id as product_id', '*')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->where('name', 'LIKE', "%$query%")
-                ->orWhere('category', 'LIKE', "%$query%")
+            $products = Product::where('name', 'LIKE', "%$query%")
                 ->get()->all();
         } else {
-            //
-            $products = DB::table('products')->select('products.id as product_id', '*')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->get()->all();
+            $products = Product::all();
         }
         return view('home.index', [
             'title' => 'DnG Store',
