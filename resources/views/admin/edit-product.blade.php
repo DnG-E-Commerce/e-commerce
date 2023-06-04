@@ -6,7 +6,7 @@
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('product') }}" class="btn btn-danger float-end"><i class="fa fa-times"></i></a>
+                        <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
                         <h6>Tambah Data Product</h6>
                     </div>
                     <div class="card-body p-3">

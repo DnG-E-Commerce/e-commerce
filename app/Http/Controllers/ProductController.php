@@ -26,12 +26,20 @@ class ProductController extends Controller
     {
         $query = $request->search;
         if ($query) {
-            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.id')->where('products', 'LIKE', "%$query%")->orWhere('category', 'LIKE', "%$query%")->get()->all();
+            $products = DB::table('products')->select('products.id as product_id', '*')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->where('products', 'LIKE', "%$query%")
+                ->orWhere('category', 'LIKE', "%$query%")
+                ->get()->all();
         } else {
-            $products = DB::table('products')->join('categories', 'products.category_id', '=', 'categories.id')->get()->all();
+            $products = DB::table('products')->select('products.id as product_id', '*')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->get()->all();
         }
+        // dd($products);
         return view('admin.product', [
-            'title' => 'DnG Store | Product',
+            'title' => 'DnG Store | Produk',
+            'menu' => ['Produk'],
             'user' => auth()->user(),
             'products' => $products,
         ]);
@@ -47,6 +55,7 @@ class ProductController extends Controller
         return view('admin.create-product', [
             'title' => 'DnG Store | Create Product',
             'user' => auth()->user(),
+            'menu' => ['Produk', 'Tambah'],
             'categories' => Category::all(),
         ]);
     }
@@ -92,6 +101,7 @@ class ProductController extends Controller
         return view('admin.product-stock', [
             'title' => 'DnG Store | Product Stock',
             'user' => auth()->user(),
+            'menu' => ['Produk', 'Stok'],
             'product' => DB::table('products')->where('id', $id)->first()
         ]);
     }
@@ -137,6 +147,7 @@ class ProductController extends Controller
         return view('admin.edit-product', [
             'title' => 'DnG Store | Edit Product',
             'user' => auth()->user(),
+            'menu' => ['Produk', 'Edit'],
             'product' => DB::table('products')->where('id', $product->id)->first(),
             'categories' => DB::table('categories')->get()->all()
         ]);

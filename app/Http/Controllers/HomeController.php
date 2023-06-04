@@ -17,11 +17,27 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        $query = $request->search;
+        if ($query) {
+            //
+            $products = DB::table('products')->select('products.id as product_id', '*')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->where('name', 'LIKE', "%$query%")
+                ->orWhere('category', 'LIKE', "%$query%")
+                ->get()->all();
+        } else {
+            //
+            $products = DB::table('products')->select('products.id as product_id', '*')
+                ->join('categories', 'products.category_id', '=', 'categories.id')
+                ->get()->all();
+        }
         return view('home.index', [
             'title' => 'DnG Store',
-            'user' => DB::table('users')->where('email', session('email'))->first()
+            'menu' => 'home',
+            'user' => auth()->user(),
+            'products' => $products
         ]);
     }
 
@@ -84,8 +100,9 @@ class HomeController extends Controller
     {
         return view('home.profile', [
             'title' => 'DnG Store | Profile',
+            'menu' => 'profile',
             'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customers'],
-            'user' => DB::table('users')->where('id', $id)->first()
+            'user' => auth()->user(),
         ]);
     }
 

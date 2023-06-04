@@ -24,6 +24,7 @@ class AdminController extends Controller
     {
         return view('admin.index', [
             'title' => 'DnG Store | Dashboard',
+            'menu' => ['Dashboard'],
             'user' => auth()->user(),
             'users' => User::all(),
             'products' => Product::all(),

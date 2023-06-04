@@ -14,7 +14,7 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('product.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-                        <h6>Products Table</h6>
+                        <h6>Tabel Produk</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="row justify-content-end mx-2">
@@ -83,15 +83,15 @@
                                                     class="text-secondary text-xs font-weight-bold">{{ $data->category }}</span>
                                             </td>
                                             <td class="text-center align-end">
-                                                <a href="{{ route('product.stock', ['product' => $data->id]) }}"
+                                                <a href="{{ route('product.stock', ['product' => $data->product_id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
                                                     Tambah Stok
                                                 </a>
-                                                <a href="{{ route('product.edit', ['product' => $data->id]) }}"
+                                                <a href="{{ route('product.edit', ['product' => $data->product_id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
                                                     Edit Produk
                                                 </a>
-                                                <a href="{{ route('product.delete', ['product' => $data->id]) }}"
+                                                <a href="{{ route('product.delete', ['product' => $data->product_id]) }}"
                                                     class="badge badge-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $data->name }} ?')">
                                                     Hapus Produk
