@@ -25,19 +25,27 @@ class UserController extends Controller
         //
     }
 
-    public function reseller()
+    public function reseller(Request $request)
     {
-        $user = auth()->user();
+        $query = $request->search;
+        if ($query) {
+            $resellers = DB::table('users')->where([
+                ['role', '=', 3],
+                ['name', 'LIKE', "%$query%"]
+            ])->get()->all();
+        } else {
+            $resellers = DB::table('users')->where('role', 3)->get()->all();
+        }
         return view('admin.reseller', [
             'title' => 'DnG Store | Reseller',
-            'user' => $user,
-            'resellers' => DB::table('users')->where('role', 3)->get()->all()
+            'user' => auth()->user(),
+            'menu' => ['Reseller'],
+            'resellers' => $resellers
         ]);
     }
 
     public function customer(Request $request)
     {
-        $user = auth()->user();
         $query = $request->search;
         if ($query) {
             $customers = DB::table('users')->where([
@@ -49,7 +57,8 @@ class UserController extends Controller
         }
         return view('admin.customer', [
             'title' => 'DnG Store | Customer',
-            'user' => $user,
+            'user' => auth()->user(),
+            'menu' => ['Customer'],
             'customers' => $customers,
         ]);
     }
@@ -60,10 +69,19 @@ class UserController extends Controller
      */
     public function customerCreate()
     {
-        $user = auth()->user();
         return view('admin.create-customer', [
             'title' => 'DnG Store | Tambah Customer',
-            'user' => $user
+            'user' => auth()->user(),
+            'menu' => ['Customer', 'Tambah'],
+        ]);
+    }
+
+    public function resellerCreate()
+    {
+        return view('admin.create-reseller', [
+            'title' => 'DnG Store | Tambah Reseller',
+            'user' => auth()->user(),
+            'menu' => ['Reseller', 'Tambah']
         ]);
     }
 
@@ -96,13 +114,42 @@ class UserController extends Controller
         return redirect()->route('customer')->with($session);
     }
 
+    public function resellerStore(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'email' => 'email|required',
+            'password' => 'min:6|required',
+            'address' => 'required',
+            'phone' => 'required|numeric',
+            'photo' => 'image|file|required|max:8192'
+        ]);
+        $photo = $request->file('photo')->store('image');
+        DB::table('users')->insert([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'role' => 3,
+            'photo' => $photo
+        ]);
+        $session = [
+            'message' => 'Berhasil menambahkan customer baru!',
+            'type' => 'Tambah Customer',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('reseller')->with($session);
+    }
+
     public function customerShow($id)
     {
-        $user = auth()->user();
         $customer = DB::table('users')->where('id', $id)->first();
         return view('admin.detail-user', [
             'title' => 'DnG Store | Detail',
-            'user' => $user,
+            'user' => auth()->user(),
+            'menu' => ['Customer', 'Detail'],
             'customer' => $customer,
             'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
         ]);
@@ -127,11 +174,11 @@ class UserController extends Controller
      */
     public function show($id)
     {
-        $user = auth()->user();
         $select_user = DB::table('users')->where('id', $id)->first();
         return view('admin.detail-user', [
             'title' => 'DnG Store | Detail',
-            'user' => $user,
+            'user' => auth()->user(),
+            'menu' => ['Profile'],
             'select_user' => $select_user,
             'role' => ['Owner', 'Admin', 'Drive', 'Reseller', 'Customer']
         ]);

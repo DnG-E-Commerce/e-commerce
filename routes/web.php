@@ -28,6 +28,7 @@ Route::get('/', function () {
 
 Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
+    Route::get('/home/profile/{user}', 'profile')->name('home.profile');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -43,7 +44,10 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/user/customer/update/{user}', 'update')->name('customer.update');
 
     Route::get('/user/reseller', 'reseller')->name('reseller');
+    Route::get('/user/reseller/create', 'resellerCreate')->name('reseller.create');
+
     Route::post('/user/customer', 'customerStore')->name('customer.store');
+    Route::post('/user/reseller', 'resellerStore')->name('reseller.store');
 });
 
 Route::controller(ProductController::class)->group(function () {
@@ -52,9 +56,11 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/product/stock/{product}', 'stock')->name('product.stock');
     Route::get('/product/delete/{product}', 'delete')->name('product.delete');
     Route::get('/product/edit/{product}', 'edit')->name('product.edit');
+    Route::get('/product/show/{product}', 'show')->name('product.show');
+
     Route::put('/product/edit/{product}', 'update')->name('product.update');
     Route::post('/product', 'store')->name('product');
-    Route::post('/product/stock/{product}', 'stockStore')->name('stock.store');
+    Route::put('/product/stock/{product}', 'stockStore')->name('stock.store');
 });
 
 Route::controller(CategoryController::class)->group(function () {

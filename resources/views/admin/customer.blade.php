@@ -14,7 +14,7 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('customer.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-                        <h6>Customers Table</h6>
+                        <h6>Tabel Customer</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
                         <div class="row justify-content-end mx-2">

@@ -6,11 +6,11 @@
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('customer') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Tambah Data Customer</h6>
+                        <a href="{{ route('reseller') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        <h6>Tambah Data Reseller</h6>
                     </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('customer.store') }}" method="post" enctype="multipart/form-data">
+                        <form action="{{ route('reseller.store') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="name">Nama Lengkap <span class="text-danger">*</span></label>
