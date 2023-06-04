@@ -89,16 +89,16 @@
                                                 </a>
                                                 <a href="{{ route('product.edit', ['product' => $data->product_id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
-                                                    Edit 
+                                                    Edit
                                                 </a>
-                                                <a href="{{ route('product.edit', ['product' => $data->id]) }}"
+                                                <a href="{{ route('product.show', ['product' => $data->product_id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
-                                                    Detail 
+                                                    Detail
                                                 </a>
                                                 <a href="{{ route('product.delete', ['product' => $data->product_id]) }}"
                                                     class="badge badge-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $data->name }} ?')">
-                                                    Hapus 
+                                                    Hapus
                                                 </a>
                                             </td>
                                         </tr>

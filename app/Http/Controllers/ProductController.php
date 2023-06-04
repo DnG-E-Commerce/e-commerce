@@ -131,9 +131,14 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show($id)
     {
-        //
+        return view('admin.detail-product', [
+            'title' => 'DnG Store | Detail Produk',
+            'user' => auth()->user(),
+            'menu' => ['Produk', 'Detail'],
+            'product' => Product::findOrFail($id),
+        ]);
     }
 
     /**

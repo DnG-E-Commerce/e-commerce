@@ -140,7 +140,7 @@ class UserController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('customer')->with($session);
+        return redirect()->route('reseller')->with($session);
     }
 
     public function customerShow($id)

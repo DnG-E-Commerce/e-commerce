@@ -56,6 +56,8 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/product/stock/{product}', 'stock')->name('product.stock');
     Route::get('/product/delete/{product}', 'delete')->name('product.delete');
     Route::get('/product/edit/{product}', 'edit')->name('product.edit');
+    Route::get('/product/show/{product}', 'show')->name('product.show');
+
     Route::put('/product/edit/{product}', 'update')->name('product.update');
     Route::post('/product', 'store')->name('product');
     Route::put('/product/stock/{product}', 'stockStore')->name('stock.store');
