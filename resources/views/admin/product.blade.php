@@ -80,22 +80,22 @@
                                             </td>
                                             <td class="align-end text-center text-sm">
                                                 <span
-                                                    class="text-secondary text-xs font-weight-bold">{{ $data->category }}</span>
+                                                    class="text-secondary text-xs font-weight-bold">{{ $data->category->category }}</span>
                                             </td>
                                             <td class="text-center align-end">
-                                                <a href="{{ route('product.stock', ['product' => $data->product_id]) }}"
+                                                <a href="{{ route('product.stock', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
                                                     Tambah Stok
                                                 </a>
-                                                <a href="{{ route('product.edit', ['product' => $data->product_id]) }}"
+                                                <a href="{{ route('product.edit', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
                                                     Edit
                                                 </a>
-                                                <a href="{{ route('product.show', ['product' => $data->product_id]) }}"
+                                                <a href="{{ route('product.show', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
                                                     Detail
                                                 </a>
-                                                <a href="{{ route('product.delete', ['product' => $data->product_id]) }}"
+                                                <a href="{{ route('product.delete', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $data->name }} ?')">
                                                     Hapus

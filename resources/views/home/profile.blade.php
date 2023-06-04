@@ -67,7 +67,7 @@
                             <div class="col-4 col-lg-4 order-lg-2">
                                 <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
                                     <a href="#">
-                                        <img src="{{ asset('argon/img/upload') }}/{{ $user->photo }}"
+                                        <img src="{{ asset('storage/' . $user->photo) }}"
                                             class="rounded-circle img-fluid border border-2 border-white bg-light">
                                     </a>
                                 </div>

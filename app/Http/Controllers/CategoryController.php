@@ -56,7 +56,19 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category' => 'required|unique:categories'
+        ]);
+        DB::table('categories')->insert([
+            'category' => $request->category
+        ]);
+        $session = [
+            'message' => 'Berhasil menambahkan kategori!',
+            'type' => 'Tambah Kategori',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('category')->with($session);
     }
 
     /**
@@ -120,8 +132,8 @@ class CategoryController extends Controller
     {
         DB::table('categories')->delete($id);
         $session = [
-            'message' => 'Berhasil menambahkan kategori baru!',
-            'type' => 'Tambah Kategori',
+            'message' => 'Berhasil menghapus kategori!',
+            'type' => 'Hapus Kategori',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];

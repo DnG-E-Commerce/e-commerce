@@ -67,9 +67,9 @@ Route::controller(CategoryController::class)->group(function () {
     Route::get('/category', 'index')->name('category');
     Route::get('/category/create', 'create')->name('category.create');
     Route::get('/category/edit/{category}', 'edit')->name('category.edit');
+    Route::get('/category/delete/{category}', 'destroy')->name('category.delete');
     Route::post('/category', 'store')->name('category.store');
     Route::put('/category/edit/{category}', 'update')->name('category.update');
-    Route::post('/category/delete/{category}', 'destroy')->name('category.delete');
 });
 
 Route::controller(CustomAuthController::class)->group(function () {

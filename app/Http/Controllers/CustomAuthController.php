@@ -34,12 +34,16 @@ class CustomAuthController extends Controller
             'password' => 'required',
         ]);
         if (Auth::attempt($credentials)) {
-            if ($user->role < 4) {
+            if ($user->role == 4) {
                 session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-                return redirect()->route('admin')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
+                return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
+            }
+            if ($user->role == 3) {
+                session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
+                return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
             }
             session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-            return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
+            return redirect()->route('admin')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
         }
         return redirect()->back()->with(['message' => 'Email atau password salah, harap login kembali!', 'type' => 'Credentials Error', 'alert' => 'Notifikasi Gagal!', 'class' => 'success']);
     }

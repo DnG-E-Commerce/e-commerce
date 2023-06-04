@@ -26,15 +26,15 @@ class ProductController extends Controller
     {
         $query = $request->search;
         if ($query) {
-            $products = DB::table('products')->select('products.id as product_id', '*')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->where('products', 'LIKE', "%$query%")
-                ->orWhere('category', 'LIKE', "%$query%")
+            $products = Product::where('name', 'LIKE', "%$query%")
                 ->get()->all();
+            // $products = DB::table('products')->select('products.id as product_id', '*')
+            //     ->join('categories', 'products.category_id', '=', 'categories.id')
+            //     ->where('name', 'LIKE', "%$query%")
+            //     ->orWhere('category', 'LIKE', "%$query%")
+            //     ->get()->all();
         } else {
-            $products = DB::table('products')->select('products.id as product_id', '*')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->get()->all();
+            $products = Product::all();
         }
         // dd($products);
         return view('admin.product', [
