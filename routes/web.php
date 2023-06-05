@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
@@ -29,11 +30,20 @@ Route::get('/', function () {
 Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
     Route::get('/home/profile/{user}', 'profile')->name('home.profile');
+
+    Route::get('/home/product/{product}', 'product')->name('home.product');
+});
+
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart/{user}', 'index')->name('cart');
+    Route::post('/cart/store/{product}', 'store')->name('cart.store');
 });
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('admin');
-    Route::get('/admin/profile/{self}', 'show')->name('admin.profile');
+    Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
+    Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
+    Route::put('/admin/edit/{user}', 'update')->name('admin.update');
 });
 
 Route::controller(UserController::class)->group(function () {

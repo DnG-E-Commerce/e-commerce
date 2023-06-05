@@ -64,7 +64,7 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link {{ $menu[0] == 'Profile' ? 'active' : '' }}"
-                    href="{{ route('user.show', ['user' => session('id')]) }}">
+                    href="{{ route('admin.profile', ['user' => session('id')]) }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>

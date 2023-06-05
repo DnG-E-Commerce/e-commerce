@@ -36,7 +36,7 @@ class UserController extends Controller
         } else {
             $resellers = DB::table('users')->where('role', 3)->get()->all();
         }
-        return view('admin.reseller', [
+        return view('reseller.index', [
             'title' => 'DnG Store | Reseller',
             'user' => auth()->user(),
             'menu' => ['Reseller'],
@@ -55,7 +55,7 @@ class UserController extends Controller
         } else {
             $customers = DB::table('users')->where('role', 4)->get()->all();
         }
-        return view('admin.customer', [
+        return view('customer.index', [
             'title' => 'DnG Store | Customer',
             'user' => auth()->user(),
             'menu' => ['Customer'],
@@ -69,7 +69,7 @@ class UserController extends Controller
      */
     public function customerCreate()
     {
-        return view('admin.create-customer', [
+        return view('customer.create-customer', [
             'title' => 'DnG Store | Tambah Customer',
             'user' => auth()->user(),
             'menu' => ['Customer', 'Tambah'],
@@ -78,7 +78,7 @@ class UserController extends Controller
 
     public function resellerCreate()
     {
-        return view('admin.create-reseller', [
+        return view('customer.create-reseller', [
             'title' => 'DnG Store | Tambah Reseller',
             'user' => auth()->user(),
             'menu' => ['Reseller', 'Tambah']
@@ -143,18 +143,6 @@ class UserController extends Controller
         return redirect()->route('reseller')->with($session);
     }
 
-    public function customerShow($id)
-    {
-        $customer = DB::table('users')->where('id', $id)->first();
-        return view('admin.detail-user', [
-            'title' => 'DnG Store | Detail',
-            'user' => auth()->user(),
-            'menu' => ['Customer', 'Detail'],
-            'customer' => $customer,
-            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
-        ]);
-    }
-
     /**
      * Store a newly created resource in storage.
      *
@@ -175,10 +163,10 @@ class UserController extends Controller
     public function show($id)
     {
         $select_user = DB::table('users')->where('id', $id)->first();
-        return view('admin.detail-user', [
+        return view('detail-user', [
             'title' => 'DnG Store | Detail',
             'user' => auth()->user(),
-            'menu' => ['Profile'],
+            'menu' => $select_user->role == 4 ? ['Customer', 'Detail'] : ['Reseller', 'Detail'],
             'select_user' => $select_user,
             'role' => ['Owner', 'Admin', 'Drive', 'Reseller', 'Customer']
         ]);

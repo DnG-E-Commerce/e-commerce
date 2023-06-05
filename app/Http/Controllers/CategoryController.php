@@ -25,7 +25,7 @@ class CategoryController extends Controller
         } else {
             $categories = DB::table('categories')->get()->all();
         }
-        return view('admin.category', [
+        return view('category.index', [
             'title' => 'DnG Store | Category',
             'menu' => ['Kategori'],
             'user' => $user,
@@ -41,7 +41,7 @@ class CategoryController extends Controller
     public function create()
     {
         $user = DB::table('users')->where('email', session('email'))->first();
-        return view('admin.create-category', [
+        return view('category.create-category', [
             'title' => 'DnG Store | Tambah Category',
             'menu' => ['Kategori', 'Tambah'],
             'user' => $user,
@@ -90,7 +90,7 @@ class CategoryController extends Controller
      */
     public function edit($id)
     {
-        return view('admin.edit-category', [
+        return view('category.edit-category', [
             'title' => 'DnG Store | Edit',
             'menu' => ['Kategori', 'Edit Data'],
             'user' => auth()->user(),

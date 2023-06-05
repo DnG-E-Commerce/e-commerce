@@ -33,7 +33,8 @@
                         <div class="card-body">
                             <h3>{{ $product->name }}</h3>
                             <p class="fst-italic">{{ substr($product->desc, 0, 50) . '.....' }}</p>
-                            <a href="#" class="text-primary">Read more <i class="fa fa-arrow-right"></i></a>
+                            <a href="{{ route('home.product', ['product' => $product->id]) }}" class="text-primary">Read
+                                more <i class="fa fa-arrow-right"></i></a>
                         </div>
                     </div>
                 @endforeach

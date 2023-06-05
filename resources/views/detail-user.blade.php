@@ -51,17 +51,10 @@
                         </table>
                     </div>
                 </div>
-                @if ($select_user->id == session('id'))
-                    <div class="d-flex gap-2 float-end">
-                        {{-- <a href="" class="btn btn-sm bg-gradient-warning mt-2 float-end">Edit</a> --}}
-                        <a href="{{ route('admin') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
-                    </div>
+                @if ($select_user->role == 4)
+                    <a href="{{ route('customer') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
                 @else
-                    @if ($select_user->role == 4)
-                        <a href="{{ route('customer') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
-                    @else
-                        <a href="{{ route('reseller') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
-                    @endif
+                    <a href="{{ route('reseller') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
                 @endif
             </div>
         </div>

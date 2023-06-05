@@ -28,16 +28,11 @@ class ProductController extends Controller
         if ($query) {
             $products = Product::where('name', 'LIKE', "%$query%")
                 ->get()->all();
-            // $products = DB::table('products')->select('products.id as product_id', '*')
-            //     ->join('categories', 'products.category_id', '=', 'categories.id')
-            //     ->where('name', 'LIKE', "%$query%")
-            //     ->orWhere('category', 'LIKE', "%$query%")
-            //     ->get()->all();
         } else {
             $products = Product::all();
         }
         // dd($products);
-        return view('admin.product', [
+        return view('product.index', [
             'title' => 'DnG Store | Produk',
             'menu' => ['Produk'],
             'user' => auth()->user(),
@@ -52,7 +47,7 @@ class ProductController extends Controller
      */
     public function create()
     {
-        return view('admin.create-product', [
+        return view('product.create-product', [
             'title' => 'DnG Store | Create Product',
             'user' => auth()->user(),
             'menu' => ['Produk', 'Tambah'],
@@ -77,14 +72,14 @@ class ProductController extends Controller
         $photo = $request->file('photo')->store('image');
         DB::table('products')->insert([
             'name' => $request->name,
-            'desc' => $request->desc,
+            'desc' => htmlspecialchars($request->desc),
             'customer_price' => $request->customer_price,
             'reseller_price' => $request->reseller_price,
             'photo' => $photo,
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
             'qty' => $request->qty ? $request->qty : 0,
-            'status' => $request->qty ? 'Ready' : 'Tidak Ready',
+            'status' => $request->qty ? 'ready' : 'tidak ready',
             'category_id' => $request->category,
         ]);
         $session = [
@@ -98,7 +93,7 @@ class ProductController extends Controller
 
     public function stock($id)
     {
-        return view('admin.product-stock', [
+        return view('product.product-stock', [
             'title' => 'DnG Store | Product Stock',
             'user' => auth()->user(),
             'menu' => ['Produk', 'Stok'],
@@ -114,7 +109,7 @@ class ProductController extends Controller
         ]);
         DB::table('products')->where('id', $product->id)->update([
             'qty' => intval($product->qty + $request->qty),
-            'status' => 'ready',
+            'status' => 'Ready',
         ]);
         $session = [
             'message' => "berhasil menambahkan stock pada $product->name!",
@@ -133,7 +128,7 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return view('admin.detail-product', [
+        return view('product.detail-product', [
             'title' => 'DnG Store | Detail Produk',
             'user' => auth()->user(),
             'menu' => ['Produk', 'Detail'],
@@ -149,7 +144,7 @@ class ProductController extends Controller
      */
     public function edit(Product $product)
     {
-        return view('admin.edit-product', [
+        return view('product.edit-product', [
             'title' => 'DnG Store | Edit Product',
             'user' => auth()->user(),
             'menu' => ['Produk', 'Edit'],
@@ -171,15 +166,19 @@ class ProductController extends Controller
             'name' => 'required',
             'customer_price' => 'required',
             'reseller_price' => 'required',
-            'photo' => 'required|image|file|max:8192'
         ]);
-        $photo = $request->file('photo')->store('image');
+        $photo = $request->file('photo');
+        if ($photo) {
+            $filephoto = $photo->store('image');
+        } else {
+            $filephoto = $product->photo;
+        }
         DB::table('products')->where('id', $product->id)->update([
             'name' => $request->name,
-            'desc' => $request->desc,
+            'desc' => htmlspecialchars($request->desc),
             'customer_price' => $request->customer_price,
             'reseller_price' => $request->reseller_price,
-            'photo' => $photo,
+            'photo' => $filephoto,
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
             'category_id' => $request->category,

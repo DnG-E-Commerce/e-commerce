@@ -60,6 +60,12 @@ class AdminController extends Controller
      */
     public function show($id)
     {
+        return view('admin.profile-admin', [
+            'title' => 'DnG Store | My Profile',
+            'user' => auth()->user(),
+            'menu' => ['Profile'],
+            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
+        ]);
     }
 
     /**
@@ -70,7 +76,12 @@ class AdminController extends Controller
      */
     public function edit($id)
     {
-        //
+        return view('admin.edit-admin', [
+            'title' => 'DnG Store | Edit Profile',
+            'user' => auth()->user(),
+            'menu' => ['Profile', 'Edit Profile'],
+            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
+        ]);
     }
 
     /**
@@ -80,9 +91,35 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'email' => 'required',
+            'phone' => 'required|numeric',
+            'photo' => 'image|max:8192',
+            'address' => 'required'
+        ]);
+        $photo = $request->file('photo');
+        if ($photo) {
+            $filename = $photo->store('image');
+        } else {
+            $filename = $user->photo;
+        }
+        DB::table('users')->where('id', $user->id)->update([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'photo' => $filename,
+            'address' => $request->address
+        ]);
+        $session = [
+            'message' => 'Berhasil mengupdate Profile!',
+            'type' => 'Edit Profile',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('admin.profile', ['user' => $user->id])->with($session);
     }
 
     /**

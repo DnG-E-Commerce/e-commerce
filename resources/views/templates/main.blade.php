@@ -68,6 +68,10 @@
                                         <a class="dropdown-item"
                                             href="{{ route('home.profile', ['user' => $user->id]) }}">Profile</a>
                                     </li>
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{{ route('cart', ['user' => $user->id]) }}">Keranjang</a>
+                                    </li>
                                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                 </ul>
                             </div>

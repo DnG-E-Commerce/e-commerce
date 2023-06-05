@@ -36,7 +36,7 @@
                         aria-labelledby="dropdownMenuButton">
                         <li class="mb-2">
                             <a class="dropdown-item border-radius-md"
-                                href="{{ route('user.show', ['user' => session('id')]) }}">
+                                href="{{ route('admin.profile', ['user' => session('id')]) }}">
                                 <div class="d-flex py-1">
                                     <div class="d-flex flex-column justify-content-center">
                                         <h6 class="text-sm font-weight-normal mb-1">

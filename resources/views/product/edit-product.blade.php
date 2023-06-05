@@ -61,7 +61,7 @@
                                 <input type="number" name="weight" class="form-control" value="{{ $product->weight }}">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="desc">Foto Produk <span class="text-danger">*</span></label>
+                                <label for="desc">Foto Produk</label>
                                 <input type="file" name="photo" class="form-control">
                                 @error('photo')
                                     <small class="text-danger">{{ $message }}</small>

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
@@ -22,22 +23,26 @@ class HomeController extends Controller
         $query = $request->search;
         if ($query) {
             //
-            $products = DB::table('products')->select('products.id as product_id', '*')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->where('name', 'LIKE', "%$query%")
-                ->orWhere('category', 'LIKE', "%$query%")
-                ->get()->all();
+            $products = Product::where('name', 'LIKE', "%$query%")->all();
         } else {
             //
-            $products = DB::table('products')->select('products.id as product_id', '*')
-                ->join('categories', 'products.category_id', '=', 'categories.id')
-                ->get()->all();
+            $products = Product::all();
         }
         return view('home.index', [
             'title' => 'DnG Store',
             'menu' => 'home',
             'user' => auth()->user(),
             'products' => $products
+        ]);
+    }
+
+    public function product(Product $product)
+    {
+        return view('home.detail-product', [
+            'title' => 'DnG Store | Detail Product',
+            'user' => auth()->user(),
+            'menu' => ['Product', 'Detail'],
+            'product' => Product::findOrFail($product->id)
         ]);
     }
 
