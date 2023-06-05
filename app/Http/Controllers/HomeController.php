@@ -6,7 +6,6 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
-use App\Models\Product;
 
 class HomeController extends Controller
 {
@@ -23,16 +22,8 @@ class HomeController extends Controller
     {
         $query = $request->search;
         if ($query) {
-<<<<<<< HEAD
-            //
             $products = Product::where('name', 'LIKE', "%$query%")->all();
         } else {
-            //
-=======
-            $products = Product::where('name', 'LIKE', "%$query%")
-                ->get()->all();
-        } else {
->>>>>>> 846e9774352a665515c5ac583698ddd333e03e39
             $products = Product::all();
         }
         return view('home.index', [
