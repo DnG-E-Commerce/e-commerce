@@ -22,15 +22,15 @@
                 <table>
                     <tr>
                         <td>Nama</td>
-                        <td>: {{ $order->name }}</td>
+                        <td>: {{ $users->name }}</td>
                     </tr>
                     <tr>
                         <td>No. Hp</td>
-                        <td>: {{ $order->phone }}</td>
+                        <td>: {{ $users->phone }}</td>
                     </tr>
                     <tr>
                         <td>Alamat</td>
-                        <td>: {{ $order->address }}</td>
+                        <td>: {{ $users->address }}</td>
                     </tr>
                     <tr>
                         <td>Qty</td>
