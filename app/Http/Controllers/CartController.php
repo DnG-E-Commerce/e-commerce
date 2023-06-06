@@ -49,7 +49,7 @@ class CartController extends Controller
         DB::table('carts')->insert([
             'user_id' => session('id'),
             'product_id' => $product->id,
-            'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi",
+            // 'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi",
             'qty' => $request->qty,
             'total' => ($request->qty * $request->price)
         ]);

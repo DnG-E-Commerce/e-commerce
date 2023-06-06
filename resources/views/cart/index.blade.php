@@ -8,6 +8,11 @@
         </script>
     @endif
     <div class="container-fluid py-4">
+    <div class="card-header pb-0">
+        <div class="text-center">        
+                        <h3>Keranjang</h3>
+                    </div>
+        
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <form action="#" method="post">
@@ -15,10 +20,12 @@
                     @foreach ($carts as $key => $cart)
                         <div class="card mb-3">
                             <div class="card-body">
+                                
                                 <div class="form-check form-check-inline float-end">
                                     <input class="form-check-input" type="checkbox" id="inlineCheckbox"
                                         name="cart[{{ $key }}]">
                                     <label class="form-check-label" for="inlineCheckbox1">Pilih</label>
+                                    <!-- <label class="form-check-label" for="inlineCheckbox1">Hapus</label> -->
                                 </div>
                                 <div class="row">
                                     <div class="col-lg-4">

@@ -61,37 +61,7 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-2 align-self-start">
-                                            <label for="qty" class="col-form-label">Dikirim ke</label>
-                                        </div>
-                                        <div class="col-10">
-                                            <div class="form-group mb-3">
-                                                <label for="provinsi">Provinsi</label>
-                                                <select name="provinsi" class="form-select" id="provinsi">
-                                                    <option>Pilih</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="kabupaten">Kabupaten</label>
-                                                <select name="kabupaten" class="form-select" id="kabupaten">
-                                                    <option>Pilih</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="">Kecamatan</label>
-                                                <select name="kecamatan" class="form-select" id="kecamatan">
-                                                    <option>Pilih</option>
-                                                </select>
-                                            </div>
-                                            <div class="form-group mb-3">
-                                                <label for="kelurahan">Kelurahan</label>
-                                                <select name="kelurahan" class="form-select" id="kelurahan">
-                                                    <option>Pilih</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    
                                     <button class="btn btn-sm bg-gradient-success float-end">Masukkan Keranjang</button>
                                 </form>
                             </div>
