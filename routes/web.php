@@ -37,6 +37,7 @@ Route::controller(HomeController::class)->group(function () {
 Route::controller(CartController::class)->group(function () {
     Route::get('/cart/{user}', 'index')->name('cart');
     Route::post('/cart/store/{product}', 'store')->name('cart.store');
+    Route::get('/cart/delete/{product}', 'delete')->name('cart.delete');
 });
 
 Route::controller(AdminController::class)->group(function () {

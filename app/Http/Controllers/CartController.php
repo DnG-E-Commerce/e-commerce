@@ -102,8 +102,16 @@ class CartController extends Controller
      * @param  \App\Models\Cart  $cart
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Cart $cart)
+    public function delete($id)
     {
-        //
+        DB::table('carts')->delete($id);
+        $session = [
+            'message' => "Berhasil menghapus data!",
+            'type' => 'Hapus barang dikeranjang',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('cart')->with($session);
     }
+    
 }

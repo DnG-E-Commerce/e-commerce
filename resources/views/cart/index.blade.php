@@ -27,7 +27,13 @@
                                         name="cart[{{ $key }}]">
                                     <label class="form-check-label" for="inlineCheckbox1">Pilih</label>
                                     <!-- <label class="form-check-label" for="inlineCheckbox1">Hapus</label> -->
+                                    <a href="{{ route('cart.delete', ['product' => $cart->id]) }}"
+                                                    class="badge badge-sm bg-gradient-danger"
+                                                    onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $cart->name }} ?')">
+                                                    Hapus
+                                                </a>
                                 </div>
+                                 
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <img src="{{ asset('storage/' . $cart->product->photo) }}"
