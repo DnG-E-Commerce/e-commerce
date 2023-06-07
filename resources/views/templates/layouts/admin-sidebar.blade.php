@@ -30,6 +30,30 @@
             'icon' => 'ni ni-circle-08 text-dark',
             'url' => 'customer',
         ],
+        5=> [
+            'id' => 6,
+            'name' => 'Pesanan',
+            'icon' => 'ni ni-circle-08 text-dark',
+            'url' => 'customer',
+        ],
+        6 => [
+            'id' => 7,
+            'name' => 'Area',
+            'icon' => 'ni ni-circle-08 text-dark',
+            'url' => 'customer',
+        ],
+        7 => [
+            'id' => 8,
+            'name' => 'Grafik Penjualan',
+            'icon' => 'ni ni-circle-08 text-dark',
+            'url' => 'customer',
+        ],
+        8 => [
+            'id' => 9,
+            'name' => 'Laporan Penjualan',
+            'icon' => 'ni ni-circle-08 text-dark',
+            'url' => 'customer',
+        ],
     ];
 @endphp
 

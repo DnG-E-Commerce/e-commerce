@@ -22,13 +22,14 @@
                                 <h3>{{ $product->name }} ({{ $product->uom }})</h3>
                                 <h4 class="fst-italic text-secondary">
                                     {{ $product->category->category }}
-                                    @if (strtoupper($product->status) == 'READY')
+                                   
+                                    <!-- @if (strtoupper($product->status) == 'READY') -->
                                         <span
                                             class="badge badge-sm bg-gradient-success float-end">{{ $product->status }}</span>
-                                    @else
+                                    <!-- @else
                                         <span
                                             class="badge badge-sm bg-gradient-danger float-end">{{ $product->status }}</span>
-                                    @endif
+                                    @endif -->
                                 </h4>
                                 <hr class="border border-1 border-dark">
                                 <form action="{{ route('cart.store', ['product' => $product->id]) }}" method="post">

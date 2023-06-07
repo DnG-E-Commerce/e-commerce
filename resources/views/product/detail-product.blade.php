@@ -13,20 +13,26 @@
                                     alt="Photo {{ $product->name }}">
                             </div>
                             <div class="col-lg-6">
-                                <h3>{{ $product->name }} ({{ $product->uom }})</h3>
+                                <h3>{{ $product->name }} </h3>
                                 <h4 class="fst-italic text-secondary">
                                     {{ $product->category->category }}
-                                    @if (strtoupper($product->status) == 'READY')
+                                    <span
+                                            class="badge badge-sm bg-gradient-success float-end">{{ $product->status }}</span>
+                                    <!-- @if (strtoupper($product->status) == 'READY')
                                         <span
                                             class="badge badge-sm bg-gradient-success float-end">{{ $product->status }}</span>
                                     @else
                                         <span
                                             class="badge badge-sm bg-gradient-danger float-end">{{ $product->status }}</span>
-                                    @endif
+                                    @endif -->
                                 </h4>
                                 <hr class="border border-1 border-dark">
+                                <!-- <p style="text-align: justify;">{{ $product->desc }}</p> -->
+                                <h6>Satuan : {{ $product->uom }}</h6>
+                                <h6>Stock : {{ $product->qty }}</h6>
+                                <h6>Deskripsi Produk :</h6>
                                 <p style="text-align: justify;">{{ $product->desc }}</p>
-                                <h5>Stock : {{ $product->qty }}</h5>
+                                
                             </div>
                         </div>
                         <hr class="border border-1 border-dark">
