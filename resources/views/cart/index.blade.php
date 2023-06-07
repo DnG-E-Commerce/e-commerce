@@ -42,9 +42,10 @@
                                     </div>
                                     <div class="col-lg-8">
                                         <h5 class="card-title">{{ $cart->product->name }}</h5>
-                                        <p class="card-text">Dikirim ke : {{ $cart->send_to }}
-                                        </p>
+                                        <!-- <p class="card-text">Dikirim ke : {{ $cart->send_to }}
+                                        </p> -->
                                         <p>Kuantitas : {{ $cart->qty }}</p>
+                                        <p>Harga : {{ $user->role == 4 ? $cart->product->customer_price : $cart->product->reseller_price  }}</p>
                                         <p>Total : Rp. {{ $cart->total }}</p>
                                     </div>
                                 </div>
