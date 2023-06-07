@@ -72,6 +72,12 @@
                                         <a class="dropdown-item"
                                             href="{{ route('cart', ['user' => $user->id]) }}">Keranjang</a>
                                     </li>
+                                    @if ($user->role == 4)
+                                    <li>
+                                        <a class="dropdown-item"
+                                            href="{{ route('cart', ['user' => $user->id]) }}">Mengajukan Reseller</a>
+                                    </li>
+                                    @endif
                                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                 </ul>
                             </div>

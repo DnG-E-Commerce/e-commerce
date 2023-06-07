@@ -13,10 +13,9 @@
             <div class="container">
                 <div class="row justify-content-center">
                     <div class="col-lg-5 text-center mx-auto">
-                        <h1 class="text-white mb-2 mt-5">Selamat datang,</h1>
+                        <h1 class="text-white mb-2 mt-5">Selamat datang </h1>
                         <h2 class="text-white mb-2">{{ $user->name }}!</h2>
-                        <p class="text-lead text-white">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque, natus
-                            laudantium recusandae ab impedit consectetur.</p>
+                        <p class="text-lead text-white">Di Sistem Informasi E-Commerce D&G Store, Selamat Berbelanja</p>
                     </div>
                 </div>
             </div>
@@ -33,8 +32,7 @@
                         <div class="card-body">
                             <h3>{{ $product->name }}</h3>
                             <p class="fst-italic">{{ substr($product->desc, 0, 50) . '.....' }}</p>
-                            <a href="{{ route('home.product', ['product' => $product->id]) }}" class="text-primary">Read
-                                more <i class="fa fa-arrow-right"></i></a>
+                            <a href="{{ route('home.product', ['product' => $product->id]) }}" class="text-primary">Lihat Lebih Detail <i class="fa fa-arrow-right"></i></a>
                         </div>
                     </div>
                 @endforeach
