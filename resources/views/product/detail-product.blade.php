@@ -6,6 +6,7 @@
             <div class="col-lg-8 mb-lg-0 mb-4">
                 <div class="card z-index-2 p-2">
                     <div class="card-body mt-0">
+                        
                         <div class="row">
                             <div class="col-lg-6">
                                 <img src="{{ asset('storage/' . $product->photo) }}"
