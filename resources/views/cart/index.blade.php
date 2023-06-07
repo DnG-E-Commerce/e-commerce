@@ -8,10 +8,11 @@
         </script>
     @endif
     <div class="container-fluid py-4">
-    <div class="card-header pb-0">
-        <div class="text-center">        
+        <div class="card-header pb-0">
+            <div class="text-center">        
                         <h3>Keranjang</h3>
-                    </div>
+            </div>
+        </div>
         
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
