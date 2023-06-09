@@ -40,7 +40,7 @@
             'id' => 6,
             'name' => 'Pesanan',
             'icon' => 'ni ni-circle-08 text-dark',
-            'url' => 'customer',
+            'url' => 'admin.orders',
         ],
         6 => [
             'id' => 7,
