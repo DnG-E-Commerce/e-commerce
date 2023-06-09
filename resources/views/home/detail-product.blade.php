@@ -127,7 +127,7 @@
                     _token: '{{ csrf_token() }}'
                 },
                 success: function(response) {
-                    window.location.assign('{{ route('order') }}')
+                    window.location.assign(`{{ route('order') }}`)
                 }
             })
         })
@@ -147,7 +147,7 @@
                 success: function(response) {
                     $('#modal-notification').modal('show')
                     window.location.assign(
-                        `{{ route('home.product', ['product' => $product->id]) }}`)
+                        `{{ route('cart') }}`)
 
                 }
             })

@@ -39,7 +39,7 @@ Route::controller(CartController::class)->group(function () {
     Route::get('/cart/delete/{cart}', 'destroy')->name('cart.delete');
     Route::post('/cart/store/{product}', 'store')->name('cart.store');
     Route::post('/cart/checkout', 'checkout')->name('cart.checkout');
-    Route::get('/cart/delete/{product}', 'delete')->name('cart.delete');
+    Route::get('/cart/delete/{cart}', 'delete')->name('cart.delete');
 });
 
 Route::controller(AdminController::class)->group(function () {

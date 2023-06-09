@@ -37,7 +37,7 @@
                                     <div class="form-group m-0">
                                         <input type="hidden" name="product_id[{{ $cart->id }}]"
                                             value="{{ $cart->product_id }}">
-                                        <input type="hidden" name="user_id" value="{{ session('id') }}">
+                                        <input type="hidden" name="user_id" value="{{ $user->id }}">
                                         <input class="form-check-input" type="checkbox" id="inlineCheckbox"
                                             name="cart[{{ $cart->id }}]">
                                         <label class="form-check-label" for="cart_select">Pilih</label>
@@ -53,12 +53,6 @@
                                             </li>
                                         </ul>
                                     </div>
-                                    <!-- <label class="form-check-label" for="inlineCheckbox1">Hapus</label> -->
-                                    <a href="{{ route('cart.delete', ['product' => $cart->id]) }}"
-                                        class="badge badge-sm bg-gradient-danger"
-                                        onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $cart->name }} ?')">
-                                        Hapus
-                                    </a>
                                 </div>
 
                                 <div class="row">
@@ -69,10 +63,25 @@
                                     </div>
                                     <div class="col-lg-8">
                                         <h5 class="card-title">{{ $cart->product->name }}</h5>
-                                        <p class="card-text">Dikirim ke : {{ $cart->send_to }}
                                         </p>
-                                        <p>Kuantitas : {{ $cart->qty }}</p>
-                                        <p>Total : Rp. {{ $cart->total }}</p>
+                                        <div class="row gap-3 g-3 align-items-center mb-3">
+                                            <div class="col-2">
+                                                <label for="qty" class="col-form-label">Kuantitas</label>
+                                            </div>
+                                            <div class="col-2">
+                                                <input type="number" name="qty[{{ $cart->id }}]" id="qty"
+                                                    class="form-control-plaintext" value="{{ $cart->qty }}">
+                                            </div>
+                                        </div>
+                                        <div class="row gap-3 g-3 align-items-center mb-3">
+                                            <div class="col-2">
+                                                <label for="total" class="col-form-label">Total</label>
+                                            </div>
+                                            <div class="col-4">
+                                                <input type="number" name="total[{{ $cart->id }}]" id="total"
+                                                    class="form-control-plaintext" value="{{ $cart->total }}">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
