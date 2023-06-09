@@ -35,12 +35,15 @@ Route::controller(HomeController::class)->group(function () {
 });
 
 Route::controller(CartController::class)->group(function () {
-    Route::get('/cart/{user}', 'index')->name('cart');
+    Route::get('/cart/mycart', 'index')->name('cart');
+    Route::get('/cart/delete/{cart}', 'destroy')->name('cart.delete');
     Route::post('/cart/store/{product}', 'store')->name('cart.store');
+    Route::post('/cart/checkout', 'checkout')->name('cart.checkout');
 });
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('admin');
+    Route::get('/admin/orders', 'order')->name('admin.orders');
     Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');
@@ -90,7 +93,10 @@ Route::controller(CustomAuthController::class)->group(function () {
     Route::post('/register', 'store')->name('register');
 });
 
-// Route Midtrans
-Route::get('/item', [OrderController::class, 'item']);
-Route::post('/checkout', [OrderController::class, 'checkout']);
-Route::post('/invoice/{id}', [OrderController::class, 'invoice']);
+Route::controller(OrderController::class)->group(function () {
+    Route::get('/order', 'index')->name('order');
+    Route::get('/order/{order}', 'show')->name('order.show');
+    Route::get('/order/delete/{order}', 'delete')->name('order.delete');
+    Route::post('/order/checkout/{product}', 'checkout')->name('order.checkout');
+    Route::put('/order/update/{order}', 'update')->name('order.update');
+});

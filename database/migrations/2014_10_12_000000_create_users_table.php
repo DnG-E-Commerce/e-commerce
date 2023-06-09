@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('phone', 15)->nullable();
             $table->tinyInteger('role')->default(4);
             $table->string('photo')->default('image/default.png');
+            $table->integer('request_upgrade')->default(0);
             $table->rememberToken();
             $table->timestamps();
         });

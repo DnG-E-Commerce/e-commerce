@@ -80,7 +80,7 @@
                                             </td>
                                             <td class="align-end text-center text-sm">
                                                 <span
-                                                    class="text-secondary text-xs font-weight-bold">{{ $data->category->category }}</span>
+                                                    class="text-secondary text-xs font-weight-bold">{{ $data->category }}</span>
                                             </td>
                                             <td class="text-center align-end">
                                                 <a href="{{ route('product.stock', ['product' => $data->id]) }}"

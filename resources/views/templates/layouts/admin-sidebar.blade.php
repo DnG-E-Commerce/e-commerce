@@ -30,6 +30,12 @@
             'icon' => 'ni ni-circle-08 text-dark',
             'url' => 'customer',
         ],
+        5 => [
+            'id' => 6,
+            'name' => 'Orders',
+            'icon' => 'ni ni-cart text-dark',
+            'url' => 'admin.orders',
+        ],
     ];
 @endphp
 

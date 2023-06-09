@@ -15,9 +15,13 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->Integer('qty');
-            $table->bigInteger('total_price');
-            $table->enum('status', ['Paid', 'Unpaid']);
+            $table->foreignId('user_id');
+            $table->integer('product_id');
+            $table->integer('qty');
+            $table->double('total_price');
+            $table->text('send_to')->nullable();
+            $table->enum('payment_method', ['VA', 'Dana', 'Gopay', 'COD']);
+            $table->enum('status', ['Recive', 'Delivery', 'Paid', 'Unpaid']);
             $table->timestamps();
         });
     }

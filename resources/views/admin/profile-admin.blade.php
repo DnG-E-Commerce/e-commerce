@@ -26,7 +26,7 @@
                             <h3 class="fst-italic">{{ $user->name }}</h3>
                             <hr class="border border-1 border-dark">
                             <p class="text-break">
-                                {{ $user->address }}
+                                {{ $user->address ? $user->address : 'Belum ada' }}
                             </p>
                             <hr class="border border-1 border-dark">
                             <div class="row">
@@ -39,7 +39,7 @@
                                 <div class="col-lg-6">
                                     <small>
                                         <i class="fa fa-phone"></i>
-                                        {{ $user->phone }}
+                                        {{ $user->phone ? $user->phone : 'Belum ada' }}
                                     </small>
                                 </div>
                             </div>

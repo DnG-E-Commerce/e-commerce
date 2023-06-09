@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -28,6 +29,16 @@ class AdminController extends Controller
             'user' => auth()->user(),
             'users' => User::all(),
             'products' => Product::all(),
+        ]);
+    }
+
+    public function order()
+    {
+        return view('admin.admin-order', [
+            'title' => 'DnG Store | Menu Order',
+            'menu' => ['Order'],
+            'user' => auth()->user(),
+            'orders' => Order::all()
         ]);
     }
 
