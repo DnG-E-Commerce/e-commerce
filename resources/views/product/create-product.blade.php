@@ -42,21 +42,32 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="uom">Satuan Berat <span class="text-danger">*</span></label>
+                                <label for="uom">Satuan<span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">
-                                    <option value="Kilogram">KG</option>
+                                    <option value="Pcs">Pcs</option>
+                                    <option value="Karton">Karton</option>
                                     <option value="Box">Box</option>
-                                    <option value="Liter">L</option>
+                                    <option value="Liter">Liter</option>
                                     <option value="Rincing">Rincing</option>
+                                    <option value="Pak">Pak</option>
+                                    <option value="Bal">Bal</option>
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="weight">Berat Produk (KG)</label>
+                                <label for="weight">Berat Produk (KG)</label> <span class="text-danger">*</span></label>
                                 <input type="number" name="weight" class="form-control">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="qty">Stok Produk</label>
+                                <label for="qty">Stok Produk</label><span class="text-danger">*</span></label>
                                 <input type="number" name="qty" class="form-control">
+                            </div>
+                            <div class="form-group mb-3">
+                                <label for="status">Status<span class="text-danger">*</span></label>
+                                <select name="status" class="form-select">
+                                    <option value="Ready">Ready</option>
+                                    <option value="Open Pre Order">Open Pre Order</option>
+                                    
+                                </select>
                             </div>
                             <div class="form-group mb-3">
                                 <label for="desc">Foto Produk <span class="text-danger">*</span></label>

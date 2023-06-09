@@ -8,6 +8,12 @@
         </script>
     @endif
     <div class="container-fluid py-4">
+        <div class="card-header pb-0">
+            <div class="text-center">
+                <h3>Keranjang</h3>
+            </div>
+        </div>
+
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="d-flex justify-content-between">
@@ -26,6 +32,7 @@
                     @foreach ($carts as $key => $cart)
                         <div class="card shadow-lg mb-3">
                             <div class="card-body">
+
                                 <div class="d-flex gap-5 form-check form-check-inline float-end">
                                     <div class="form-group m-0">
                                         <input type="hidden" name="product_id[{{ $cart->id }}]"
@@ -46,7 +53,14 @@
                                             </li>
                                         </ul>
                                     </div>
+                                    <!-- <label class="form-check-label" for="inlineCheckbox1">Hapus</label> -->
+                                    <a href="{{ route('cart.delete', ['product' => $cart->id]) }}"
+                                        class="badge badge-sm bg-gradient-danger"
+                                        onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $cart->name }} ?')">
+                                        Hapus
+                                    </a>
                                 </div>
+
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <img src="{{ asset('storage/' . $cart->product->photo) }}"
@@ -55,25 +69,10 @@
                                     </div>
                                     <div class="col-lg-8">
                                         <h5 class="card-title">{{ $cart->product->name }}</h5>
-                                        <div class="d-flex gap-3 g-3 align-items-center mb-3">
-                                            <div class="col-2">
-                                                <label for="qty" class="col-form-label">Kuantitas</label>
-                                            </div>
-                                            <div class="col-2">
-                                                <input type="number" name="qty[{{ $cart->id }}]" class="form-control"
-                                                    value="{{ $cart->qty }}">
-                                            </div>
-                                        </div>
-                                        <div class="row g-3 align-items-center mb-3">
-                                            <div class="col-2">
-                                                <label for="total" class="col-form-label">Total</label>
-                                            </div>
-                                            <div class="col-auto">
-                                                <input type="number" name="total[{{ $cart->id }}]"
-                                                    class="form-control-plaintext" value="{{ $cart->total }}" readonly>
-                                            </div>
-                                        </div>
-
+                                        <p class="card-text">Dikirim ke : {{ $cart->send_to }}
+                                        </p>
+                                        <p>Kuantitas : {{ $cart->qty }}</p>
+                                        <p>Total : Rp. {{ $cart->total }}</p>
                                     </div>
                                 </div>
                             </div>

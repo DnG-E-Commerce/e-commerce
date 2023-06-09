@@ -89,12 +89,12 @@ class ProductController extends Controller
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
             'qty' => $request->qty ? $request->qty : 0,
-            'status' => $request->qty ? 'ready' : 'tidak ready',
+            'status' => $request->status,
             'category_id' => $request->category,
         ]);
         $session = [
-            'message' => 'Berhasil menambahkan prodak baru!',
-            'type' => 'Tambah Prodak',
+            'message' => 'Berhasil menambahkan produk baru!',
+            'type' => 'Tambah Produk',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];

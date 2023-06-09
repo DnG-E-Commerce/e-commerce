@@ -7,7 +7,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-5 text-center mx-auto">
-                    <h1 class="text-white mb-2 mt-5">Welcome!</h1>
+                    <h1 class="text-white mb-2 mt-5">D&G Store</h1>
                     <p class="text-lead text-white">Use these awesome forms to login or create new account in your project
                         for free.</p>
                 </div>
@@ -19,7 +19,7 @@
             <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
                 <div class="card z-index-0">
                     <div class="card-header text-center pt-4">
-                        <h5>Register with</h5>
+                        <h5>Form Register</h5>
                     </div>
                     <div class="card-body">
                         <form role="form" action="{{ route('register') }}" method="POST">
@@ -68,10 +68,10 @@
                                 </label>
                             </div>
                             <div class="text-center">
-                                <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit">Sign up</button>
+                                <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit">Register</button>
                             </div>
-                            <p class="text-sm mt-3 mb-0">Already have an account? <a href="{{ route('login') }}"
-                                    class="text-dark font-weight-bolder">Sign in</a></p>
+                            <p class="text-sm mt-3 mb-0">Sudah Memiliki Akun? <a href="{{ route('login') }}"
+                                    class="text-primary text-gradient font-weight-bold">Login</a></p>
                         </form>
                     </div>
                 </div>
