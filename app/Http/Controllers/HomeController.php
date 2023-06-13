@@ -44,11 +44,12 @@ class HomeController extends Controller
 
     public function product(Product $product)
     {
+        $product = DB::table('products as p')->select('p.*', 'c.category')->join('categories as c', 'p.category_id', '=', 'c.id')->where('p.id', '=', $product->id)->first();
         return view('home.detail-product', [
             'title' => 'DnG Store | Detail Product',
             'user' => auth()->user(),
             'menu' => ['Product', 'Detail'],
-            'product' => Product::findOrFail($product->id)
+            'product' => $product
         ]);
     }
 

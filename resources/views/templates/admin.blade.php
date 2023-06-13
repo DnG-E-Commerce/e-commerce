@@ -138,6 +138,8 @@
     <script src="{{ asset('argon/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
     {{-- fontaweseme --}}
     <script src="{{ asset('fontawesome/js/all.min.js') }}"></script>
+    {{-- ChartJS --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
 </body>
 
 </html>

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('password');
             $table->text('address')->nullable();
             $table->string('phone', 15)->nullable();
-            $table->tinyInteger('role')->default(4);
+            $table->enum('role', ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']);
             $table->string('photo')->default('image/default.png');
             $table->integer('request_upgrade')->default(0);
             $table->rememberToken();

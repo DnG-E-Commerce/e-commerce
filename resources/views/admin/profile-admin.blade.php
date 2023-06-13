@@ -15,7 +15,7 @@
                     {{-- <img src="{{asset('storage/'.$select_user->photo)}}" alt="Photo {{$select_user->name}}" style="width: 12rem; background-size: cover;"> --}}
                     <div class="card-body mt-0">
                         <div class="card-header text-center">
-                            <h4>{{ $role[$user->role] }}</h4>
+                            <h4>{{ $user->role }}</h4>
                         </div>
                         <div class="d-grid justify-content-center" style="width: 100%; height: 15rem;">
                             <img src="{{ asset('storage/' . $user->photo) }}"

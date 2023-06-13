@@ -21,7 +21,8 @@
                             <div class="col-lg-6">
                                 <h3>{{ $order->product->name }} ({{ $order->product->uom }})</h3>
                                 <hr class="border border-1 border-dark">
-                                <form action="{{ route('order.update', ['order' => $order->id]) }}" method="post">
+                                <form action="{{ route('order.update', ['order' => $order->id]) }}" method="post"
+                                    id="form-checkout">
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="normal_price" id="normal_price"
@@ -93,24 +94,22 @@
                                         </div>
                                         <div class="col-auto">
                                             <select name="payment_method" id="payment_method" class="form-select">
-                                                <option value="VA">Virtual Account</option>
-                                                <option value="Dana">Dana</option>
-                                                <option value="Gopay">Gopay</option>
+                                                <option value="BRI VA">BRI Virtual Account</option>
+                                                <option value="BNI VA">BNI Virtual Account</option>
+                                                <option value="BCA VA">BCA Virtual Account</option>
                                                 <option value="COD">Cash On Delivery (COD)</option>
+                                                <option value="Cash">Cash</option>
                                             </select>
                                         </div>
                                         <div class="col-auto">
                                             <div class="d-grid">
-                                                <button class="btn bg-gradient-success float-end">Checkout!</button>
+                                                <button class="btn bg-gradient-success float-end"
+                                                    id="pay-button">Checkout!</button>
                                             </div>
                                         </div>
                                     </div>
                                 </form>
                             </div>
-                        </div>
-                        <hr class="border border-1 border-dark">
-                        <div class="text-break">
-                            {!! htmlspecialchars_decode($order->product->desc) !!}
                         </div>
                     </div>
                 </div>

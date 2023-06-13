@@ -5,6 +5,7 @@ use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -48,6 +49,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');
+    Route::put('/admin/order/update/{order}', 'orderUpdate')->name('admin.order.update');
 });
 
 Route::controller(UserController::class)->group(function () {
@@ -99,5 +101,10 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('/order/{order}', 'show')->name('order.show');
     Route::get('/order/delete/{order}', 'delete')->name('order.delete');
     Route::post('/order/checkout/{product}', 'checkout')->name('order.checkout');
+    Route::post('/order', 'store')->name('order.store');
     Route::put('/order/update/{order}', 'update')->name('order.update');
+});
+
+Route::controller(InvoiceController::class)->group(function () {
+    Route::get('/invoice/order/{invoice}', 'invoice')->name('invoice.order');
 });

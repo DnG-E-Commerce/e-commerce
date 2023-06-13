@@ -27,7 +27,7 @@
                             <div class="col-lg-6">
                                 <h3>{{ $product->name }} </h3>
                                 <h4 class="fst-italic text-secondary">
-                                    {{ $product->category->category }}
+                                    {{ $product->category }}
 
                                     @if (strtoupper($product->status) == 'READY')
                                         <span
@@ -38,7 +38,9 @@
                                     @endif
                                 </h4>
                                 <hr class="border border-1 border-dark">
-                                <form method="post">
+                                <form action="{{ route('order.store') }}" method="post" id="form-checkout-cart">
+                                    @csrf
+                                    <input type="hidden" name="mode" id="mode">
                                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                                     <div class="row g-3 align-items-center mb-3">
                                         <div class="col-2">
@@ -65,7 +67,6 @@
                                             </span>
                                         </div>
                                     </div>
-                                    @csrf
                                     <div class="row g-3 align-items-center mb-3">
                                         <div class="col-2">
                                             <label for="qty" class="col-form-label">Kuantitas</label>
@@ -85,9 +86,11 @@
                                         </h3>
                                     </div>
                                     <div class="d-flex gap-3 float-end">
-                                        <button class="btn btn-sm bg-gradient-success" id="checkout">Beli
+                                        <button class="btn btn-sm bg-gradient-success check" id="checkout"
+                                            data="checkout">Beli
                                             sekarang</button>
-                                        <button class="btn btn-sm bg-gradient-warning" id="keranjang">Masukkan
+                                        <button class="btn btn-sm bg-gradient-warning check" id="cart"
+                                            data="cart">Masukkan
                                             Keranjang</button>
                                     </div>
                                 </form>
@@ -113,45 +116,54 @@
     </script>
     <script>
         const checkout = document.getElementById('checkout')
-        const keranjang = document.getElementById('keranjang')
-
+        const cart = document.getElementById('cart')
+        let mode = document.getElementById('mode')
+        const form = document.getElementById('form-checkout-cart')
         checkout.addEventListener('click', (e) => {
-            e.preventDefault()
-            let qty = document.getElementById('qty').value
-            $.ajax({
-                url: '{{ route('order.checkout', ['product' => $product->id]) }}',
-                method: 'post',
-                data: {
-                    // product_id: '{{ $product->id }}',
-                    qty: qty,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    window.location.assign(`{{ route('order') }}`)
-                }
-            })
+            mode.value = "checkout"
+            form.submit()
         })
-        keranjang.addEventListener('click', (e) => {
-            e.preventDefault()
-            let qty = document.getElementById('qty').value
-            let price = document.getElementById('price').value
-            $.ajax({
-                url: '{{ route('cart.store', ['product' => $product->id]) }}',
-                method: 'post',
-                data: {
-                    // product_id: '{{ $product->id }}',
-                    qty: qty,
-                    price: price,
-                    _token: '{{ csrf_token() }}'
-                },
-                success: function(response) {
-                    $('#modal-notification').modal('show')
-                    window.location.assign(
-                        `{{ route('cart') }}`)
+        cart.addEventListener('click', (e) => {
+            mode.value = "cart"
+            form.submit()
+        })
+        // checkout.addEventListener('click', (e) => {
+        //     e.preventDefault()
+        //     let qty = document.getElementById('qty').value
+        //     $.ajax({
+        //         url: '{{ route('order.checkout', ['product' => $product->id]) }}',
+        //         method: 'post',
+        //         data: {
+        //             // product_id: '{{ $product->id }}',
+        //             qty: qty,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         success: function(response) {
+        //             window.location.assign(`{{ route('order') }}`)
+        //         }
+        //     })
+        // })
+        // keranjang.addEventListener('click', (e) => {
+        //     e.preventDefault()
+        //     let qty = document.getElementById('qty').value
+        //     let price = document.getElementById('price').value
+        //     $.ajax({
+        //         url: '{{ route('cart.store', ['product' => $product->id]) }}',
+        //         method: 'post',
+        //         data: {
+        //             // product_id: '{{ $product->id }}',
+        //             qty: qty,
+        //             price: price,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         success: function(response) {
+        //             $('#modal-notification').modal('show')
+        //             window.location.assign(
+        //                 `{{ route('cart') }}`)
 
-                }
-            })
-        })
+        //         }
+        //     })
+        // })
     </script>
     {{-- Modal Notification --}}
     <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"

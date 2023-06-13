@@ -12,6 +12,42 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function invoice(Invoice $invoice)
+    {
+        return view('invoice/detail-invoice', [
+            'title' => 'DnG Store | Detail Invoice',
+            'user' => auth()->user(),
+            'invoice' => $invoice,
+            'menu' => ['Invoice']
+        ]);
+    }
+
+    public function generateMidtrans(Invoice $invoice)
+    {
+        // Set your Merchant Server Key
+        \Midtrans\Config::$serverKey = 'midtrans.server_key';
+        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+        \Midtrans\Config::$isProduction = false;
+        // Set sanitization on (default)
+        \Midtrans\Config::$isSanitized = true;
+        // Set 3DS transaction for credit card to true
+        \Midtrans\Config::$is3ds = true;
+
+        $params = [
+            'transaction_details' => [
+                'order_id' => $invoice->id,
+                'gross_amount' => $invoice->grand_total,
+            ],
+            'customer_details' => [
+                'first_name' => $invoice->order->user->name,
+                'last_name' => '',
+                'address' => $invoice->order->user->address,
+                'phone' => $invoice->order->user->phone,
+            ],
+        ];
+        return response()->json(['midtrnas' => $params, 'invoice' => $invoice]);
+    }
+
     public function index()
     {
         //

@@ -20,8 +20,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->double('total_price');
             $table->text('send_to')->nullable();
-            $table->enum('payment_method', ['VA', 'Dana', 'Gopay', 'COD']);
-            $table->enum('status', ['Recive', 'Delivery', 'Paid', 'Unpaid']);
+            $table->enum('status', ['Recive', 'Delivery', 'Order Confirmed', 'Ordered'])->nullable();
             $table->timestamps();
         });
     }

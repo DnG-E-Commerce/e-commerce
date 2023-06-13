@@ -36,20 +36,34 @@
                                             <span class="badge badge-sm bg-gradient-success">Dalam Perjalanan</span>
                                         @break
 
-                                        @case('Paid')
-                                            <span class="badge badge-sm bg-gradient-success">Lunas</span>
+                                        @case('Order Confirmed')
+                                            <span class="badge badge-sm bg-gradient-success">Pembayaran Dikonfirmasi</span>
+                                        @break
+
+                                        @case('Ordered')
+                                            <span class="badge badge-sm bg-gradient-success">Dipesan</span>
                                         @break
 
                                         @default
-                                            <a href="{{ route('order.show', ['order' => $order->id]) }}"
-                                                class="btn btn-sm bg-gradient-warning">Bayar Sekarang</a>
+                                            <span class="badge badge-sm bg-gradient-warning">Harap Lengkapi data</span>
                                     @endswitch
                                     <div class="dropdown">
                                         <button class="fa-solid fa-ellipsis-vertical" type="button"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         </button>
                                         <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item"
+                                            @foreach ($order->invoice as $invoice)
+                                                @if ($invoice->status == 'Paid')
+                                                    <li>
+                                                        <a class="dropdown-item"
+                                                            href="{{ route('invoice.order', ['invoice' => $invoice->id]) }}"
+                                                            target="_blank">Detail
+                                                            Invoice</a>
+                                                    </li>
+                                                @endif
+                                            @endforeach
+                                            <li>
+                                                <a class="dropdown-item"
                                                     href="{{ route('order.delete', ['order' => $order->id]) }}"
                                                     onclick="return confirm('Apakah anda ingin menghapus produk ini dari keranjang?')">Hapus</a>
                                             </li>
@@ -85,9 +99,22 @@
                                                     readonly>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
+                                @if (!$order->status)
+                                    <a href="{{ route('order.show', ['order' => $order->id]) }}"
+                                        class="btn btn-sm btn-warning float-end">Lenkapi
+                                        data</a>
+                                @endif
+                                @if ($order->status == 'Ordered')
+                                    @foreach ($order->invoice as $invoice)
+                                        @if ($invoice->status == 'Paid')
+                                        @else
+                                            <a href="{{ route('invoice.order', ['invoice' => $invoice->id]) }}"
+                                                class="btn btn-sm btn-success float-end">Selesaikan Pembayaran</a>
+                                        @endif
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     @endforeach

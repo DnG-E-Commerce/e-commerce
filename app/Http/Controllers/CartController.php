@@ -45,54 +45,35 @@ class CartController extends Controller
      */
     public function store(Request $request, Product $product)
     {
+        $request->validate([
+            'qty' => 'required'
+        ]);
+        $user = auth()->user();
         $session = [
             'message' => 'Berhasil menambahkan prodak ke keranjang, Checkout sekarang juga!',
             'type' => 'Tambah ke Keranjang',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-
         $cart = DB::table('carts')->where([
-            ['user_id', '=', session('id')],
+            ['user_id', '=', $user->id],
             ['product_id', '=', $product->id]
         ])->first();
-
-        $request->validate([
-            'qty' => 'required'
-        ]);
-
         if ($cart) {
             DB::table('carts')->where([
-                ['user_id', '=', session('id')],
+                ['user_id', '=', $user->id],
                 ['product_id', '=', $product->id]
             ])->update([
                 'qty' => $cart->qty + $request->qty,
                 'total' => $cart->total + ($request->qty * $request->price)
             ]);
-            return response()->json([
-                'route' => 'home.product',
-                'product' => $product->id,
-                'message' => 'Berhasil menambahkan prodak ke keranjang, Checkout sekarang juga!',
-                'type' => 'Tambah ke Keranjang',
-                'alert' => 'Notifikasi Sukses!',
-                'class' => 'success'
-            ]);
         }
         DB::table('carts')->insert([
-            'user_id' => session('id'),
+            'user_id' => $user->id,
             'product_id' => $product->id,
             'qty' => $request->qty,
             'total' => ($request->qty * $request->price)
         ]);
-        return response()->json([
-            'route' => 'home.product',
-            'product' => $product->id,
-            'message' => 'Berhasil menambahkan prodak ke keranjang, Checkout sekarang juga!',
-            'type' => 'Tambah ke Keranjang',
-            'alert' => 'Notifikasi Sukses!',
-            'class' => 'success'
-        ]);
-        // return redirect()->route('home.product', ['product' => $product->id])->with($session);
     }
 
     /**
@@ -117,7 +98,7 @@ class CartController extends Controller
             $qty = $request->input('qty')[$key];
             $total = $request->input('total')[$key];
             $order = DB::table('orders')->where([
-                ['status', '=', 'Unpaid'],
+                ['status', '=', 'Ordered'],
                 ['user_id', '=', "$user->id"],
                 ['product_id', '=', "$productId"]
             ])->first();
@@ -128,40 +109,19 @@ class CartController extends Controller
                     'product_id' => $productId,
                     'qty' => $qty,
                     'total_price' => $total,
-                    'status' => 'Unpaid'
+                    'status' => 'Ordered'
                 ]);
             } else {
                 DB::table('orders')->where([
                     ['user_id', '=', "$user->id"],
                     ['product_id', '=', "$productId"],
-                    ['status', '=', "Unpaid"]
+                    ['status', '=', "Ordered"]
                 ])->update([
                     'qty' => $order->qty + $qty,
                     'total_price' => $total
                 ]);
             }
-
             DB::table('carts')->delete($key);
-            // dd($order);
-            // if ($order) {
-            //     if ($order->user_id == $user->id && $order->product_id == $productId) {
-            //         DB::table('orders')->where([
-            //             ['user_id', '=', "$user->id"],
-            //             ['product_id', '=', "$productId"]
-            //         ])->update([
-            //             'qty' => $order->qty + $qty,
-            //             'total_price' => $total
-            //         ]);
-            //     }
-            // } else {
-            //     DB::insert([
-            //         'user_id' => $user->id,
-            //         'product_id' => $productId,
-            //         'qty' => $qty,
-            //         'total_price' => $total,
-            //         'status' => 'Unpaid'
-            //     ]);
-            // }
         }
         return redirect()->route('cart')->with($session);
     }

@@ -39,7 +39,7 @@
         5 => [
             'id' => 6,
             'name' => 'Pesanan',
-            'icon' => 'ni ni-circle-08 text-dark',
+            'icon' => 'ni ni-box-2 text-warning',
             'url' => 'admin.orders',
         ],
         6 => [

@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\Product;
+use Faker\Core\Number;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Nette\Utils\Random;
 
 class OrderController extends Controller
 {
@@ -28,11 +30,58 @@ class OrderController extends Controller
         ]);
     }
 
+    public function store(Request $request)
+    {
+        $user = auth()->user();
+        $cart = DB::table('carts')->where([
+            ['user_id', '=', $user->id],
+            ['product_id', '=', $request->product_id]
+        ])->first();
+        if ($request->mode == 'checkout') {
+            DB::table('orders')->insert([
+                'user_id' => $user->id,
+                'product_id' => $request->product_id,
+                'qty' => $request->qty,
+                'total_price' => intval($request->qty * $request->price),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+            $session = [
+                'message' => 'Harap lengkapi data-data untuk melanjutkan transaksi!',
+                'type' => 'Checkout!',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            return redirect()->route('order')->with($session);
+        } else {
+            if ($cart) {
+                DB::table('carts')->where([
+                    ['user_id', '=', $user->id],
+                    ['product_id', '=', $request->product_id]
+                ])->update([
+                    'qty' => $cart->qty + $request->qty,
+                    'total' => $cart->total + ($request->qty * $request->price)
+                ]);
+            } else {
+                DB::table('carts')->insert([
+                    'user_id' => $user->id,
+                    'product_id' => $request->product_id,
+                    'qty' => $request->qty,
+                    'total' => intval($request->qty * $request->price),
+                    'created_at' => date('Y-m-d H:i:s'),
+                ]);
+            }
+            $session = [
+                'message' => 'Berhasil memasukkan produk ke keranjang, ayo checkout sekarang!',
+                'type' => 'Keranjang!',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            return redirect()->route('home.product', ['product' => $request->product_id])->with($session);
+        }
+    }
+
     public function show(Order $order)
     {
-        $user = session('id');
-        $order = Order::where('id', '=', "$order->id")->get()->first();
-
         return view('checkout.detail-checkout', [
             'title' => 'DnG Store | Checkout',
             'user' => auth()->user(),
@@ -45,6 +94,7 @@ class OrderController extends Controller
     {
         $user = auth()->user();
         $price = $user->role == 4 ? $product->customer_price : $product->reseller_price;
+
         $order = Order::where([
             ['user_id', '=', "$user->id"],
             ['product_id', '=', "$product->id"],
@@ -69,30 +119,57 @@ class OrderController extends Controller
                 'status' => 'Unpaid'
             ]);
         }
-
         return redirect()->route('order', ['order' => $order->id]);
     }
 
     public function update(Request $request, Order $order)
     {
-        $request->validate([
-            'qty' => 'required'
-        ]);
-        DB::table('orders')->where('id', $order->id)->update([
-            'qty' => $request->qty,
-            'total_price' => $request->price,
-            'status' => 'Paid',
-            'payment_method' => $request->payment_method,
-            'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi"
-        ]);
         $session = [
-            'message' => 'Berhasil mengedit data serta melakukan transaksi!',
+            'message' => 'Berhasil mengupdate!',
             'type' => 'Checkout!',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('order')->with($session);
-        //
+        $request->validate([
+            'qty' => 'required'
+        ]);
+        DB::beginTransaction();
+        DB::table('orders')->where('id', $order->id)->update([
+            'qty' => $request->qty,
+            'total_price' => $request->price,
+            'status' => 'Ordered',
+            'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi"
+        ]);
+
+        $status = 'Unpaid';
+        if ($request->payment_method == 'COD' || $request->payment_method == 'Cash') {
+            $status = 'Paid';
+        }
+
+        DB::table('invoices')->insert([
+            'invoice_code' => 'INV-1003' . Random::generate(3, '0-9') . substr($order->created_at, 0, 4) . $order->id,
+            'order_id' => $order->id,
+            'grand_total' => $order->total_price,
+            'status' => $status,
+            'payment_method' => $request->payment_method
+        ]);
+        DB::commit();
+        $last_invoice = DB::table('invoices')->latest('id')->first();
+        // DB::beginTransaction();
+        // DB::table('orders')->insert([
+        //     'user_id' => $order->user->id,
+        // ]);
+        // DB::commit();
+        // DB::raw("
+        // BEGIN;
+        // INSERT INTO orders (user_id, product_id, qty, total_price, send_to, status, created_at, updated_at) VALUES (4, 3, 10, 10000, \"subang\", NULL, now(), now());
+        // INSERT INTO invoices (order_id, invoice_code) VALUES ((SELECT LAST_INSERT_ID()), \"asue\");
+        // COMMIT;
+        // ");
+        if ($last_invoice->status == 'Paid') {
+            return redirect()->route('order')->with($session);
+        }
+        return redirect()->route('invoice.order', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function item()
@@ -167,21 +244,20 @@ class OrderController extends Controller
                     'class' => 'danger'
                 ];
                 break;
-            case 'Paid':
+            case 'Order Confirmed':
                 $session = [
-                    'message' => 'Tidak dapat menghapus transaksi orderan telah dibayar!',
+                    'message' => 'Tidak dapat menghapus transaksi orderan telah dikonfirmasi!',
                     'type' => 'Hapus Orderan',
                     'alert' => 'Notifikasi Gagal!',
                     'class' => 'danger'
                 ];
                 break;
-            case 'Unpaid':
-                DB::table('orders')->delete($order->id);
+            case 'Ordered':
                 $session = [
-                    'message' => 'Berhasil membatalkan orderan!',
+                    'message' => 'Tidak dapat menghapus transaksi orderan telah dibayar!',
                     'type' => 'Hapus Orderan',
-                    'alert' => 'Notifikasi berhasil!',
-                    'class' => 'success'
+                    'alert' => 'Notifikasi gagal!',
+                    'class' => 'danger'
                 ];
                 break;
         }

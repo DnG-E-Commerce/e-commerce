@@ -19,19 +19,19 @@ class UserSeeder extends Seeder
         DB::table('users')->insert([
             'name' => 'Owner D&G Store',
             'email' => 'dngstore.owner@gmail.com',
-            'role' => 0,
+            'role' => 'Owner',
             'password' => Hash::make('ownernich')
         ]);
         DB::table('users')->insert([
             'name' => 'Admin D&G Store',
             'email' => 'dngstore.admin@gmail.com',
-            'role' => 1,
+            'role' => 'Admin',
             'password' => Hash::make('adminajah')
         ]);
         DB::table('users')->insert([
             'name' => 'Driver D&G Store',
             'email' => 'dngstore.driver@gmail.com',
-            'role' => 2,
+            'role' => 'Driver',
             'password' => Hash::make('driverdngstoregoesbrrrh')
         ]);
     }

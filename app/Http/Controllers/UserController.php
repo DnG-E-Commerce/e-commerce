@@ -30,11 +30,11 @@ class UserController extends Controller
         $query = $request->search;
         if ($query) {
             $resellers = DB::table('users')->where([
-                ['role', '=', 3],
+                ['role', '=', 'Reseller'],
                 ['name', 'LIKE', "%$query%"]
             ])->get()->all();
         } else {
-            $resellers = DB::table('users')->where('role', 3)->get()->all();
+            $resellers = DB::table('users')->where('role', 'Reseller')->get()->all();
         }
         return view('reseller.index', [
             'title' => 'DnG Store | Reseller',
@@ -49,11 +49,11 @@ class UserController extends Controller
         $query = $request->search;
         if ($query) {
             $customers = DB::table('users')->where([
-                ['role', '=', 4],
+                ['role', '=', 'Customer'],
                 ['name', 'LIKE', "%$query%"]
             ])->get()->all();
         } else {
-            $customers = DB::table('users')->where('role', 4)->get()->all();
+            $customers = DB::table('users')->where('role', 'Customer')->get()->all();
         }
         return view('customer.index', [
             'title' => 'DnG Store | Customer',
@@ -102,7 +102,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'address' => $request->address,
             'phone' => $request->phone,
-            'role' => 4,
+            'role' => 'Customer',
             'photo' => $photo
         ]);
         $session = [
@@ -131,7 +131,7 @@ class UserController extends Controller
             'password' => Hash::make($request->password),
             'address' => $request->address,
             'phone' => $request->phone,
-            'role' => 3,
+            'role' => 'Reseller',
             'photo' => $photo
         ]);
         $session = [
@@ -166,7 +166,7 @@ class UserController extends Controller
         return view('detail-user', [
             'title' => 'DnG Store | Detail',
             'user' => auth()->user(),
-            'menu' => $select_user->role == 4 ? ['Customer', 'Detail'] : ['Reseller', 'Detail'],
+            'menu' => $select_user->role == 'Customer' ? ['Customer', 'Detail'] : ['Reseller', 'Detail'],
             'select_user' => $select_user,
             'role' => ['Owner', 'Admin', 'Drive', 'Reseller', 'Customer']
         ]);
@@ -190,10 +190,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(User $user)
     {
         DB::table('users')->where('id', $user->id)->update([
-            'role' => 3,
+            'role' => 'reseller',
         ]);
         $session = [
             'message' => 'Berhasil mengupgrade customer!',

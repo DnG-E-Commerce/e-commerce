@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\OrderChart;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
 {
@@ -23,23 +23,67 @@ class AdminController extends Controller
      */
     public function index()
     {
+        $month = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $data = [];
+        foreach ($month as $key => $m) {
+            $order = DB::table('orders')->whereMonth('created_at', '=', $key + 1)->get()->all();
+            array_push($data, [count($order)]);
+        }
+        $orderChart = new OrderChart();
+        $orderChart->labels($month);
+        $orderChart->dataset('Order by trimister', 'line', $data);
         return view('admin.index', [
             'title' => 'DnG Store | Dashboard',
             'menu' => ['Dashboard'],
             'user' => auth()->user(),
             'users' => User::all(),
+            'orders' => Order::all(),
             'products' => Product::all(),
+            'orderChart' => $orderChart
         ]);
     }
 
     public function order()
     {
+        $orders = DB::table('orders as o')->select('o.*', 'u.name as user', 'u.role as role', 'p.name as product')
+            ->join('users as u', 'o.user_id', '=', 'u.id')
+            ->join('products as p', 'o.product_id', '=', 'p.id')
+            ->where('o.status', '!=', 'Unpaid')
+            ->get()->all();
+
         return view('admin.admin-order', [
             'title' => 'DnG Store | Menu Order',
-            'menu' => ['Order'],
+            'menu' => ['Pesanan'],
             'user' => auth()->user(),
-            'orders' => Order::all()
+            'orders' => $orders,
+            'status' => ['Delivery', 'Order Confirmed', 'Paid'],
         ]);
+    }
+
+    public function orderUpdate(Request $request, Order $order)
+    {
+        $session = [
+            'message' => 'Berhasil mengupdate Pesanan!',
+            'type' => 'Edit Pesanan',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+
+        $product = DB::table('products')->where('id', $order->product_id)->first();
+
+        if ($order->status == 'Paid') {
+            DB::table('orders')->where('id', $order->id)->update([
+                'status' => $request->status
+            ]);
+            DB::table('products')->where('id', $order->product_id)->update([
+                'qty' => intval($product->qty - $order->qty)
+            ]);
+        } else {
+            DB::table('orders')->where('id', $order->id)->update([
+                'status' => $request->status
+            ]);
+        }
+        return redirect()->route('admin.orders')->with($session);
     }
 
     /**
@@ -69,13 +113,12 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
         return view('admin.profile-admin', [
             'title' => 'DnG Store | My Profile',
             'user' => auth()->user(),
             'menu' => ['Profile'],
-            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
         ]);
     }
 
@@ -85,7 +128,7 @@ class AdminController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit()
     {
         return view('admin.edit-admin', [
             'title' => 'DnG Store | Edit Profile',

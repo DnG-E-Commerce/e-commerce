@@ -23,6 +23,9 @@
     {{-- JQuery --}}
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
         crossorigin="anonymous"></script>
+    <!-- @TODO: replace SET_YOUR_CLIENT_KEY_HERE with your client key -->
+    <script type="text/javascript" src="{{ config('midtrans.snap_url') }}"
+        data-client-key="{{ config('midtrans.client_key') }}"></script>
 
 </head>
 
@@ -75,10 +78,11 @@
                                         <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
                                     </li>
                                     @if ($user->role == 4)
-                                    <li>
-                                        <a class="dropdown-item"
-                                            href="{{ route('cart', ['user' => $user->id]) }}">Mengajukan Reseller</a>
-                                    </li>
+                                        <li>
+                                            <a class="dropdown-item"
+                                                href="{{ route('cart', ['user' => $user->id]) }}">Mengajukan
+                                                Reseller</a>
+                                        </li>
                                     @endif
                                     <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                 </ul>

@@ -6,9 +6,6 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-
-use function PHPSTORM_META\map;
 
 class ProductController extends Controller
 {
@@ -32,14 +29,11 @@ class ProductController extends Controller
                 ->where('name', 'like', "%$query%")
                 ->orWhere('category', 'like', "%$query%")
                 ->get()->all();
-            // $products = Product::where('name', 'LIKE', "%$query%")
-            //     ->get()->all();
         } else {
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
                 ->get()->all();
-            // $products = Product::all();
         }
         // dd($products);
         return view('product.index', [

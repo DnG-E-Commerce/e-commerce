@@ -16,7 +16,7 @@
                         <h6>Tabel Pesanan</h6>
                     </div>
                     <div class="card-body px-0 pt-0 pb-2">
-                        <div class="table-responsive p-0">
+                        <div class="table-responsive p-1">
                             <table class="table align-items-center mb-0">
                                 <thead>
                                     <tr>
@@ -30,8 +30,11 @@
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             qty</th>
                                         <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Total</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -41,27 +44,38 @@
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->user->name }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->user }}
+                                                    ({{ $data->role }})
+                                                </span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->product->name }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->product }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span
                                                     class="text-xs font-weight-bold">{{ $data->qty ? $data->qty : 'Belum ada' }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span
-                                                    class="text-xs font-weight-bold">{{ $data->total_price ? $data->total_price : 'Belum ada' }}</span>
+                                                <span class="text-xs font-weight-bold">Rp.
+                                                    {{ $data->total_price ? $data->total_price : 'Belum ada' }}</span>
                                             </td>
-                                            <td class="text-center align-end">
-                                                {{-- <a class="btn btn-sm bg-gradient-primary"
-                                                    href="{{ route('customer.update', ['user' => $data->id]) }}"
-                                                    onclick="return confirm('Apakah anda yakin ingin mengupgrade customer berikut?')">Upgrade</a>
-                                                <a href="{{ route('user.show', ['user' => $data->id]) }}"
-                                                    class="btn btn-sm bg-gradient-warning">
-                                                    Detail
-                                                </a> --}}
+                                            <td class="align-middle text-sm">
+                                                <form action="{{ route('admin.order.update', ['order' => $data->id]) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="input-group">
+                                                        <select name="status" id="status" class="form-select"
+                                                            style="width: 2rem;">
+                                                            @foreach ($status as $s)
+                                                                <option value="{{ $s }}"
+                                                                    {{ $data->status == $s ? 'selected' : '' }}>
+                                                                    {{ $s }}</option>
+                                                            @endforeach
+                                                        </select>
+                                                        <button class="input-group-text bg-gradient-warning">Update</button>
+                                                    </div>
+                                                </form>
                                             </td>
                                         </tr>
                                     @endforeach

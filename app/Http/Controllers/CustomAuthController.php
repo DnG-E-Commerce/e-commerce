@@ -34,11 +34,7 @@ class CustomAuthController extends Controller
             'password' => 'required',
         ]);
         if (Auth::attempt($credentials)) {
-            if ($user->role == 4) {
-                session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-                return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
-            }
-            if ($user->role == 3) {
+            if ($user->role == 'Customer' || $user->role == 'Reseller') {
                 session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
                 return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
             }
@@ -62,7 +58,8 @@ class CustomAuthController extends Controller
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
-            'password' => Hash::make($request->password)
+            'password' => Hash::make($request->password),
+            'role' => 'Customer'
         ]);
         $session = [
             'message' => 'Berhasil membuat akun!',
