@@ -40,7 +40,7 @@
             'id' => 6,
             'name' => 'Pesanan',
             'icon' => 'ni ni-box-2 text-warning',
-            'url' => 'admin.orders',
+            'url' => 'admin.invoices',
         ],
         6 => [
             'id' => 7,

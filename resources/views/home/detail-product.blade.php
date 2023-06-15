@@ -11,7 +11,7 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-8 mb-lg-0 mb-4">
                 <div class="card-header pb-0">
-                    <div class="text-center">
+                    <div class="text-center mb-4">
                         <h3>Detail Produk</h3>
                     </div>
                 </div>
@@ -28,62 +28,68 @@
                                 <h3>{{ $product->name }} </h3>
                                 <h4 class="fst-italic text-secondary">
                                     {{ $product->category }}
-
-                                    @if (strtoupper($product->status) == 'READY')
+                                    @if ($product->qty_status == 'Ready')
                                         <span
-                                            class="badge badge-sm bg-gradient-success float-end">{{ $product->status }}</span>
+                                            class="badge badge-sm bg-gradient-success float-end">{{ $product->qty_status }}</span>
                                     @else
                                         <span
-                                            class="badge badge-sm bg-gradient-danger float-end">{{ $product->status }}</span>
+                                            class="badge badge-sm bg-gradient-danger float-end">{{ $product->qty_status }}</span>
                                     @endif
                                 </h4>
                                 <hr class="border border-1 border-dark">
-                                <form action="{{ route('order.store') }}" method="post" id="form-checkout-cart">
+                                <form method="post" id="form-checkout-cart">
                                     @csrf
                                     <input type="hidden" name="mode" id="mode">
                                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                                     <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-2">
+                                        <div class="col-3">
                                             <label for="price" class="col-form-label">Harga</label>
                                         </div>
                                         <div class="col-auto">
                                             <input type="number" name="price" id="price"
                                                 class="form-control-plaintext"
-                                                value="{{ $user->role == 4 ? $product->customer_price : $product->reseller_price }}"
+                                                value="{{ $user->role == 'Customer' ? $product->customer_price : $product->reseller_price }}"
                                                 readonly>
                                         </div>
-
                                         <div class="col-4">
                                             <span id="prices_for" class="form-text">
-                                                {{ $user->role == 4 ? 'Harga Customer' : 'Harga Reseller' }}
-                                            </span>
-                                        </div>
-                                        <div class="col-2">
-                                            <label for="uom" class="col-form-label">Satuan </label>
-                                        </div>
-                                        <div class="col-4">
-                                            <span id="prices_for" class="form-text">
-                                                {{ $product->uom }}
+                                                {{ $user->role == 'Customer' ? 'Harga Customer' : 'Harga Reseller' }}
                                             </span>
                                         </div>
                                     </div>
                                     <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-2">
+                                        <div class="col-3">
+                                            <label for="uom" class="col-form-label">Satuan</label>
+                                        </div>
+                                        <div class="col-auto">
+                                            <input type="text" name="uom" id="uom"
+                                                class="form-control-plaintext" value="{{ $product->uom }}" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-3">
                                             <label for="qty" class="col-form-label">Kuantitas</label>
                                         </div>
                                         <div class="col-auto">
-                                            <input type="number" name="qty" id="qty" class="form-control">
+                                            <input type="number" name="qty" id="qty"
+                                                class="form-control @error('qty') is-invalid @enderror">
                                         </div>
                                         <div class="col-2">
-                                            <span id="passwordHelpInline" class="form-text">
+                                            <span class="form-text">
                                                 Stok : {{ $product->qty }}
                                             </span>
                                         </div>
+                                        @error('qty')
+                                            <small class="text-danger">{{ $message }}</small>
+                                        @enderror
                                     </div>
-                                    <div class="d-flex gap-3">
-                                        <h3>Harga :
-                                            <h3 id="canvas-harga"></h3>
-                                        </h3>
+                                    <div class="row g-3 align-items-center mb-3">
+                                        <div class="col-3">
+                                            <label for="total_harga" class="col-form-label">Total Harga</label>
+                                        </div>
+                                        <div class="col-auto d-flex fw-bolder">
+                                            <input type="text" id="canvas-harga" class="form-control-plaintext" readonly>
+                                        </div>
                                     </div>
                                     <div class="d-flex gap-3 float-end">
                                         <button class="btn btn-sm bg-gradient-success check" id="checkout"
@@ -106,64 +112,31 @@
         </div>
     </div>
     <script>
-        let qty = document.getElementById('qty')
-        let price = document.getElementById('price').value
-        let canvasHarga = document.getElementById('canvas-harga')
-        canvasHarga.innerText = "0"
-        qty.addEventListener('change', () => {
-            canvasHarga.innerText = qty.value * price
+        $(document).ready(function() {
+            let qty = $('#qty')
+            let price = $('#price')
+            let canvasHarga = $('#canvas-harga')
+            canvasHarga.val(`Rp. 0`)
+            qty.keyup(() => {
+                console.log('Berubah')
+                canvasHarga.val(`Rp. ${qty.val() * price.val()}`)
+            })
         })
     </script>
     <script>
-        const checkout = document.getElementById('checkout')
-        const cart = document.getElementById('cart')
-        let mode = document.getElementById('mode')
-        const form = document.getElementById('form-checkout-cart')
-        checkout.addEventListener('click', (e) => {
-            mode.value = "checkout"
-            form.submit()
+        const checkout = $('#checkout')
+        const cart = $('#cart')
+        let mode = $('#mode')
+        checkout.click(() => {
+            mode.val('checkout')
+            $('#form-checkout-cart').attr('action', "{{ route('StoreOrder') }}")
+            $('#form-checkout-cart').submit()
         })
-        cart.addEventListener('click', (e) => {
-            mode.value = "cart"
-            form.submit()
+        cart.click(() => {
+            mode.val('cart')
+            $('#form-checkout-cart').attr('action', "{{ route('StoreCart') }}")
+            $('#form-checkout-cart').submit()
         })
-        // checkout.addEventListener('click', (e) => {
-        //     e.preventDefault()
-        //     let qty = document.getElementById('qty').value
-        //     $.ajax({
-        //         url: '{{ route('order.checkout', ['product' => $product->id]) }}',
-        //         method: 'post',
-        //         data: {
-        //             // product_id: '{{ $product->id }}',
-        //             qty: qty,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             window.location.assign(`{{ route('order') }}`)
-        //         }
-        //     })
-        // })
-        // keranjang.addEventListener('click', (e) => {
-        //     e.preventDefault()
-        //     let qty = document.getElementById('qty').value
-        //     let price = document.getElementById('price').value
-        //     $.ajax({
-        //         url: '{{ route('cart.store', ['product' => $product->id]) }}',
-        //         method: 'post',
-        //         data: {
-        //             // product_id: '{{ $product->id }}',
-        //             qty: qty,
-        //             price: price,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         success: function(response) {
-        //             $('#modal-notification').modal('show')
-        //             window.location.assign(
-        //                 `{{ route('cart') }}`)
-
-        //         }
-        //     })
-        // })
     </script>
     {{-- Modal Notification --}}
     <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"

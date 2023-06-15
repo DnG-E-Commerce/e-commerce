@@ -22,51 +22,43 @@
                                     <tr>
                                         <th class="text-center">#</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Nama</th>
+                                            Invoice Code</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Produk</th>
+                                            Grand Total</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            qty</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Total</th>
+                                            Status</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Aksi</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($orders as $key => $data)
+                                    @foreach ($invoices as $key => $data)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->user }}
-                                                    ({{ $data->role }})
-                                                </span>
+                                                <span class="text-xs font-weight-bold">{{ $data->invoice_code }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->product }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->grand_total }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span
-                                                    class="text-xs font-weight-bold">{{ $data->qty ? $data->qty : 'Belum ada' }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->status }}</span>
                                             </td>
-                                            <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">Rp.
-                                                    {{ $data->total_price ? $data->total_price : 'Belum ada' }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
+                                            <td class="align-middle text-sm col-2">
                                                 <form action="{{ route('admin.order.update', ['order' => $data->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('PUT')
                                                     <div class="input-group">
-                                                        <select name="status" id="status" class="form-select"
-                                                            style="width: 2rem;">
+                                                        <select name="status" id="status" class="form-select">
                                                             @foreach ($status as $s)
                                                                 <option value="{{ $s }}"
                                                                     {{ $data->status == $s ? 'selected' : '' }}>
@@ -76,6 +68,10 @@
                                                         <button class="input-group-text bg-gradient-warning">Update</button>
                                                     </div>
                                                 </form>
+                                            </td>
+                                            <td class="align-middle text-sm">
+                                                <a href="{{ route('admin.detail.invoice', ['invoice' => $data->id]) }}"
+                                                    class="btn btn-sm bg-gradient-primary">Detail</a>
                                             </td>
                                         </tr>
                                     @endforeach

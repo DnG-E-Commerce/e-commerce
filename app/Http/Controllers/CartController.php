@@ -98,32 +98,30 @@ class CartController extends Controller
             $qty = $request->input('qty')[$key];
             $total = $request->input('total')[$key];
             $order = DB::table('orders')->where([
-                ['status', '=', 'Ordered'],
+                ['status', '=', null],
                 ['user_id', '=', "$user->id"],
                 ['product_id', '=', "$productId"]
             ])->first();
-
             if (!$order) {
                 DB::table('orders')->insert([
                     'user_id' => $user->id,
                     'product_id' => $productId,
                     'qty' => $qty,
-                    'total_price' => $total,
-                    'status' => 'Ordered'
+                    'total' => $total,
                 ]);
             } else {
                 DB::table('orders')->where([
                     ['user_id', '=', "$user->id"],
                     ['product_id', '=', "$productId"],
-                    ['status', '=', "Ordered"]
+                    ['status', '=', null]
                 ])->update([
                     'qty' => $order->qty + $qty,
-                    'total_price' => $total
+                    'total' => $total
                 ]);
             }
             DB::table('carts')->delete($key);
         }
-        return redirect()->route('cart')->with($session);
+        return redirect()->route('order')->with($session);
     }
 
     public function show(Cart $cart)

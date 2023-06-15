@@ -11,8 +11,13 @@ class Invoice extends Model
 {
     use HasFactory;
 
-    public function order(): BelongsTo
+    public function order(): HasMany
     {
-        return $this->belongsTo(Order::class);
+        return $this->hasMany(Order::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

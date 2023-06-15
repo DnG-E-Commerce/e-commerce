@@ -15,12 +15,12 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('invoice_id')->nullable();
             $table->foreignId('user_id');
             $table->integer('product_id');
             $table->integer('qty');
-            $table->double('total_price');
-            $table->text('send_to')->nullable();
-            $table->enum('status', ['Recive', 'Delivery', 'Order Confirmed', 'Ordered'])->nullable();
+            $table->double('total');
+            $table->enum('status', ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'])->nullable();
             $table->timestamps();
         });
     }

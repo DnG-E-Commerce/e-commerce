@@ -23,7 +23,8 @@ return new class extends Migration
             $table->string('uom')->nullable();
             $table->float('weight')->nullable();
             $table->integer('qty')->default(0);
-            $table->string('status')->nullable();
+            $table->enum('qty_status', ['Ready', 'Habis'])->nullable();
+            $table->enum('special_status', ['Pre Order', 'Biasa'])->nullable();
             $table->foreignId('category_id');
             $table->timestamps();
         });

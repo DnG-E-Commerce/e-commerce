@@ -83,7 +83,8 @@ class ProductController extends Controller
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
             'qty' => $request->qty ? $request->qty : 0,
-            'status' => $request->status,
+            'qty_status' => $request->qty ? 'Ready' : 'Habis',
+            'special_status' => $request->status,
             'category_id' => $request->category,
         ]);
         $session = [

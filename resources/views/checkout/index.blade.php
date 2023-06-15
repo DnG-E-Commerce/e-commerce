@@ -14,7 +14,7 @@
                     <h4 class="mb-4">List Orderan Produk</h4>
                     <h4>Total : {{ count($orders) }}</h4>
                 </div>
-                <form action="{{ route('cart.checkout') }}" method="post" enctype="multipart/form-data">
+                <form action="{{ route('order.checkout') }}" method="post" enctype="multipart/form-data">
                     @csrf
                     @if (!$orders)
                         <div class="card shadow mb-3">
@@ -27,41 +27,18 @@
                         <div class="card shadow-lg mb-3">
                             <div class="card-body">
                                 <div class="d-flex gap-5 form-check form-check-inline float-end">
-                                    @switch($order->status)
-                                        @case('Recive')
-                                            <span class="badge badge-sm bg-gradient-success">Diterima</span>
-                                        @break
-
-                                        @case('Delivery')
-                                            <span class="badge badge-sm bg-gradient-success">Dalam Perjalanan</span>
-                                        @break
-
-                                        @case('Order Confirmed')
-                                            <span class="badge badge-sm bg-gradient-success">Pembayaran Dikonfirmasi</span>
-                                        @break
-
-                                        @case('Ordered')
-                                            <span class="badge badge-sm bg-gradient-success">Dipesan</span>
-                                        @break
-
-                                        @default
-                                            <span class="badge badge-sm bg-gradient-warning">Harap Lengkapi data</span>
-                                    @endswitch
+                                    <div class="form-group m-0">
+                                        <input type="hidden" name="order_id[{{ $order->id }}]"
+                                            value="{{ $order->id }}">
+                                        <input class="form-check-input" type="checkbox" id="inlineCheckbox"
+                                            name="order[{{ $order->id }}]">
+                                        <label class="form-check-label" for="order_select">Pilih</label>
+                                    </div>
                                     <div class="dropdown">
                                         <button class="fa-solid fa-ellipsis-vertical" type="button"
                                             data-bs-toggle="dropdown" aria-expanded="false">
                                         </button>
                                         <ul class="dropdown-menu">
-                                            @foreach ($order->invoice as $invoice)
-                                                @if ($invoice->status == 'Paid')
-                                                    <li>
-                                                        <a class="dropdown-item"
-                                                            href="{{ route('invoice.order', ['invoice' => $invoice->id]) }}"
-                                                            target="_blank">Detail
-                                                            Invoice</a>
-                                                    </li>
-                                                @endif
-                                            @endforeach
                                             <li>
                                                 <a class="dropdown-item"
                                                     href="{{ route('order.delete', ['order' => $order->id]) }}"
@@ -77,9 +54,9 @@
                                             alt="Photo {{ $order->product->name }}">
                                     </div>
                                     <div class="col-lg-8">
-                                        <h5 class="card-title">{{ $order->product->name }}</h5>
-                                        <p class="card-text">Dikirim ke : {{ $order->send_to ? $order->send_to : '-' }}
-                                        </p>
+                                        <div class="d-flex gap-3">
+                                            <h5 class="card-title">{{ $order->product->name }}</h5>
+                                        </div>
                                         <div class="d-flex gap-5 g-3 align-items-center mb-3">
                                             <div class="col-2">
                                                 <label for="qty" class="col-form-label">Kuantitas</label>
@@ -95,29 +72,19 @@
                                             </div>
                                             <div class="col-auto">
                                                 <input type="number" name="total[{{ $order->id }}]"
-                                                    class="form-control-plaintext" value="{{ $order->total_price }}"
-                                                    readonly>
+                                                    class="form-control-plaintext" value="{{ $order->total }}" readonly>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                @if (!$order->status)
-                                    <a href="{{ route('order.show', ['order' => $order->id]) }}"
-                                        class="btn btn-sm btn-warning float-end">Lenkapi
-                                        data</a>
-                                @endif
-                                @if ($order->status == 'Ordered')
-                                    @foreach ($order->invoice as $invoice)
-                                        @if ($invoice->status == 'Paid')
-                                        @else
-                                            <a href="{{ route('invoice.order', ['invoice' => $invoice->id]) }}"
-                                                class="btn btn-sm btn-success float-end">Selesaikan Pembayaran</a>
-                                        @endif
-                                    @endforeach
-                                @endif
                             </div>
                         </div>
                     @endforeach
+                    @if ($orders)
+                        <div class="d-grid">
+                            <button class="btn bg-gradient-success">Checkout Sekarang</button>
+                        </div>
+                    @endif
                 </form>
             </div>
         </div>

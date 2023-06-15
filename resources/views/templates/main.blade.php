@@ -61,31 +61,46 @@
                 <ul class="navbar-nav my-2">
                     <li class="nav-item">
                         @if (Session::get('name'))
-                            <div class="dropdown">
-                                <button class="btn btn-secondary dropdown-toggle mb-0" type="button"
-                                    data-bs-toggle="dropdown" aria-expanded="false">
-                                    {{ $user->name }}
-                                </button>
-                                <ul class="dropdown-menu dropdown-menu-dark">
-                                    <li>
-                                        <a class="dropdown-item"
-                                            href="{{ route('home.profile', ['user' => $user->id]) }}">Profile</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('order') }}">Transaksi</a>
-                                    </li>
-                                    <li>
-                                        <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
-                                    </li>
-                                    @if ($user->role == 4)
+                            <div class="d-flex gap-4">
+                                <div class="dropdown align-items-center">
+                                    <a class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-bell text-white"></i>
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('order') }}">Riwayat Transaksi</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle mb-0" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                        {{ $user->name }}
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-dark">
                                         <li>
                                             <a class="dropdown-item"
-                                                href="{{ route('cart', ['user' => $user->id]) }}">Mengajukan
-                                                Reseller</a>
+                                                href="{{ route('home.profile', ['user' => $user->id]) }}">Profile</a>
                                         </li>
-                                    @endif
-                                    <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
-                                </ul>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('order') }}">Pesanan</a>
+                                        </li>
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
+                                        </li>
+                                        @if ($user->role == 'Customer')
+                                            <li>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('cart', ['user' => $user->id]) }}">Mengajukan
+                                                    Reseller</a>
+                                            </li>
+                                        @endif
+                                        <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                                    </ul>
+                                </div>
                             </div>
                         @else
                             <a href="{{ route('login') }}" class="btn btn-sm btn-secondary mb-0">Login</a>

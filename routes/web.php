@@ -9,9 +9,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
-use App\Models\Category;
 use Illuminate\Support\Facades\Route;
-use Monolog\Handler\RotatingFileHandler;
 
 /*
 |--------------------------------------------------------------------------
@@ -45,7 +43,8 @@ Route::controller(CartController::class)->group(function () {
 
 Route::controller(AdminController::class)->group(function () {
     Route::get('/admin', 'index')->name('admin');
-    Route::get('/admin/orders', 'order')->name('admin.orders');
+    Route::get('/admin/invoices', 'invoice')->name('admin.invoices');
+    Route::get('/admin/invoice/{invoice}', 'showInvoice')->name('admin.detail.invoice');
     Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');
@@ -100,11 +99,13 @@ Route::controller(OrderController::class)->group(function () {
     Route::get('/order', 'index')->name('order');
     Route::get('/order/{order}', 'show')->name('order.show');
     Route::get('/order/delete/{order}', 'delete')->name('order.delete');
-    Route::post('/order/checkout/{product}', 'checkout')->name('order.checkout');
-    Route::post('/order', 'store')->name('order.store');
-    Route::put('/order/update/{order}', 'update')->name('order.update');
+    Route::post('/order/checkout', 'checkout')->name('order.checkout');
+    Route::post('/order/store', 'storeToOrder')->name('StoreOrder');
+    Route::post('/cart/store', 'storeToCart')->name('StoreCart');
 });
 
 Route::controller(InvoiceController::class)->group(function () {
     Route::get('/invoice/order/{invoice}', 'invoice')->name('invoice.order');
+    Route::get('/invoice/edit/{invoice}', 'edit')->name('invoice.edit');
+    Route::put('/invoice/update/{invoice}', 'update')->name('invoice.update');
 });

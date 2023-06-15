@@ -26,19 +26,18 @@
                                     @csrf
                                     @method('PUT')
                                     <input type="hidden" name="normal_price" id="normal_price"
-                                        value="{{ $user->role == 4 ? $order->product->customer_price : $order->product->reseller_price }}">
+                                        value="{{ $user->role == 'Customer' ? $order->product->customer_price : $order->product->reseller_price }}">
                                     <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-2">
+                                        <div class="col-4">
                                             <label for="price" class="col-form-label">Total Harga</label>
-                                            <h5 id="canvas-harga"></h5>
                                         </div>
                                         <div class="col-auto">
                                             <input type="number" name="price" id="price"
-                                                class="form-control-plaintext" value="{{ $order->total_price }}" readonly>
+                                                class="form-control-plaintext" value="{{ $order->total }}" readonly>
                                         </div>
                                     </div>
                                     <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-2">
+                                        <div class="col-4">
                                             <label for="qty" class="col-form-label">Kuantitas</label>
                                         </div>
                                         <div class="col-auto">
@@ -49,7 +48,7 @@
                                                 value="{{ $order->qty }}">
                                         </div>
                                         <div class="col-2">
-                                            <span id="passwordHelpInline" class="form-text">
+                                            <span class="form-text">
                                                 Stok : {{ $order->product->qty }}
                                             </span>
                                         </div>
@@ -58,10 +57,10 @@
                                         @enderror
                                     </div>
                                     <div class="row g-3 align-items-center mb-3">
-                                        <div class="col-2 align-self-start">
+                                        <div class="col-4 align-self-start">
                                             <label for="qty" class="col-form-label">Dikirim ke</label>
                                         </div>
-                                        <div class="col-10">
+                                        <div class="col-8">
                                             <div class="form-group mb-3">
                                                 <label for="provinsi">Provinsi</label>
                                                 <select name="provinsi" class="form-select" id="provinsi">
@@ -88,11 +87,11 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="row g-8 align-items-center">
-                                        <div class="col-2">
+                                    <div class="row g-0 align-items-center mb-3">
+                                        <div class="col-4">
                                             <label for="price" class="col-form-label">Metode Pembayaran</label>
                                         </div>
-                                        <div class="col-auto">
+                                        <div class="col-8">
                                             <select name="payment_method" id="payment_method" class="form-select">
                                                 <option value="BRI VA">BRI Virtual Account</option>
                                                 <option value="BNI VA">BNI Virtual Account</option>
@@ -101,12 +100,9 @@
                                                 <option value="Cash">Cash</option>
                                             </select>
                                         </div>
-                                        <div class="col-auto">
-                                            <div class="d-grid">
-                                                <button class="btn bg-gradient-success float-end"
-                                                    id="pay-button">Checkout!</button>
-                                            </div>
-                                        </div>
+                                    </div>
+                                    <div class="d-flex float-end">
+                                        <button class="btn bg-gradient-success float-end" id="pay-button">Checkout!</button>
                                     </div>
                                 </form>
                             </div>
@@ -117,12 +113,11 @@
         </div>
     </div>
     <script>
-        let qty = document.getElementById('qty')
-        let price = document.getElementById('price')
-        let normalPrice = document.getElementById('normal_price')
-        let canvasHarga = document.getElementById('canvas-harga')
-        qty.addEventListener('keyup', () => {
-            price.value = parseInt(qty.value * normalPrice.value)
+        let qty = $('#qty')
+        let price = $('#price')
+        let normalPrice = $('#normal_price')
+        qty.keyup(() => {
+            price.val(parseInt(qty.val() * normalPrice.val()))
         })
     </script>
     <script>

@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order;
-use App\Models\Product;
-use Faker\Core\Number;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
+use Midtrans\Transaction;
 use Nette\Utils\Random;
 
 class OrderController extends Controller
@@ -21,6 +21,7 @@ class OrderController extends Controller
         $user = auth()->user();
         $orders = Order::where([
             ['user_id', '=', "$user->id"],
+            ['status', '=', null]
         ])->get()->all();
         return view('checkout.index', [
             'title' => 'DnG Store | Checkout',
@@ -30,56 +31,85 @@ class OrderController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    public function storeToOrder(Request $request)
     {
+        $request->validate([
+            'qty' => 'required|numeric'
+        ]);
+        $user = auth()->user();
+        $order = DB::table('orders')->where([
+            ['user_id', '=', $user->id],
+            ['product_id', '=', $request->product_id],
+            ['status', '=', null]
+        ])->first();
+        DB::beginTransaction();
+        if ($order) {
+            DB::table('orders')->where([
+                ['user_id', '=', $user->id],
+                ['product_id', '=', $request->product_id],
+                ['status', '=', null]
+            ])->update([
+                'qty' => $order->qty + $request->qty,
+                'total' => $order->total + ($request->qty * $request->price),
+                'updated_at' => now('Asia/Jakarta')
+            ]);
+        } else {
+            DB::table('orders')->insert([
+                'user_id' => $user->id,
+                'product_id' => $request->product_id,
+                'qty' => $request->qty,
+                'total' => intval($request->qty * $request->price),
+                'created_at' => date('Y-m-d H:i:s'),
+            ]);
+        }
+        DB::commit();
+        $session = [
+            'message' => 'Harap lengkapi data-data untuk melanjutkan transaksi!',
+            'type' => 'Checkout!',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('order')->with($session);
+    }
+
+    public function storeToCart(Request $request)
+    {
+        //
+        $request->validate([
+            'qty' => 'required|numeric'
+        ]);
         $user = auth()->user();
         $cart = DB::table('carts')->where([
             ['user_id', '=', $user->id],
             ['product_id', '=', $request->product_id]
         ])->first();
-        if ($request->mode == 'checkout') {
-            DB::table('orders')->insert([
+        DB::beginTransaction();
+        if ($cart) {
+            DB::table('carts')->where([
+                ['user_id', '=', $user->id],
+                ['product_id', '=', $request->product_id]
+            ])->update([
+                'qty' => $cart->qty + $request->qty,
+                'total' => $cart->total + ($request->qty * $request->price)
+            ]);
+        } else {
+            DB::table('carts')->insert([
                 'user_id' => $user->id,
                 'product_id' => $request->product_id,
                 'qty' => $request->qty,
-                'total_price' => intval($request->qty * $request->price),
+                'total' => intval($request->qty * $request->price),
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
-            $session = [
-                'message' => 'Harap lengkapi data-data untuk melanjutkan transaksi!',
-                'type' => 'Checkout!',
-                'alert' => 'Notifikasi Sukses!',
-                'class' => 'success'
-            ];
-            return redirect()->route('order')->with($session);
-        } else {
-            if ($cart) {
-                DB::table('carts')->where([
-                    ['user_id', '=', $user->id],
-                    ['product_id', '=', $request->product_id]
-                ])->update([
-                    'qty' => $cart->qty + $request->qty,
-                    'total' => $cart->total + ($request->qty * $request->price)
-                ]);
-            } else {
-                DB::table('carts')->insert([
-                    'user_id' => $user->id,
-                    'product_id' => $request->product_id,
-                    'qty' => $request->qty,
-                    'total' => intval($request->qty * $request->price),
-                    'created_at' => date('Y-m-d H:i:s'),
-                ]);
-            }
-            $session = [
-                'message' => 'Berhasil memasukkan produk ke keranjang, ayo checkout sekarang!',
-                'type' => 'Keranjang!',
-                'alert' => 'Notifikasi Sukses!',
-                'class' => 'success'
-            ];
-            return redirect()->route('home.product', ['product' => $request->product_id])->with($session);
         }
+        DB::commit();
+        $session = [
+            'message' => 'Berhasil memasukkan produk ke keranjang, ayo checkout sekarang!',
+            'type' => 'Keranjang!',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('home.product', ['product' => $request->product_id])->with($session);
     }
-
     public function show(Order $order)
     {
         return view('checkout.detail-checkout', [
@@ -90,86 +120,46 @@ class OrderController extends Controller
         ]);
     }
 
-    public function checkout(Request $request, Product $product)
+    public function checkout(Request $request)
     {
         $user = auth()->user();
-        $price = $user->role == 4 ? $product->customer_price : $product->reseller_price;
-
-        $order = Order::where([
-            ['user_id', '=', "$user->id"],
-            ['product_id', '=', "$product->id"],
-            ['status', '=', 'Unpaid'],
-        ])->get()->first();
-
-        if ($order) {
-            DB::table('orders')->where([
-                ['user_id', '=', "$user->id"],
-                ['product_id', '=', "$product->id"],
-                ['status', '=', 'Unpaid'],
-            ])->update([
-                'qty' => $order->qty + $request->get('qty'),
-                'total_price' => $order->total_price + ($request->get('qty') * $price)
-            ]);
-        } else {
-            DB::table('orders')->insert([
-                'user_id' => $user->id,
-                'product_id' => $product->id,
-                'qty' => $request->get('qty'),
-                'total_price' => $request->get('qty') * $price,
-                'status' => 'Unpaid'
-            ]);
-        }
-        return redirect()->route('order', ['order' => $order->id]);
-    }
-
-    public function update(Request $request, Order $order)
-    {
+        $request->validate([
+            'order' => 'required'
+        ]);
         $session = [
-            'message' => 'Berhasil mengupdate!',
+            'message' => 'Harap Lengkapi data terlebih dahulu sebelum melanjutkan pembayaran!',
             'type' => 'Checkout!',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        $request->validate([
-            'qty' => 'required'
-        ]);
         DB::beginTransaction();
-        DB::table('orders')->where('id', $order->id)->update([
-            'qty' => $request->qty,
-            'total_price' => $request->price,
-            'status' => 'Ordered',
-            'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi"
-        ]);
-
-        $status = 'Unpaid';
-        if ($request->payment_method == 'COD' || $request->payment_method == 'Cash') {
-            $status = 'Paid';
-        }
-
+        // Generate new invoice
         DB::table('invoices')->insert([
-            'invoice_code' => 'INV-1003' . Random::generate(3, '0-9') . substr($order->created_at, 0, 4) . $order->id,
-            'order_id' => $order->id,
-            'grand_total' => $order->total_price,
-            'status' => $status,
-            'payment_method' => $request->payment_method
+            'user_id' => $user->id,
+            'invoice_code' => 'INV-1003' . Random::generate(4, '0-9') . date('Y') * date('m') * date('d'),
+            'grand_total' => 0,
+            'created_at' => now('Asia/Jakarta')
         ]);
-        DB::commit();
-        $last_invoice = DB::table('invoices')->latest('id')->first();
-        // DB::beginTransaction();
-        // DB::table('orders')->insert([
-        //     'user_id' => $order->user->id,
-        // ]);
-        // DB::commit();
-        // DB::raw("
-        // BEGIN;
-        // INSERT INTO orders (user_id, product_id, qty, total_price, send_to, status, created_at, updated_at) VALUES (4, 3, 10, 10000, \"subang\", NULL, now(), now());
-        // INSERT INTO invoices (order_id, invoice_code) VALUES ((SELECT LAST_INSERT_ID()), \"asue\");
-        // COMMIT;
-        // ");
-        if ($last_invoice->status == 'Paid') {
-            return redirect()->route('order')->with($session);
+        $total = 0;
+        foreach ($request->order as $key => $data) {
+            $last_invoice = DB::table('invoices')->latest('id')->first();
+            $orderId = $request->order_id[$key];
+            $total += $request->total[$key];
+            DB::table('orders')->where('id', $orderId)->update([
+                'invoice_id' => $last_invoice->id,
+                'qty' => $request->qty[$key],
+                'total' => $request->total[$key],
+                'status' => 'Dipesan',
+            ]);
         }
-        return redirect()->route('invoice.order', ['invoice' => $last_invoice->id])->with($session);
+
+        DB::table('invoices')->where('invoice_code', $last_invoice->invoice_code)->update([
+            'grand_total' => $total,
+            'updated_at' => now('Asia/Jakarta'),
+        ]);
+
+        DB::commit();
+        return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function item()
@@ -177,35 +167,7 @@ class OrderController extends Controller
         return view('order-item');
     }
 
-    // public function checkout(Request $request)
-    // {
-    //     $request->request->add(['total_price' => $request->qty * 10000, 'status' => 'Unpaid']);
-    //     $order = Order::create($request->all());
-    //     // Set your Merchant Server Key
-    //     \Midtrans\Config::$serverKey = 'midtrans.server_key';
-    //     // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-    //     \Midtrans\Config::$isProduction = false;
-    //     // Set sanitization on (default)
-    //     \Midtrans\Config::$isSanitized = true;
-    //     // Set 3DS transaction for credit card to true
-    //     \Midtrans\Config::$is3ds = true;
 
-    //     $params = array(
-    //         'transaction_details' => array(
-    //             'order_id' => $order->id,
-    //             'gross_amount' => $order->total_price,
-    //         ),
-    //         'customer_details' => array(
-    //             'first_name' => $request->name,
-    //             'last_name' => '',
-    //             'address' => $request->address,
-    //             'phone' => $request->phone,
-    //         ),
-    //     );
-
-    //     $snapToken = \Midtrans\Snap::getSnapToken($params);
-    //     return view('checkout', compact('snapToken', 'order'));
-    // }
     public function callback(Request $request)
     {
         $serverkey = config('midtrans.server_key');
@@ -213,7 +175,7 @@ class OrderController extends Controller
         if ($hashed == $request->signature_key) {
             if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
                 $order = Order::find($request->order_id);
-                $order->update(['status' => 'Paid']);
+                $order->update(['status' => 'Lunas']);
             }
         }
     }
@@ -227,7 +189,7 @@ class OrderController extends Controller
     public function delete(Order $order)
     {
         switch ($order->status) {
-            case 'Recive':
+            case 'Diterima':
                 DB::table('orders')->delete($order->id);
                 $session = [
                     'message' => 'Berhasil menghapus riwayat transaksi!',
@@ -236,7 +198,7 @@ class OrderController extends Controller
                     'class' => 'success'
                 ];
                 break;
-            case 'Delivery':
+            case 'Dikirim':
                 $session = [
                     'message' => 'Tidak dapat menghapus transaksi orderan yang sedang dikirimkan!',
                     'type' => 'Hapus Orderan',
@@ -244,7 +206,7 @@ class OrderController extends Controller
                     'class' => 'danger'
                 ];
                 break;
-            case 'Order Confirmed':
+            case 'Dikonfimasi/Dikemas':
                 $session = [
                     'message' => 'Tidak dapat menghapus transaksi orderan telah dikonfirmasi!',
                     'type' => 'Hapus Orderan',
@@ -252,7 +214,7 @@ class OrderController extends Controller
                     'class' => 'danger'
                 ];
                 break;
-            case 'Ordered':
+            case 'Dipesan':
                 $session = [
                     'message' => 'Tidak dapat menghapus transaksi orderan telah dibayar!',
                     'type' => 'Hapus Orderan',
@@ -260,6 +222,14 @@ class OrderController extends Controller
                     'class' => 'danger'
                 ];
                 break;
+            default:
+                DB::table('orders')->delete($order->id);
+                $session = [
+                    'message' => 'Berhasil membatalkan data pesanan',
+                    'type' => 'Hapus Orderan',
+                    'alert' => 'Notifikasi Berhasil!',
+                    'class' => 'success'
+                ];
         }
         return redirect()->route('order')->with($session);
     }

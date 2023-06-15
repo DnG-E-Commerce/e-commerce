@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -21,7 +20,8 @@ class ProductSeeder extends Seeder
             'customer_price' => 23000,
             'reseller_price' => 20000,
             'photo' => 'image/curved-6.jpg',
-            'status' => 'ready',
+            'qty_status' => 'Ready',
+            'special_status' => 'Biasa',
             'uom' => 'Kilogram',
             'weight' => 4,
             'qty' => 100,
@@ -33,7 +33,8 @@ class ProductSeeder extends Seeder
             'customer_price' => 23000,
             'reseller_price' => 20000,
             'photo' => 'image/curved-6.jpg',
-            'status' => 'ready',
+            'qty_status' => 'Ready',
+            'special_status' => 'Biasa',
             'uom' => 'Box',
             'weight' => 2,
             'qty' => 100,
@@ -45,7 +46,8 @@ class ProductSeeder extends Seeder
             'customer_price' => 23000,
             'reseller_price' => 20000,
             'photo' => 'image/curved-6.jpg',
-            'status' => 'ready',
+            'qty_status' => 'Ready',
+            'special_status' => 'Biasa',
             'uom' => 'Box',
             'weight' => 1,
             'qty' => 100,
@@ -57,7 +59,8 @@ class ProductSeeder extends Seeder
             'customer_price' => 23000,
             'reseller_price' => 20000,
             'photo' => 'image/curved-6.jpg',
-            'status' => 'ready',
+            'qty_status' => 'Ready',
+            'special_status' => 'Biasa',
             'uom' => 'Box',
             'weight' => 3,
             'qty' => 100,
@@ -69,7 +72,8 @@ class ProductSeeder extends Seeder
             'customer_price' => 23000,
             'reseller_price' => 20000,
             'photo' => 'image/curved-6.jpg',
-            'status' => 'ready',
+            'qty_status' => 'Ready',
+            'special_status' => 'Biasa',
             'uom' => 'Kilogram',
             'weight' => 1,
             'qty' => 100,

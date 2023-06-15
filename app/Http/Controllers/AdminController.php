@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Charts\OrderChart;
+use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\User;
@@ -43,20 +44,25 @@ class AdminController extends Controller
         ]);
     }
 
-    public function order()
+    public function invoice()
     {
-        $orders = DB::table('orders as o')->select('o.*', 'u.name as user', 'u.role as role', 'p.name as product')
-            ->join('users as u', 'o.user_id', '=', 'u.id')
-            ->join('products as p', 'o.product_id', '=', 'p.id')
-            ->where('o.status', '!=', 'Unpaid')
-            ->get()->all();
-
-        return view('admin.admin-order', [
-            'title' => 'DnG Store | Menu Order',
+        $invoices = Invoice::all();
+        return view('admin.invoice.index', [
+            'title' => 'DnG Store | Menu Invoice',
             'menu' => ['Pesanan'],
             'user' => auth()->user(),
-            'orders' => $orders,
-            'status' => ['Delivery', 'Order Confirmed', 'Paid'],
+            'invoices' => $invoices,
+            'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
+        ]);
+    }
+
+    public function showInvoice(Invoice $invoice)
+    {
+        return view('admin.invoice.detail-invoice', [
+            'title' => 'DnG Store | Admin | Detail Invoice',
+            'menu' => ['Pesanan', 'Detail Pesanan'],
+            'user' => auth()->user(),
+            'invoice' => $invoice
         ]);
     }
 
@@ -71,7 +77,7 @@ class AdminController extends Controller
 
         $product = DB::table('products')->where('id', $order->product_id)->first();
 
-        if ($order->status == 'Paid') {
+        if ($order->status == 'Dipesan') {
             DB::table('orders')->where('id', $order->id)->update([
                 'status' => $request->status
             ]);

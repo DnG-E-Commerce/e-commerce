@@ -12,25 +12,18 @@
             <div class="col-lg-8 mb-lg-0 mb-4">
                 <h3>{{ $title }}</h3>
 
-                @php
-                    $namaBulan = $month[intval(substr($invoice->created_at, 5, 2) - 1)];
-                @endphp
-
-                <h4 class="float-end">
-                    {{ substr($invoice->created_at, 8, 2) . ' - ' . $namaBulan . ' - ' . substr($invoice->created_at, 0, 4) }}
-                </h4>
-                <h4>{{ $invoice->invoice_code }}</h4>
+                <p>{{ $transaction }}</p>
                 <hr class="border border-1 border-dark">
-                <h4>{{ $invoice->order->product->name }} ({{ $invoice->order->product->uom }})
+                {{-- <h4>{{ $invoice->order->product->name }} ({{ $invoice->order->product->uom }}) --}}
                 </h4>
                 <div class="row">
                     <div class="col-3">
-                        <img src="{{ asset('storage/' . $invoice->order->product->photo) }}"
-                            alt="Photo {{ $invoice->order->product->name }}" class="img-fluid rounded">
+                        {{-- <img src="{{ asset('storage/' . $invoice->order->product->photo) }}"
+                            alt="Photo {{ $invoice->order->product->name }}" class="img-fluid rounded"> --}}
                     </div>
                     <div class="col-9">
                         <div class="table-responsive">
-                            <table class="table">
+                            {{-- <table class="table">
                                 <tr>
                                     <th class="w-30">Kuantitas</th>
                                     <td>:</td>
@@ -56,7 +49,7 @@
                                     <td>:</td>
                                     <td>{{ $invoice->status }}</td>
                                 </tr>
-                            </table>
+                            </table> --}}
                         </div>
                     </div>
                 </div>
@@ -83,17 +76,4 @@
             </div>
         </div>
     </div>
-    <script type="text/javascript">
-        $.ajax({
-            url: "{{ route('api.invoice', ['invoice' => $invoice->id]) }}",
-            type: 'get',
-            dataType: 'json',
-            success: function(response) {
-                console.log(response)
-            },
-            error: function(error) {
-                console.log(error)
-            }
-        })
-    </script>
 @endsection

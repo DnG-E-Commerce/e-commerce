@@ -32,7 +32,6 @@
                     @foreach ($carts as $key => $cart)
                         <div class="card shadow-lg mb-3">
                             <div class="card-body">
-
                                 <div class="d-flex gap-5 form-check form-check-inline float-end">
                                     <div class="form-group m-0">
                                         <input type="hidden" name="product_id[{{ $cart->id }}]"
@@ -65,21 +64,21 @@
                                         <h5 class="card-title">{{ $cart->product->name }}</h5>
                                         </p>
                                         <div class="row gap-3 g-3 align-items-center mb-3">
-                                            <div class="col-2">
+                                            <div class="col-4">
                                                 <label for="qty" class="col-form-label">Kuantitas</label>
                                             </div>
-                                            <div class="col-2">
+                                            <div class="col-4">
                                                 <input type="number" name="qty[{{ $cart->id }}]" id="qty"
                                                     class="form-control-plaintext" value="{{ $cart->qty }}">
                                             </div>
                                         </div>
                                         <div class="row gap-3 g-3 align-items-center mb-3">
-                                            <div class="col-2">
+                                            <div class="col-4">
                                                 <label for="total" class="col-form-label">Total</label>
                                             </div>
                                             <div class="col-4">
                                                 <input type="number" name="total[{{ $cart->id }}]" id="total"
-                                                    class="form-control-plaintext" value="{{ $cart->total }}">
+                                                    class="form-control-plaintext" value="{{ $cart->total }}" readonly>
                                             </div>
                                         </div>
                                     </div>

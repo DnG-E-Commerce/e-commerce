@@ -54,7 +54,7 @@
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="weight">Berat Produk (KG)</label> <span class="text-danger">*</span></label>
+                                <label for="weight">Berat Produk (KG)<span class="text-danger">*</span></label>
                                 <input type="number" name="weight" class="form-control">
                             </div>
                             <div class="form-group mb-3">
@@ -64,9 +64,8 @@
                             <div class="form-group mb-3">
                                 <label for="status">Status<span class="text-danger">*</span></label>
                                 <select name="status" class="form-select">
-                                    <option value="Ready">Ready</option>
-                                    <option value="Open Pre Order">Open Pre Order</option>
-                                    
+                                    <option value="Biasa">Ready</option>
+                                    <option value="Pre Order">Open Pre Order</option>
                                 </select>
                             </div>
                             <div class="form-group mb-3">
