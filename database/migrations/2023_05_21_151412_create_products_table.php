@@ -24,7 +24,7 @@ return new class extends Migration
             $table->float('weight')->nullable();
             $table->integer('qty')->default(0);
             $table->enum('qty_status', ['Ready', 'Habis'])->nullable();
-            $table->enum('special_status', ['Pre Order', 'Biasa'])->nullable();
+            $table->enum('special_status', ['Pre Order', 'Biasa', 'Limited Edition'])->nullable();
             $table->foreignId('category_id');
             $table->timestamps();
         });

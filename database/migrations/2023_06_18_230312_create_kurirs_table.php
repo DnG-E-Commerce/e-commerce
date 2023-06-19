@@ -13,9 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('user_verifies', function (Blueprint $table) {
+        Schema::create('kurirs', function (Blueprint $table) {
             $table->id();
-            $table->string('token');
+            $table->foreignId('user_id');
+            $table->foreignId('invoice_id');
+            $table->string('photo');
             $table->timestamps();
         });
     }
@@ -27,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('user_verifies');
+        Schema::dropIfExists('kurirs');
     }
 };

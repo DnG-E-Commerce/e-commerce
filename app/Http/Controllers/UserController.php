@@ -91,7 +91,10 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'email|required',
             'password' => 'min:6|required',
-            'address' => 'required',
+            'provinsi' => 'required',
+            'kabupaten' => 'required',
+            'kecamatan' => 'required',
+            'kelurahan' => 'required',
             'phone' => 'required|numeric',
             'photo' => 'image|file|required|max:8192'
         ]);

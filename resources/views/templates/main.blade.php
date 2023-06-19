@@ -93,9 +93,13 @@
                                         </li>
                                         @if ($user->role == 'Customer')
                                             <li>
-                                                <a class="dropdown-item"
-                                                    href="{{ route('cart', ['user' => $user->id]) }}">Mengajukan
-                                                    Reseller</a>
+                                                <form action="{{ route('pengajuan', ['user' => $user->id]) }}"
+                                                    method="post">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <button class="dropdown-item">Mengajukan
+                                                        Reseller</button>
+                                                </form>
                                             </li>
                                         @endif
                                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>

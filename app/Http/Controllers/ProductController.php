@@ -27,13 +27,15 @@ class ProductController extends Controller
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
                 ->where('name', 'like', "%$query%")
-                ->orWhere('category', 'like', "%$query%")
-                ->get()->all();
+                ->orWhere('uom', 'like', "%$query%")
+                ->orWhere('customer_price', 'like', "%$query%")
+                ->orWhere('reseller_price', 'like', "%$query%")
+                ->paginate(10);
         } else {
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
-                ->get()->all();
+                ->paginate(10);
         }
         // dd($products);
         return view('product.index', [
@@ -69,9 +71,11 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'customer_price' => 'required',
-            'reseller_price' => 'required',
-            'photo' => 'required|image|file|max:8192'
+            'customer_price' => 'required|numeric',
+            'reseller_price' => 'required|numeric',
+            'uom' => 'not_in:pilih',
+            'status' => 'not_in:pilih',
+            'caetgory' => 'not_in:pilih',
         ]);
         $photo = $request->file('photo')->store('image');
         DB::table('products')->insert([

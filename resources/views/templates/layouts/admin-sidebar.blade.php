@@ -45,20 +45,20 @@
         6 => [
             'id' => 7,
             'name' => 'Area',
-            'icon' => 'ni ni-circle-08 text-dark',
-            'url' => 'customer',
-        ],
-        7 => [
-            'id' => 8,
-            'name' => 'Grafik Penjualan',
-            'icon' => 'ni ni-circle-08 text-dark',
-            'url' => 'customer',
+            'icon' => 'ni ni-map-big text-dark',
+            'url' => 'area',
         ],
         8 => [
             'id' => 9,
             'name' => 'Laporan Penjualan',
-            'icon' => 'ni ni-circle-08 text-dark',
+            'icon' => 'ni ni-send text-dark',
             'url' => 'customer',
+        ],
+        9 => [
+            'id' => 10,
+            'name' => 'Pengiriman',
+            'icon' => 'ni ni-square-pin text-dark',
+            'url' => 'pengiriman',
         ],
     ];
 @endphp

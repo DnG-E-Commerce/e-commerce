@@ -42,16 +42,21 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
+                                @php
+                                    $unitofmeasure = ['Pcs', 'Karton', 'Box', 'Liter', 'Rincing', 'Pak', 'Bal'];
+                                @endphp
                                 <label for="uom">Satuan<span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">
-                                    <option value="Pcs">Pcs</option>
-                                    <option value="Karton">Karton</option>
-                                    <option value="Box">Box</option>
-                                    <option value="Liter">Liter</option>
-                                    <option value="Rincing">Rincing</option>
-                                    <option value="Pak">Pak</option>
-                                    <option value="Bal">Bal</option>
+                                    <option value="pilih">--Pilih--</option>
+                                    @foreach ($unitofmeasure as $uom)
+                                        <option value="{{ $uom }}" {{ old('uom') == $uom ? 'selected' : '' }}>
+                                            {{ $uom }}
+                                        </option>
+                                    @endforeach
                                 </select>
+                                @error('uom')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="form-group mb-3">
                                 <label for="weight">Berat Produk (KG)<span class="text-danger">*</span></label>
@@ -62,11 +67,21 @@
                                 <input type="number" name="qty" class="form-control">
                             </div>
                             <div class="form-group mb-3">
+                                @php
+                                    $special_status = ['Biasa', 'Pre Order', 'Limited Edition'];
+                                @endphp
                                 <label for="status">Status<span class="text-danger">*</span></label>
                                 <select name="status" class="form-select">
-                                    <option value="Biasa">Ready</option>
-                                    <option value="Pre Order">Open Pre Order</option>
+                                    <option value="pilih">--Pilih--</option>
+                                    @foreach ($special_status as $ss)
+                                        <option value="{{ $ss }}" {{ old('status') == $ss ? 'selected' : '' }}>
+                                            {{ $ss }}
+                                        </option>
+                                    @endforeach
                                 </select>
+                                @error('status')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="form-group mb-3">
                                 <label for="desc">Foto Produk <span class="text-danger">*</span></label>
@@ -74,15 +89,20 @@
                                 @error('photo')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
-
                             </div>
                             <div class="form-group mb-3">
                                 <label for="category">Kategori <span class="text-danger">*</span></label>
                                 <select name="category" class="form-select">
+                                    <option value="pilih">--Pilih--</option>
                                     @foreach ($categories as $key => $data)
-                                        <option value="{{ $data->id }}">{{ $data->category }}</option>
+                                        <option value="{{ $data->id }}"
+                                            {{ old('category') == $data->id ? 'selected' : '' }}>
+                                            {{ $data->category }}</option>
                                     @endforeach
                                 </select>
+                                @error('category')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-sm btn-success">Tambah</button>

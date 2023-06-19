@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\KurirController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
@@ -29,8 +31,8 @@ Route::get('/', function () {
 Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
     Route::get('/home/profile/{user}', 'profile')->name('home.profile');
-
     Route::get('/home/product/{product}', 'product')->name('home.product');
+    Route::put('/home/mengajukan-reseller/{user}', 'pengajuanReseller')->name('pengajuan');
 });
 
 Route::controller(CartController::class)->group(function () {
@@ -108,4 +110,17 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::get('/invoice/order/{invoice}', 'invoice')->name('invoice.order');
     Route::get('/invoice/edit/{invoice}', 'edit')->name('invoice.edit');
     Route::put('/invoice/update/{invoice}', 'update')->name('invoice.update');
+});
+
+Route::controller(AreaController::class)->group(function () {
+    Route::get('/area', 'index')->name('area');
+    Route::get('/area/create', 'create')->name('area.create');
+    Route::get('/area/{area}', 'edit')->name('area.edit');
+    Route::get('/area/delete/{area}', 'destroy')->name('area.delete');
+    Route::post('/area/store', 'store')->name('area.store');
+    Route::put('/area/edit/{area}', 'update')->name('area.update');
+});
+
+Route::controller(KurirController::class)->group(function () {
+    Route::get('/pengiriman', 'index')->name('pengiriman');
 });

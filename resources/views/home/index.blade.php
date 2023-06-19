@@ -22,20 +22,23 @@
         </div>
     @endif
     <div class="container">
-        <div class="col-md col-lg col-sm">
-            <div class="d-flex justify-content-center" style="flex-wrap: wrap;">
-                @foreach ($products as $key => $product)
-                    <div class="card mx-2 my-2 shadow-md" style="width: 20rem;">
-                        <img src="{{ asset('storage/' . $product->photo) }}" alt="Image {{ $product->name }}"
-                            class="image-fluid"
-                            style="object-fit: cover; height: 15rem; padding: 12px; border-radius: 24px;">
-                        <div class="card-body">
-                            <h3>{{ $product->name }}</h3>
-                            <p class="fst-italic">{{ substr($product->desc, 0, 50) . '.....' }}</p>
-                            <a href="{{ route('home.product', ['product' => $product->id]) }}" class="text-primary">Lihat Lebih Detail <i class="fa fa-arrow-right"></i></a>
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-10 col-sm-4">
+                <div class="d-flex gap-3" style="flex-wrap: wrap;">
+                    @foreach ($products as $key => $product)
+                        <div class="card shadow-md" style="width: 20rem;">
+                            <img src="{{ asset('storage/' . $product->photo) }}" alt="Image {{ $product->name }}"
+                                class="image-fluid"
+                                style="object-fit: cover; height: 15rem; padding: 12px; border-radius: 24px;">
+                            <div class="card-body">
+                                <h3>{{ $product->name }}</h3>
+                                <p class="fst-italic">{{ substr($product->desc, 0, 50) . '.....' }}</p>
+                                <a href="{{ route('home.product', ['product' => $product->id]) }}"
+                                    class="text-primary">Lihat Lebih Detail <i class="fa fa-arrow-right"></i></a>
+                            </div>
                         </div>
-                    </div>
-                @endforeach
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>

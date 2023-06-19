@@ -15,6 +15,7 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
     public function invoice(Invoice $invoice)
     {
         $month = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'Oktober', 'November', 'Desember'];

@@ -21,6 +21,7 @@ return new class extends Migration
             $table->integer('qty');
             $table->double('total');
             $table->enum('status', ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'])->nullable();
+            $table->text('notes');
             $table->timestamps();
         });
     }

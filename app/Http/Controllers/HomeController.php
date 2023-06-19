@@ -53,6 +53,21 @@ class HomeController extends Controller
         ]);
     }
 
+    public function pengajuanReseller(Request $request, User $user)
+    {
+        DB::table('users')->where('id', $user->id)
+            ->update([
+                'request_upgrade' => 1
+            ]);
+        $session = [
+            'message' => 'Berhasil mengajukan menjadi reseller, harap menunggu konfirmasi dari admin',
+            'type' => 'Pengajuan Berhasil',
+            'alert' => 'Notifikasi berhasil!',
+            'class' => 'success'
+        ];
+        return redirect()->route('home')->with($session);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
