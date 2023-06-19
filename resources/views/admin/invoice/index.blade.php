@@ -15,12 +15,12 @@
                     <div class="card-header pb-0">
                         <h6>Tabel Pesanan</h6>
                     </div>
-                    <div class="card-body px-0 pt-0 pb-2">
+                    <div class="card-body px-5 pt-0 pb-2">
                         <div class="table-responsive p-1">
-                            <table class="table align-items-center mb-0">
+                            <table class="table align-items-center mb-0" id="example">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">#</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">No</th>
                                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Invoice Code</th>
                                         <th

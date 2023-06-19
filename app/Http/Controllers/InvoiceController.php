@@ -69,9 +69,9 @@ class InvoiceController extends Controller
     public function edit(Invoice $invoice)
     {
         $payment_method = [
-            ['bank' => 'bri', 'name' => 'BRI Virtual Account'],
-            ['bank' => 'bca', 'name' => 'BCA Virtual Account'],
-            ['bank' => 'bni', 'name' => 'BNI Virtual Account'],
+            ['bank' => 'bri', 'name' => 'Transfer'],
+            // ['bank' => 'bca', 'name' => 'BCA Virtual Account'],
+            // ['bank' => 'bni', 'name' => 'BNI Virtual Account'],
             ['bank' => 'cash', 'name' => 'Cash'],
             ['bank' => 'cod', 'name' => 'Cash On Delivery'],
         ];

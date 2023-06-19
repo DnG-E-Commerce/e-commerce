@@ -27,6 +27,9 @@
     <script type="text/javascript" src="{{ config('midtrans.snap_url') }}"
         data-client-key="{{ config('midtrans.client_key') }}"></script>
 
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
+
 </head>
 
 <body>
@@ -138,6 +141,13 @@
     <script src="{{ asset('argon/js/argon-dashboard.min.js?v=2.0.4') }}"></script>
     {{-- Fontawesome --}}
     <script src="{{ asset('fontawesome/js/all.min.js') }}"></script>
+
+
+    <script>
+      $(document).ready(function () {
+            $('#example').DataTable();
+});
+  </script>
 </body>
 
 </html>
