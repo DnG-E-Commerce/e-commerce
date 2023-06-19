@@ -69,14 +69,17 @@
                                     <a class="" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                         <i class="fa-solid fa-bell text-white"></i>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-dark">
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('order') }}">Riwayat Transaksi</a>
-                                        </li>
-                                        <li>
-                                            <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
-                                        </li>
-                                    </ul>
+                                    <ol class="dropdown-menu dropdown-menu-dark">
+                                        @foreach ($notifications as $key => $n)
+                                            <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                                <div class="ms-2 me-auto">
+                                                    <div class="fw-bold">{{ $n->title }}</div>
+                                                    {{ substr($n->message, 0, 15) }} ...
+                                                </div>
+                                                <span class="badge bg-primary rounded-pill">New</span>
+                                            </li>
+                                        @endforeach
+                                    </ol>
                                 </div>
                                 <div class="dropdown">
                                     <button class="btn btn-secondary dropdown-toggle mb-0" type="button"
@@ -96,15 +99,14 @@
                                         </li>
                                         @if ($user->role == 'Customer')
                                             <li>
-                                                <form action="{{ route('pengajuan', ['user' => $user->id]) }}"
-                                                    method="post">
-                                                    @csrf
-                                                    @method('PUT')
-                                                    <button class="dropdown-item">Mengajukan
-                                                        Reseller</button>
-                                                </form>
+                                                <a class="dropdown-item"
+                                                    href="{{ route('home.pengajuan-reseller') }}">Pengajuan
+                                                    Reseller</a>
                                             </li>
                                         @endif
+                                        <li><a class="dropdown-item" href="{{ route('invoice') }}">Riwayat
+                                                Transaksi</a>
+                                        </li>
                                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                     </ul>
                                 </div>
@@ -144,10 +146,10 @@
 
 
     <script>
-      $(document).ready(function () {
+        $(document).ready(function() {
             $('#example').DataTable();
-});
-  </script>
+        });
+    </script>
 </body>
 
 </html>

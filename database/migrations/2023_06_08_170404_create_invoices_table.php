@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id');
             $table->string('invoice_code');
+            $table->double('ongkir')->nullable();
             $table->double('grand_total');
             $table->text('send_to')->nullable();
+            $table->text('notes')->nullable();
             $table->enum('status', ['Lunas', 'Belum Lunas', 'Pending'])->nullable();
-            $table->enum('payment_method', ['bri', 'bni', 'bca', 'cash', 'cod'])->nullable();
+            $table->enum('payment_method', ['transfer', 'cash', 'cod'])->nullable();
             $table->timestamps();
         });
     }

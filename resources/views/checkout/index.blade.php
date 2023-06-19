@@ -8,10 +8,15 @@
         </script>
     @endif
     <div class="container-fluid py-4">
+        <div class="card-header pb-0">
+            <div class="text-center">
+                <h3>Checkout</h3>
+            </div>
+        </div>
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="d-flex justify-content-between">
-                    <h4 class="mb-4">List Orderan Produk</h4>
+                    <h4 class="mb-4">List</h4>
                     <h4>Total : {{ count($orders) }}</h4>
                 </div>
                 <form action="{{ route('order.checkout') }}" method="post" enctype="multipart/form-data">

@@ -81,7 +81,7 @@
                                 <div class="numbers">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Penjualan</p>
                                     <h5 class="font-weight-bolder">
-                                        {{ count($orders) }}
+                                        {{ count($orders->where('status', 'Dipesan')) }}
                                     </h5>
                                 </div>
                             </div>

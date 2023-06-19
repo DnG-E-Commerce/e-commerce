@@ -62,7 +62,8 @@ class AdminController extends Controller
             'title' => 'DnG Store | Admin | Detail Invoice',
             'menu' => ['Pesanan', 'Detail Pesanan'],
             'user' => auth()->user(),
-            'invoice' => $invoice
+            'invoice' => $invoice,
+            'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
         ]);
     }
 

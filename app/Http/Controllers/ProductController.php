@@ -19,25 +19,12 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = $request->search;
-        if ($query) {
-            $products = DB::table('products as p')
-                ->select('p.id as product_id', 'p.*', 'c.category')
-                ->join('categories as c', 'p.category_id', '=', 'c.id')
-                ->where('name', 'like', "%$query%")
-                ->orWhere('uom', 'like', "%$query%")
-                ->orWhere('customer_price', 'like', "%$query%")
-                ->orWhere('reseller_price', 'like', "%$query%")
-                ->paginate(10);
-        } else {
-            $products = DB::table('products as p')
-                ->select('p.id as product_id', 'p.*', 'c.category')
-                ->join('categories as c', 'p.category_id', '=', 'c.id')
-                ->paginate(10);
-        }
-        // dd($products);
+        $products = DB::table('products as p')
+            ->select('p.id as product_id', 'p.*', 'c.category')
+            ->join('categories as c', 'p.category_id', '=', 'c.id')
+            ->get()->all();
         return view('product.index', [
             'title' => 'DnG Store | Produk',
             'menu' => ['Produk'],

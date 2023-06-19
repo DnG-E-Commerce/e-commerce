@@ -25,11 +25,15 @@ class CartController extends Controller
      */
     public function index()
     {
+        $user = auth()->user();
+        $carts = DB::table('carts')->where('user_id', $user->id)->get()->all();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('cart.index', [
             'title' => 'DnG Store | My Cart',
-            'user' => auth()->user(),
+            'user' => $user,
             'menu' => ['Cart', 'Detail'],
-            'carts' => Cart::where('user_id', session('id'))->get()->all(),
+            'carts' => $carts,
+            'notifications' => $notification,
         ]);
     }
 

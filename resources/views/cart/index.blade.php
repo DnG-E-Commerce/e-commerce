@@ -17,7 +17,7 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="d-flex justify-content-between">
-                    <h4 class="mb-4">List Keranjang</h4>
+                    <h4 class="mb-4">List</h4>
                     <h4>Total : {{ count($carts) }}</h4>
                 </div>
                 <form action="{{ route('cart.checkout') }}" method="post" enctype="multipart/form-data">

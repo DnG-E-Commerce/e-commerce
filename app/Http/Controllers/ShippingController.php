@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
-use App\Models\Kurir;
+use App\Models\Shipping;
 use Illuminate\Http\Request;
 
-class KurirController extends Controller
+class ShippingController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,10 +15,11 @@ class KurirController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::paginate(10);
-        return view('kurir.index', [
+        $user = auth()->user();
+        $invoices = Invoice::all();
+        return view('shipping.index', [
             'title' => 'DnG Store | Pengiriman',
-            'user' => auth()->user(),
+            'user' => $user,
             'menu' => ['Pengiriman'],
             'invoices' => $invoices,
         ]);
@@ -51,7 +52,7 @@ class KurirController extends Controller
      * @param  \App\Models\Kurir  $kurir
      * @return \Illuminate\Http\Response
      */
-    public function show(Kurir $kurir)
+    public function show(Shipping $shipping)
     {
         //
     }
@@ -62,31 +63,4 @@ class KurirController extends Controller
      * @param  \App\Models\Kurir  $kurir
      * @return \Illuminate\Http\Response
      */
-    public function edit(Kurir $kurir)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Kurir  $kurir
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Kurir $kurir)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Kurir  $kurir
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Kurir $kurir)
-    {
-        //
-    }
 }

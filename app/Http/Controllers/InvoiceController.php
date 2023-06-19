@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Nette\Utils\Random;
+use PhpParser\Node\Expr\Cast\Array_;
 
 class InvoiceController extends Controller
 {
@@ -15,6 +16,19 @@ class InvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    public function index()
+    {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        $invoices = Invoice::where('user_id', $user->id)->get()->all();
+        return view('invoice.index', [
+            'title' => 'DnG Store | Transaksi',
+            'menu' => ['Transaksi'],
+            'user' => $user,
+            'notifications' => $notification,
+            'invoices' => $invoices
+        ]);
+    }
 
     public function invoice(Invoice $invoice)
     {
@@ -57,7 +71,15 @@ class InvoiceController extends Controller
      */
     public function show(Invoice $invoice)
     {
-        //
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('invoice.detail-invoice', [
+            'title' => 'DnG Store | Detail Invoice',
+            'menu' => ['Transaksi', 'Detail Invoice'],
+            'user' => $user,
+            'notifications' => $notification,
+            'invoice' => $invoice
+        ]);
     }
 
     /**
@@ -68,19 +90,20 @@ class InvoiceController extends Controller
      */
     public function edit(Invoice $invoice)
     {
+        $user = auth()->user();
         $payment_method = [
-            ['bank' => 'bri', 'name' => 'Transfer'],
-            // ['bank' => 'bca', 'name' => 'BCA Virtual Account'],
-            // ['bank' => 'bni', 'name' => 'BNI Virtual Account'],
+            ['bank' => 'transfer', 'name' => 'Transfer'],
             ['bank' => 'cash', 'name' => 'Cash'],
             ['bank' => 'cod', 'name' => 'Cash On Delivery'],
         ];
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('invoice.edit-invoice', [
             'title' => 'DnG Store | Lengkapi Data Pembayaran',
             'user' => auth()->user(),
             'menu' => ['Invoice', 'Lengkapi Data'],
             'invoice' => $invoice,
-            'payment_method' => $payment_method
+            'payment_method' => $payment_method,
+            'notifications' => $notification
         ]);
     }
 
@@ -97,22 +120,26 @@ class InvoiceController extends Controller
         \Midtrans\Config::$is3ds = true;
 
         // dd($request->payment_method);
+        $area = DB::table('areas')
+            ->where([
+                ['provinsi', '=', $request->kelurahan],
+                ['kabupaten', '=', $request->kabupaten],
+                ['kecamatan', '=', $request->kecamatan],
+                ['kelurahan', '=', $request->kelurahan]
+            ])->first();
 
+        $ongkir = $area ? $area->ongkir : 10000;
         $params = [
             'payment_type' => 'bank_transfer',
             'transaction_details' => [
                 'order_id' => md5($invoice->id . Random::generate(2, '0-9')),
-                'gross_amount' => $invoice->grand_total,
+                'gross_amount' => $invoice->grand_total + $ongkir,
             ],
             'customer_details' => [
                 'first_name' => $invoice->user->name,
                 'last_name' => '',
                 'address' => $invoice->user->address,
                 'phone' => $invoice->user->phone,
-            ],
-            'bank_transfer' => [
-                'bank' => $request->payment_method,
-                'va_number' => 11111
             ],
         ];
         $snapToken = \Midtrans\Snap::getSnapToken($params);
@@ -128,23 +155,20 @@ class InvoiceController extends Controller
      */
     public function update(Request $request, Invoice $invoice)
     {
+        $user = auth()->user();
         DB::beginTransaction();
-        if ($request->payment_method == 'cash' || $request->payment_method == 'cod') {
-            DB::table('invoices')->where('id', $invoice->id)
-                ->update([
-                    'status' => 'Pending',
-                    'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi",
-                    'payment_method' => $request->payment_method,
-                    'updated_at' => date('Y-m-d H:i:s')
-                ]);
-        } else {
-            DB::table('invoices')->where('id', $invoice->id)
-                ->update([
-                    'status' => 'Lunas',
-                    'send_to' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi",
-                    'payment_method' => $request->payment_method,
-                    'updated_at' => date('Y-m-d H:i:s')
-                ]);
+        switch ($request->payment_method) {
+            case 'cash':
+                $this->handleCash($request->all(), $invoice);
+                break;
+
+            case 'cod':
+                $this->handleCOD($request->all(), $invoice);
+                break;
+
+            case 'transfer':
+                $this->handleTransfer($request->all(), $invoice);
+                break;
         }
         foreach ($invoice->order as $order) {
             DB::table('orders')->where('id', $order->id)
@@ -153,6 +177,12 @@ class InvoiceController extends Controller
                     'updated_at' => date('Y-m-d H:i:s')
                 ]);
         }
+        DB::table('notifications')->insert([
+            'user_id' =>    $user->id,
+            'title' => 'Pembayaran Berhasil',
+            'message' => "Berhasil melakukan pembayaran untuk invoice $invoice->invoice_code, harap menunggu pesanan dikonfirmasi oleh admin dan melakukan pengecekan pesanan secara berkala",
+            'is_read' => 0
+        ]);
         DB::commit();
         $session = [
             'message' => 'Berhasil menyelesaikan transaksi! Terimakasih telah berbelanja di DnG Store',
@@ -160,7 +190,68 @@ class InvoiceController extends Controller
             'alert' => 'Notifikasi berhasil!',
             'class' => 'success'
         ];
-        return redirect()->route('home')->with($session);
+        return redirect()->route('invoice.show', ['invoice' => $invoice->id])->with($session);
+    }
+
+    public function handleCash($data, $invoice)
+    {
+        DB::table('invoices')->where('id', $invoice['id'])
+            ->update([
+                'status' => 'Pending',
+                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'ongkir' => 0,
+                'grand_total' => $invoice['grand_total'],
+                'payment_method' => $data['payment_method'],
+                'notes' => $data['notes'],
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+    }
+
+    public function handleCOD($data, $invoice)
+    {
+        $area = DB::table('areas')
+            ->where([
+                ['provinsi', '=', $data['provinsi']],
+                ['kabupaten', '=', $data['kabupaten']],
+                ['kecamatan', '=', $data['kecamatan']],
+                ['kelurahan', '=', $data['kelurahan']]
+            ])->first();
+
+        $ongkir = $area ? $area->ongkir : 0;
+
+        DB::table('invoices')->where('id', $invoice['id'])
+            ->update([
+                'status' => 'Pending',
+                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'ongkir' => $ongkir,
+                'grand_total' => $invoice['grand_total'] + $ongkir,
+                'payment_method' => $data['payment_method'],
+                'notes' => $data['notes'],
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
+    }
+
+    public function handleTransfer($data, $invoice)
+    {
+        $area = DB::table('areas')
+            ->where([
+                ['provinsi', '=', $data['provinsi']],
+                ['kabupaten', '=', $data['kabupaten']],
+                ['kecamatan', '=', $data['kecamatan']],
+                ['kelurahan', '=', $data['kelurahan']]
+            ])->first();
+
+        $ongkir = $area ? $area->ongkir : 0;
+        DB::table('invoices')->where('id', $invoice['id'])
+            ->update([
+                'status' => 'Lunas',
+                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'ongkir' => $ongkir,
+                'grand_total' => $invoice['grand_total'] + $ongkir,
+                'payment_method' => $data['payment_method'],
+                'notes' => $data['notes'],
+                'updated_at' => date('Y-m-d H:i:s')
+            ]);
     }
 
     /**

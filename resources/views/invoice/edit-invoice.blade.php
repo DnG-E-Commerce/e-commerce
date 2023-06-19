@@ -53,6 +53,13 @@
                             </div>
                         </div>
                     </div>
+                    <div class="form-group">
+                        <label for="">Catatan (Detail alamat atau sebagainya)</label>
+                        <textarea name="notes" id="notes" rows="3" class="form-control"></textarea>
+                        <small class="text-secondary">*catatan diisi untuk memberitahu detail alamat atau patokan alamat
+                            yang
+                            dituju</small>
+                    </div>
                     <div class="d-grid">
                         <button class="btn bg-gradient-success" id="btn-pay">Checkout Sekarang</button>
                     </div>
@@ -65,13 +72,13 @@
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div class="ms-2 me-auto">
                                 <div class="fw-bold">{{ $order->product->name }}</div>
-                                Rp. {{ $order->total }}
+                                Rp. {{ number_format($order->total, 0, ',', '.') }}
                             </div>
-                            <span class="badge bg-primary rounded-pill">{{ $order->qty }}</span>
+                            <span class="badge bg-primary rounded-pill">qty : {{ $order->qty }}</span>
                         </li>
                     @endforeach
                 </ol>
-                <h5>Total Harga : Rp. {{ $invoice->grand_total }}</h5>
+                <h5>Total Harga : Rp. {{ number_format($invoice->grand_total, 0, ',', '.') }}</h5>
             </div>
         </div>
     </div>

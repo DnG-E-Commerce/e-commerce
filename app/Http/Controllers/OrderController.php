@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Invoice;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -23,11 +24,13 @@ class OrderController extends Controller
             ['user_id', '=', "$user->id"],
             ['status', '=', null]
         ])->get()->all();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('checkout.index', [
             'title' => 'DnG Store | Checkout',
             'user' => $user,
             'orders' => $orders,
-            'menu' => ['Order']
+            'menu' => ['Order'],
+            'notifications' => $notification
         ]);
     }
 
@@ -138,11 +141,12 @@ class OrderController extends Controller
             'user_id' => $user->id,
             'invoice_code' => 'INV-1003' . Random::generate(4, '0-9') . date('Y') * date('m') * date('d'),
             'grand_total' => 0,
+            'status' => 'Pending',
             'created_at' => now('Asia/Jakarta')
         ]);
         $total = 0;
+        $last_invoice = DB::table('invoices')->latest('id')->first();
         foreach ($request->order as $key => $data) {
-            $last_invoice = DB::table('invoices')->latest('id')->first();
             $orderId = $request->order_id[$key];
             $total += $request->total[$key];
             DB::table('orders')->where('id', $orderId)->update([
@@ -157,33 +161,15 @@ class OrderController extends Controller
             'grand_total' => $total,
             'updated_at' => now('Asia/Jakarta'),
         ]);
-
+        DB::table('notifications')->insert([
+            'user_id' => $user->id,
+            'title' => 'Melakukan Checkout',
+            'message' => "Berhasil men-checkout barang dengan invoice $last_invoice->invoice_code, harap lanjutkan untuk melakukan pembayaran!",
+            'is_read' => 0,
+            'created_at' => now('Asia/Jakarta')
+        ]);
         DB::commit();
         return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
-    }
-
-    public function item()
-    {
-        return view('order-item');
-    }
-
-
-    public function callback(Request $request)
-    {
-        $serverkey = config('midtrans.server_key');
-        $hashed = hash('sha512', $request->order_id . $request->status_code . $request->gross_amount . $serverkey);
-        if ($hashed == $request->signature_key) {
-            if ($request->transaction_status == 'capture' or $request->transaction_status == 'settlement') {
-                $order = Order::find($request->order_id);
-                $order->update(['status' => 'Lunas']);
-            }
-        }
-    }
-
-    public function invoice($id)
-    {
-        $order = Order::find($id);
-        return view('invoice', compact('order'));
     }
 
     public function delete(Order $order)
@@ -232,5 +218,30 @@ class OrderController extends Controller
                 ];
         }
         return redirect()->route('order')->with($session);
+    }
+
+    public function updateStatus(Request $request, Invoice $invoice)
+    {
+        DB::table('orders')->where('invoice_id', $invoice->id)
+            ->update([
+                'status' => $request->status
+            ]);
+        if ($request->status == 'Dikonfirmasi/Dikemas') {
+            foreach ($invoice->order as $key => $order) {
+                $product = DB::table('products')->where('id', $order->product_id)->first();
+                DB::table('products')->where('id', $order->product_id)
+                    ->update([
+                        'qty'        =>    $product->qty - $order->qty,
+                        'qty_status' =>  $product->qty - $order->qty == 0 ? 'Habis' : 'Ready'
+                    ]);
+            }
+        }
+        $session = [
+            'message' => 'Berhasil mengupdate status pesanan!',
+            'type' => 'Update Status Pesanan',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('admin.detail.invoice', ['invoice' => $invoice->id])->with($session);
     }
 }

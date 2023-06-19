@@ -24,7 +24,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-10 col-lg-10 col-sm-4">
-                <div class="d-flex gap-3" style="flex-wrap: wrap;">
+                <div class="d-flex gap-3 mb-5" style="flex-wrap: wrap;">
                     @foreach ($products as $key => $product)
                         <div class="card shadow-md" style="width: 20rem;">
                             <img src="{{ asset('storage/' . $product->photo) }}" alt="Image {{ $product->name }}"
@@ -39,6 +39,7 @@
                         </div>
                     @endforeach
                 </div>
+                {{ $products->links() }}
             </div>
         </div>
     </div>

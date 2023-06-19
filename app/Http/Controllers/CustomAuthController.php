@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
-use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -54,12 +52,20 @@ class CustomAuthController extends Controller
             'password' => 'required|min:6',
             'repeat-password' => 'required|same:password|required_with:password'
         ]);
-        User::create([
+        DB::table('users')->insert([
             'name' => $request->name,
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'role' => 'Customer'
+            'role' => 'Customer',
+            'created_at' => now('Asia/Jakarta')
+        ]);
+        $latest = DB::table('users')->latest('id')->first();
+        DB::table('notifications')->insert([
+            'user_id' => $latest->id,
+            'title' => 'Membuat Akun baru',
+            'message' => "Berhasil menbuat akun baru pada " . now('Asia/Jakarta'),
+            'is_read' => 1
         ]);
         $session = [
             'message' => 'Berhasil membuat akun!',

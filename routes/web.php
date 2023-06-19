@@ -10,6 +10,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KurirController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -32,6 +33,7 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/home', 'index')->name('home');
     Route::get('/home/profile/{user}', 'profile')->name('home.profile');
     Route::get('/home/product/{product}', 'product')->name('home.product');
+    Route::get('/home/pengajuan-reseller', 'pengajuanReseller')->name('home.pengajuan-reseller');
     Route::put('/home/mengajukan-reseller/{user}', 'pengajuanReseller')->name('pengajuan');
 });
 
@@ -65,6 +67,8 @@ Route::controller(UserController::class)->group(function () {
 
     Route::post('/user/customer', 'customerStore')->name('customer.store');
     Route::post('/user/reseller', 'resellerStore')->name('reseller.store');
+
+    Route::post('/user/mengajukan-reseller/{user}', 'storePengajuan')->name('pengajuan.store');
 });
 
 Route::controller(ProductController::class)->group(function () {
@@ -104,9 +108,12 @@ Route::controller(OrderController::class)->group(function () {
     Route::post('/order/checkout', 'checkout')->name('order.checkout');
     Route::post('/order/store', 'storeToOrder')->name('StoreOrder');
     Route::post('/cart/store', 'storeToCart')->name('StoreCart');
+    Route::put('/admin/order/update-status/{invoice}', 'updateStatus')->name('admin-order.update-status');
 });
 
 Route::controller(InvoiceController::class)->group(function () {
+    Route::get('/invoice', 'index')->name('invoice');
+    Route::get('/invoice/{invoice}', 'show')->name('invoice.show');
     Route::get('/invoice/order/{invoice}', 'invoice')->name('invoice.order');
     Route::get('/invoice/edit/{invoice}', 'edit')->name('invoice.edit');
     Route::put('/invoice/update/{invoice}', 'update')->name('invoice.update');
@@ -121,6 +128,6 @@ Route::controller(AreaController::class)->group(function () {
     Route::put('/area/edit/{area}', 'update')->name('area.update');
 });
 
-Route::controller(KurirController::class)->group(function () {
+Route::controller(ShippingController::class)->group(function () {
     Route::get('/pengiriman', 'index')->name('pengiriman');
 });

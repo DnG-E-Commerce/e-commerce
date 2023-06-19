@@ -13,14 +13,11 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('orders', function (Blueprint $table) {
+        Schema::create('shippings', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('invoice_id')->nullable();
             $table->foreignId('user_id');
-            $table->integer('product_id');
-            $table->integer('qty');
-            $table->double('total');
-            $table->enum('status', ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'])->nullable();
+            $table->foreignId('invoice_id');
+            $table->string('photo');
             $table->timestamps();
         });
     }
@@ -32,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('orders');
+        Schema::dropIfExists('kurirs');
     }
 };

@@ -23,7 +23,7 @@
     {{-- JQuery --}}
     <script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM="
         crossorigin="anonymous"></script>
-        
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css" />
     <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.js"></script>
 </head>
@@ -145,10 +145,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js" charset="utf-8"></script>
 
     <script>
-      $(document).ready(function () {
+        $(document).ready(function() {
             $('#example').DataTable();
-});
-  </script>
+        });
+    </script>
 
 
 </body>

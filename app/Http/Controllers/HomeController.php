@@ -20,6 +20,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $user = auth()->user();
         $query = $request->search;
         if ($query) {
             $products = DB::table('products as p')
@@ -27,46 +28,50 @@ class HomeController extends Controller
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
                 ->where('name', 'like', "%$query%")
                 ->orWhere('category', 'like', "%$query%")
-                ->get()->all();
+                ->paginate(6);
         } else {
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
-                ->get()->all();
+                ->paginate(6);
         }
+
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('home.index', [
             'title' => 'DnG Store',
             'menu' => 'home',
-            'user' => auth()->user(),
-            'products' => $products
+            'user' => $user,
+            'products' => $products,
+            'notifications' => $notification
         ]);
     }
 
     public function product(Product $product)
     {
+        $user = auth()->user();
         $product = DB::table('products as p')->select('p.*', 'c.category')->join('categories as c', 'p.category_id', '=', 'c.id')->where('p.id', '=', $product->id)->first();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('home.detail-product', [
             'title' => 'DnG Store | Detail Product',
-            'user' => auth()->user(),
+            'user' => $user,
             'menu' => ['Product', 'Detail'],
-            'product' => $product
+            'product' => $product,
+            'notifications' => $notification
         ]);
     }
 
-    public function pengajuanReseller(Request $request, User $user)
+    public function pengajuanReseller()
     {
-        DB::table('users')->where('id', $user->id)
-            ->update([
-                'request_upgrade' => 1
-            ]);
-        $session = [
-            'message' => 'Berhasil mengajukan menjadi reseller, harap menunggu konfirmasi dari admin',
-            'type' => 'Pengajuan Berhasil',
-            'alert' => 'Notifikasi berhasil!',
-            'class' => 'success'
-        ];
-        return redirect()->route('home')->with($session);
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('home.pengajuan-reseller', [
+            'title' => 'DnG Store | Form Pengajuan Reseller',
+            'menu' => ['Home', 'Pengajuan Reseller'],
+            'user' => $user,
+            'notifications' => $notification
+        ]);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -123,13 +128,16 @@ class HomeController extends Controller
         //
     }
 
-    public function profile($id)
+    public function profile()
     {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('home.profile', [
             'title' => 'DnG Store | Profile',
             'menu' => 'profile',
             'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customers'],
-            'user' => auth()->user(),
+            'user' => $user,
+            'notifications' => $notification
         ]);
     }
 

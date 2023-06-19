@@ -20,10 +20,39 @@ class UserController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function storePengajuan(Request $request, User $user)
     {
-        //
+        $request->validate([
+            'instance_name' => 'required',
+            'photo' => 'image|max:8149',
+        ]);
+        $photo = $request->file('photo')->store('instance');
+        DB::table('users')->where('id', $user->id)
+            ->update([
+                'request_upgrade' => 1
+            ]);
+        DB::table('request_upgrades')->insert([
+            'user_id' => $user->id,
+            'instance_name' => $request->instance_name,
+            'photo' => $photo,
+            'created_at' => now('Asia/Jakarta')
+        ]);
+        DB::table('notifications')->insert([
+            'user_id' => $user->id,
+            'title' => 'Pengajuan',
+            'message' => "Pengajuan untuk Menjadi Reseller telah berhasil, harap tunggu untuk konfirmasi dari Admin",
+            'is_read' => 0,
+            'created_at' => now('Asia/Jakarta')
+        ]);
+        $session = [
+            'message' => 'Berhasil mengajukan menjadi reseller, harap menunggu konfirmasi dari admin',
+            'type' => 'Pengajuan Berhasil',
+            'alert' => 'Notifikasi berhasil!',
+            'class' => 'success'
+        ];
+        return redirect()->route('home')->with($session);
     }
+
 
     public function reseller(Request $request)
     {

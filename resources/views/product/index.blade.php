@@ -21,9 +21,9 @@
                             <div class="col-lg-4 col-md-4 col-sm-3">
                                 <form action="" method="get">
                                     <!-- <div class="input-group">
-                                        <input type="text" name="search" class="form-control">
-                                        <button class="input-group-text bg-success text-white" type="submit">Cari</button>
-                                    </div> -->
+                                            <input type="text" name="search" class="form-control">
+                                            <button class="input-group-text bg-success text-white" type="submit">Cari</button>
+                                        </div> -->
                                 </form>
                             </div>
                         </div>
@@ -104,7 +104,6 @@
                                         </tr>
                                     @endforeach
                                 </tbody>
-                                {{ $products->links() }}
                             </table>
                         </div>
                     </div>

@@ -20,20 +20,9 @@ class AreaController extends Controller
     }
 
 
-    public function index(Request $request)
+    public function index()
     {
-        $query = $request->search;
-        if ($query) {
-            $areas = DB::table('areas')
-                ->where('provinsi', 'like', "%$query%")
-                ->orWhere('kabupaten', 'like', "%$query%")
-                ->orWhere('kecamatan', 'like', "%$query%")
-                ->orWhere('kelurahan', 'like', "%$query%")
-                ->orWhere('ongkir', 'like', "%$query%")
-                ->paginate(15);
-        } else {
-            $areas = DB::table('areas')->paginate(15);
-        }
+        $areas = DB::table('areas')->get()->all();
         return view('area.index', [
             'title' => 'DnG Store | Area Pemesanan',
             'menu'  => ['Area'],

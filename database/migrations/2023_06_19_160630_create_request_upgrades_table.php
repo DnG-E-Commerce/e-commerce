@@ -13,10 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('kurirs', function (Blueprint $table) {
+        Schema::create('request_upgrades', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id');
-            $table->foreignId('invoice_id');
+            $table->string('instance_name');
             $table->string('photo');
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('kurirs');
+        Schema::dropIfExists('request_upgrades');
     }
 };
