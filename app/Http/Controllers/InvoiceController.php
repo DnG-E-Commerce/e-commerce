@@ -127,7 +127,8 @@ class InvoiceController extends Controller
                 ['kecamatan', '=', $request->kecamatan],
                 ['kelurahan', '=', $request->kelurahan]
             ])->first();
-        $ongkir = $area ? $area->ongkir : 0;
+
+        $ongkir = $area ? $area->ongkir : 10000;
         $params = [
             'payment_type' => 'bank_transfer',
             'transaction_details' => [

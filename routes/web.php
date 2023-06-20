@@ -136,3 +136,5 @@ Route::controller(ShippingController::class)->group(function () {
 Route::controller(NotificationController::class)->group(function () {
     Route::get('/notification', 'index')->name('notification');
 });
+
+Route::post('/send-whatsapp-message', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send.whatsapp');
