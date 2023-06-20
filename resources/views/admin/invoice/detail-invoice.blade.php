@@ -24,7 +24,15 @@
                                         <li class="list-group-item d-flex justify-content-between align-items-start">
                                             <div class="ms-2 me-auto">
                                                 <div class="fw-bold">{{ $order->product->name }}</div>
-                                                Rp. {{ number_format($order->total, 0, '.', ',') }}
+                                                <ul>
+                                                    <li>Harga Satuan :
+                                                        Rp.
+                                                        {{ number_format($order->user->role == 'customer' ? $order->product->customer_price : $order->product->reseller_price, 0, ',', '.') }}
+                                                    </li>
+                                                    <li>Total Harga :
+                                                        Rp. {{ number_format($order->total, 0, ',', '.') }}
+                                                    </li>
+                                                </ul>
                                             </div>
                                             <span class="badge bg-primary rounded-pill">QTY : {{ $order->qty }}</span>
                                         </li>

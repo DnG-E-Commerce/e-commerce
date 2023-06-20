@@ -8,6 +8,7 @@ use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KurirController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShippingController;
@@ -130,4 +131,8 @@ Route::controller(AreaController::class)->group(function () {
 
 Route::controller(ShippingController::class)->group(function () {
     Route::get('/pengiriman', 'index')->name('pengiriman');
+});
+
+Route::controller(NotificationController::class)->group(function () {
+    Route::get('/notification', 'index')->name('notification');
 });

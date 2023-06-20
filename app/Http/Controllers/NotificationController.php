@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Notification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class NotificationController extends Controller
 {
@@ -14,7 +15,14 @@ class NotificationController extends Controller
      */
     public function index()
     {
-        //
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get()->all();
+        return view('notification.index', [
+            'title' => 'DnG Store | Notifikasi',
+            'menu' => ['Notification'],
+            'user' => $user,
+            'notifications' => $notification
+        ]);
     }
 
     /**

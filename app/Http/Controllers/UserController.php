@@ -226,6 +226,7 @@ class UserController extends Controller
     {
         DB::table('users')->where('id', $user->id)->update([
             'role' => 'reseller',
+            'request_upgrade' => 0
         ]);
         $session = [
             'message' => 'Berhasil mengupgrade customer!',

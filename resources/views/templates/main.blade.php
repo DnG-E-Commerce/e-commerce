@@ -79,6 +79,11 @@
                                                 <span class="badge bg-primary rounded-pill">New</span>
                                             </li>
                                         @endforeach
+                                        <li>
+                                            <a class="dropdown-item" href="{{ route('notification') }}">Lihat
+                                                lebih...</a>
+                                        </li>
+
                                     </ol>
                                 </div>
                                 <div class="dropdown">

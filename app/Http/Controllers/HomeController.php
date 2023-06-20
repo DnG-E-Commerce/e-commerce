@@ -35,8 +35,10 @@ class HomeController extends Controller
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
                 ->paginate(6);
         }
-
-        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        $notification = null;
+        if ($user) {
+            $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        }
         return view('home.index', [
             'title' => 'DnG Store',
             'menu' => 'home',

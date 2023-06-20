@@ -122,13 +122,12 @@ class InvoiceController extends Controller
         // dd($request->payment_method);
         $area = DB::table('areas')
             ->where([
-                ['provinsi', '=', $request->kelurahan],
+                ['provinsi', '=', $request->provinsi],
                 ['kabupaten', '=', $request->kabupaten],
                 ['kecamatan', '=', $request->kecamatan],
                 ['kelurahan', '=', $request->kelurahan]
             ])->first();
-
-        $ongkir = $area ? $area->ongkir : 10000;
+        $ongkir = $area ? $area->ongkir : 0;
         $params = [
             'payment_type' => 'bank_transfer',
             'transaction_details' => [
@@ -181,7 +180,8 @@ class InvoiceController extends Controller
             'user_id' =>    $user->id,
             'title' => 'Pembayaran Berhasil',
             'message' => "Berhasil melakukan pembayaran untuk invoice $invoice->invoice_code, harap menunggu pesanan dikonfirmasi oleh admin dan melakukan pengecekan pesanan secara berkala",
-            'is_read' => 0
+            'is_read' => 0,
+            'created_at' => now('Asia/Jakarta'),
         ]);
         DB::commit();
         $session = [
