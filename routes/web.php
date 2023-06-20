@@ -131,3 +131,5 @@ Route::controller(AreaController::class)->group(function () {
 Route::controller(ShippingController::class)->group(function () {
     Route::get('/pengiriman', 'index')->name('pengiriman');
 });
+
+Route::post('/send-whatsapp-message', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send.whatsapp');
