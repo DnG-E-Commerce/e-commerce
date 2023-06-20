@@ -62,7 +62,7 @@ class OrderController extends Controller
                 'product_id' => $request->product_id,
                 'qty' => $request->qty,
                 'total' => intval($request->qty * $request->price),
-                'created_at' => date('Y-m-d H:i:s'),
+                'created_at' => now('Asia/Jakarta'),
             ]);
         }
         DB::commit();
@@ -154,6 +154,7 @@ class OrderController extends Controller
                 'qty' => $request->qty[$key],
                 'total' => $request->total[$key],
                 'status' => 'Dipesan',
+                'created_at' => now('Asia/Jakarta')
             ]);
         }
 

@@ -2,57 +2,9 @@
     $dataSidebar = [
         0 => [
             'id' => 1,
-            'name' => 'Dashboard',
+            'name' => 'Drop Shipping',
             'icon' => 'ni ni-tv-2 text-primary',
-            'url' => 'admin',
-        ],
-        1 => [
-            'id' => 2,
-            'name' => 'Produk',
-            'icon' => 'ni ni-app text-warning',
-            'url' => 'product',
-        ],
-        2 => [
-            'id' => 3,
-            'name' => 'Kategori',
-            'icon' => 'ni ni-tag text-primary',
-            'url' => 'category',
-        ],
-        3 => [
-            'id' => 4,
-            'name' => 'Reseller',
-            'icon' => 'ni ni-cart text-danger',
-            'url' => 'reseller',
-        ],
-        4 => [
-            'id' => 5,
-            'name' => 'Customer',
-            'icon' => 'ni ni-circle-08 text-dark',
-            'url' => 'customer',
-        ],
-        5 => [
-            'id' => 6,
-            'name' => 'Orders',
-            'icon' => 'ni ni-cart text-dark',
-            'url' => 'admin.orders',
-        ],
-        5 => [
-            'id' => 6,
-            'name' => 'Pesanan',
-            'icon' => 'ni ni-box-2 text-warning',
-            'url' => 'admin.invoices',
-        ],
-        6 => [
-            'id' => 7,
-            'name' => 'Area',
-            'icon' => 'ni ni-map-big text-dark',
-            'url' => 'area',
-        ],
-        8 => [
-            'id' => 9,
-            'name' => 'Laporan Penjualan',
-            'icon' => 'ni ni-send text-dark',
-            'url' => 'customer',
+            'url' => 'driver',
         ],
     ];
 @endphp
@@ -87,8 +39,7 @@
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $menu[0] == 'Profile' ? 'active' : '' }}"
-                    href="{{ route('admin.profile', ['user' => session('id')]) }}">
+                <a class="nav-link {{ $menu[0] == 'Profile' ? 'active' : '' }}" href="{{ route('driver.profile') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>

@@ -32,12 +32,34 @@ class CustomAuthController extends Controller
             'password' => 'required',
         ]);
         if (Auth::attempt($credentials)) {
-            if ($user->role == 'Customer' || $user->role == 'Reseller') {
-                session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-                return redirect()->route('home')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
-            }
             session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
-            return redirect()->route('admin')->with(['message' => 'Selamat datang di DnG Store!', 'type' => 'Login', 'alert' => 'Notifikasi Sukses!', 'class' => 'success']);
+            $session = [
+                'message' => 'Selamat datang di DnG Store!',
+                'type' => 'Login',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            switch ($user->role) {
+                case 'Owner':
+                    return redirect()->route('owner')->with($session);
+                    break;
+
+                case 'Admin':
+                    return redirect()->route('admin')->with($session);
+                    break;
+
+                case 'Driver':
+                    return redirect()->route('driver')->with($session);
+                    break;
+
+                case 'Reseller':
+                    return redirect()->route('home')->with($session);
+                    break;
+
+                case 'Customer':
+                    return redirect()->route('home')->with($session);
+                    break;
+            }
         }
         return redirect()->back()->with(['message' => 'Email atau password salah, harap login kembali!', 'type' => 'Credentials Error', 'alert' => 'Notifikasi Gagal!', 'class' => 'success']);
     }

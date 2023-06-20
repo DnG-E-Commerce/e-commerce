@@ -5,11 +5,13 @@ use App\Http\Controllers\AreaController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomAuthController;
+use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\KurirController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\OwnerController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ShippingController;
 use App\Http\Controllers\UserController;
@@ -38,12 +40,10 @@ Route::controller(HomeController::class)->group(function () {
     Route::put('/home/mengajukan-reseller/{user}', 'pengajuanReseller')->name('pengajuan');
 });
 
-Route::controller(CartController::class)->group(function () {
-    Route::get('/cart/mycart', 'index')->name('cart');
-    Route::get('/cart/delete/{cart}', 'destroy')->name('cart.delete');
-    Route::post('/cart/store/{product}', 'store')->name('cart.store');
-    Route::post('/cart/checkout', 'checkout')->name('cart.checkout');
-    Route::get('/cart/delete/{cart}', 'delete')->name('cart.delete');
+Route::controller(OwnerController::class)->group(function () {
+    Route::get('/owner', 'index')->name('owner');
+    Route::get('/owner/profile', 'profile')->name('owner.profile');
+    Route::get('/owner/laporan-penjualan', 'salesReport')->name('owner.report');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -54,6 +54,13 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');
     Route::put('/admin/order/update/{order}', 'orderUpdate')->name('admin.order.update');
+});
+
+Route::controller(DriverController::class)->group(function () {
+    Route::get('/driver', 'index')->name('driver');
+    Route::get('/driver/profile', 'profile')->name('driver.profile');
+    Route::get('/driver/invoice/{invoice}', 'invoice')->name('driver.invoice');
+    Route::post('/driver/confirm-recive/{invoice}', 'store')->name('drive.store');
 });
 
 Route::controller(UserController::class)->group(function () {
@@ -70,6 +77,14 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/user/reseller', 'resellerStore')->name('reseller.store');
 
     Route::post('/user/mengajukan-reseller/{user}', 'storePengajuan')->name('pengajuan.store');
+});
+
+Route::controller(CartController::class)->group(function () {
+    Route::get('/cart/mycart', 'index')->name('cart');
+    Route::get('/cart/delete/{cart}', 'destroy')->name('cart.delete');
+    Route::post('/cart/store/{product}', 'store')->name('cart.store');
+    Route::post('/cart/checkout', 'checkout')->name('cart.checkout');
+    Route::get('/cart/delete/{cart}', 'delete')->name('cart.delete');
 });
 
 Route::controller(ProductController::class)->group(function () {
