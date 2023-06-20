@@ -118,7 +118,10 @@
                         url: "{{ route('api.invoice.checkout', ['invoice' => $invoice->id]) }}",
                         type: 'post',
                         data: {
-                            address: `${kelurahan}, ${kecamatan}, ${kabupaten}, ${provinsi}`,
+                            provinsi: provinsi,
+                            kabupaten: kabupaten,
+                            kecamatan: kecamatan,
+                            kelurahan: kelurahan,
                             payment_method: payment_method
                         },
                         success: function(response) {

@@ -122,13 +122,13 @@ class InvoiceController extends Controller
         // dd($request->payment_method);
         $area = DB::table('areas')
             ->where([
-                ['provinsi', '=', $request->kelurahan],
+                ['provinsi', '=', $request->provinsi],
                 ['kabupaten', '=', $request->kabupaten],
                 ['kecamatan', '=', $request->kecamatan],
                 ['kelurahan', '=', $request->kelurahan]
             ])->first();
 
-        $ongkir = $area ? $area->ongkir : 10000;
+        $ongkir = $area ? $area->ongkir: 0;
         $params = [
             'payment_type' => 'bank_transfer',
             'transaction_details' => [
