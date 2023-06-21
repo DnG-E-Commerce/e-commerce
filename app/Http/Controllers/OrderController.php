@@ -6,8 +6,6 @@ use App\Models\Invoice;
 use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Midtrans\Transaction;
 use Nette\Utils\Random;
 
 class OrderController extends Controller
@@ -20,15 +18,14 @@ class OrderController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $orders = Order::where([
-            ['user_id', '=', "$user->id"],
-            ['status', '=', null]
-        ])->get()->all();
+        $orders = Order::where('user_id', $user->id)->get()->all();
+        $invoices = Invoice::where('user_id', $user->id)->get()->all();
         $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('checkout.index', [
             'title' => 'DnG Store | Checkout',
             'user' => $user,
             'orders' => $orders,
+            'invoices' => $invoices,
             'menu' => ['Order'],
             'notifications' => $notification
         ]);
@@ -40,31 +37,28 @@ class OrderController extends Controller
             'qty' => 'required|numeric'
         ]);
         $user = auth()->user();
-        $order = DB::table('orders')->where([
-            ['user_id', '=', $user->id],
-            ['product_id', '=', $request->product_id],
-            ['status', '=', null]
-        ])->first();
         DB::beginTransaction();
-        if ($order) {
-            DB::table('orders')->where([
-                ['user_id', '=', $user->id],
-                ['product_id', '=', $request->product_id],
-                ['status', '=', null]
-            ])->update([
-                'qty' => $order->qty + $request->qty,
-                'total' => $order->total + ($request->qty * $request->price),
-                'updated_at' => now('Asia/Jakarta')
-            ]);
-        } else {
-            DB::table('orders')->insert([
-                'user_id' => $user->id,
-                'product_id' => $request->product_id,
-                'qty' => $request->qty,
-                'total' => intval($request->qty * $request->price),
-                'created_at' => now('Asia/Jakarta'),
-            ]);
-        }
+        DB::table('invoices')->insert([
+            'user_id' => $user->id,
+            'invoice_code' => 'INV-1003' . Random::generate(4, '0-9') . date('Y') * date('m') * date('d'),
+            'grand_total' => 0,
+            'status' => 'Pending',
+            'created_at' => now('Asia/Jakarta')
+        ]);
+        $last_invoice = DB::table('invoices')->latest('id')->first();
+        DB::table('orders')->insert([
+            'user_id' => $user->id,
+            'product_id' => $request->product_id,
+            'invoice_id' => $last_invoice->id,
+            'qty' => $request->qty,
+            'total' => intval($request->qty * $request->price),
+            'status' => 'Dipesan',
+            'created_at' => now('Asia/Jakarta'),
+        ]);
+        DB::table('invoices')->where('invoice_code', $last_invoice->invoice_code)->update([
+            'grand_total' => intval($request->qty * $request->price),
+            'updated_at' => now('Asia/Jakarta'),
+        ]);
         DB::commit();
         $session = [
             'message' => 'Harap lengkapi data-data untuk melanjutkan transaksi!',
@@ -72,7 +66,7 @@ class OrderController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('order')->with($session);
+        return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function storeToCart(Request $request)

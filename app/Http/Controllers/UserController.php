@@ -222,8 +222,23 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(User $user)
+    public function review(User $user)
     {
+        $request_upgrade = DB::table('request_upgrades')->where('user_id', $user->id)->first();
+        return view('customer.review-request', [
+            'title' => 'DnG Store | Review Request',
+            'user' => auth()->user(),
+            'select_user' => $user,
+            'review' => $request_upgrade,
+            'menu' => ['Cusomter', 'Review Request'],
+        ]);
+    }
+
+    public function acceptRequest(Request $request, User $user)
+    {
+        DB::table('request_upgrades')->where('user_id', $request->req_id)->update([
+            'updated_at' => now('Asia/Jakarta'),
+        ]);
         DB::table('users')->where('id', $user->id)->update([
             'role' => 'reseller',
             'request_upgrade' => 0

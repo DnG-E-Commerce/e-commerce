@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\CustomersAndResellerChart;
 use App\Charts\OrderChart;
+use App\Charts\OrdersChart;
+use App\Charts\ProductsChart;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Product;
@@ -22,17 +25,8 @@ class AdminController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(OrdersChart $ordersChart, ProductsChart $productsChart, CustomersAndResellerChart $customersAndResellerChart)
     {
-        $month = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        $data = [];
-        foreach ($month as $key => $m) {
-            $order = DB::table('orders')->whereMonth('created_at', '=', $key + 1)->get()->all();
-            array_push($data, [count($order)]);
-        }
-        $orderChart = new OrderChart();
-        $orderChart->labels($month);
-        $orderChart->dataset('Order by trimister', 'line', $data);
         return view('admin.index', [
             'title' => 'DnG Store | Dashboard',
             'menu' => ['Dashboard'],
@@ -40,7 +34,20 @@ class AdminController extends Controller
             'users' => User::all(),
             'orders' => Order::all(),
             'products' => Product::all(),
-            'orderChart' => $orderChart
+            'orderChart' => $ordersChart->build(),
+            'productChart' => $productsChart->build(),
+            'CustomerResellerChart' => $customersAndResellerChart->build(),
+        ]);
+    }
+
+    public function salesReport()
+    {
+        $user = auth()->user();
+        return view('admin.sales-report', [
+            'title' => 'DnG Store | Laporan Penjualan',
+            'user' => $user,
+            'menu' => ['Laporan Penjualan'],
+            'orders' => Order::all(),
         ]);
     }
 

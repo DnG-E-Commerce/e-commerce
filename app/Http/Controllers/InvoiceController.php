@@ -20,7 +20,7 @@ class InvoiceController extends Controller
     {
         $user = auth()->user();
         $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
-        $invoices = Invoice::where('user_id', $user->id)->get()->all();
+        $invoices = Invoice::where('user_id', $user->id)->orderBy('created_at', 'desc')->get()->all();
         return view('invoice.index', [
             'title' => 'DnG Store | Transaksi',
             'menu' => ['Transaksi'],
@@ -198,8 +198,8 @@ class InvoiceController extends Controller
     {
         DB::table('invoices')->where('id', $invoice['id'])
             ->update([
-                'status' => 'Belum Lunas',
-                // 'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'status' => 'Pending',
+                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
                 'ongkir' => 0,
                 'grand_total' => $invoice['grand_total'],
                 'payment_method' => $data['payment_method'],

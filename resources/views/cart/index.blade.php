@@ -69,7 +69,7 @@
                                             </div>
                                             <div class="col-4">
                                                 <input type="number" name="qty[{{ $cart->id }}]" id="qty"
-                                                    class="form-control-plaintext" value="{{ $cart->qty }}">
+                                                    class="form-control-plaintext" value="{{ $cart->qty }}" readonly>
                                             </div>
                                         </div>
                                         <div class="row gap-3 g-3 align-items-center mb-3">

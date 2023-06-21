@@ -17,7 +17,7 @@ class DriverController extends Controller
     public function index()
     {
         $user = auth()->user();
-        $invoices = Invoice::where('status', 'Lunas')->get()->all();
+        $invoices = Invoice::where('status', 'Lunas')->orWhere('status', 'Belum Lunas')->orderBy('created_at', 'desc')->get()->all();
         return view('driver.index', [
             'title'    => 'DnG Store | Dashboard Driver',
             'user'     => $user,
@@ -42,7 +42,7 @@ class DriverController extends Controller
         return view('driver.confirm-recive', [
             'title' => 'DnG Store | Konfirmasi Paket',
             'user' => $user,
-            'menu' => ['List Pengiriman', 'Konfirmasi Paket'],
+            'menu' => ['Drop Shipping', 'Konfirmasi Paket'],
             'invoice' => $invoice
         ]);
     }
