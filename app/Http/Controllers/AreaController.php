@@ -95,8 +95,8 @@ class AreaController extends Controller
     public function edit(Area $area)
     {
         return view('area.edit-area', [
-            'title' => 'DnG Store | Pengiriman',
-            'menu' => ['Pengiriman'],
+            'title' => 'DnG Store | Edit Area',
+            'menu' => ['Area', 'Edit Area'],
             'user' => auth()->user(),
             'area' => $area
         ]);

@@ -2,10 +2,17 @@
     $dataSidebar = [
         0 => [
             'id' => 1,
-            'name' => 'Drop Shipping',
+            'name' => 'Dashboard',
             'icon' => 'ni ni-tv-2 text-primary',
             'url' => 'driver',
         ],
+        1 => [
+            'id' => 2,
+            'name' => 'List Pengiriman',
+            'icon' => 'ni ni-app text-warning',
+            'url' => 'driver',
+        ],
+      
     ];
 @endphp
 

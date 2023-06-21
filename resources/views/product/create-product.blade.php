@@ -20,7 +20,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="desc">Deskripsi Produk</label>
+                                <label for="desc">Deskripsi Produk <span class="text-danger">*</span></label>
                                 <textarea name="desc" name="desc" class="form-control" rows="3">{{ old('desc') }}</textarea>
                             </div>
                             <div class="form-group mb-3">
@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 @php
-                                    $unitofmeasure = ['Pcs', 'Karton', 'Box', 'Liter', 'Rincing', 'Pak', 'Bal'];
+                                    $unitofmeasure = ['Pcs', 'Karton/Dus', 'Box', 'Liter','Kilogram' ,'Rincing', 'PAK', 'BAL', 'Paket', 'Toples'];
                                 @endphp
                                 <label for="uom">Satuan<span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">
@@ -59,7 +59,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="weight">Berat Produk (KG)<span class="text-danger">*</span></label>
+                                <label for="weight">Ukuran Produk<span class="text-danger">*</span></label>
                                 <input type="number" name="weight" class="form-control">
                             </div>
                             <div class="form-group mb-3">

@@ -50,6 +50,12 @@
         ],
         8 => [
             'id' => 9,
+            'name' => 'Grafik Penjualan',
+            'icon' => 'ni ni-map-big text-dark',
+            'url' => 'area',
+        ],
+        10 => [
+            'id' => 11,
             'name' => 'Laporan Penjualan',
             'icon' => 'ni ni-send text-dark',
             'url' => 'customer',

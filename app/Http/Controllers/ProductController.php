@@ -58,11 +58,32 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
+            'desc' => 'required',
+            'uom' => 'required',
+            'photo' => 'required',
+            'qty' => 'required',
+            'special_status' => 'required',
+            'weight' => 'required',
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',
-            'uom' => 'not_in:pilih',
-            'status' => 'not_in:pilih',
-            'caetgory' => 'not_in:pilih',
+            'uom' => 'required|not_in:pilih',
+            'status' => 'required|not_in:pilih',
+            'category' => 'required|not_in:pilih',
+            
+        ],[
+            'name.required' => 'Nama Produk wajib diisi!',
+            'desc.required' => 'Deskripsi Produk wajib diisi!',
+            'photo.required' => 'Foto Produk wajib diisi!',
+            'qty.required' => 'Stok Produk wajib diisi!',
+            'customer_price.required' => 'Harga Customer wajib diisi!',
+            'reseller_price.required' => 'Harga Reseller wajib diisi!',
+            'category.required' => 'Kategori Produk wajib diisi!',
+            'uom.required' => 'Satuan Produk wajib diisi!',
+            'weight.required' => 'Ukuran Produk wajib diisi!',
+            'category.not_in' => 'Pilihan Kategori salah!',
+            'status.not_in' => 'Pilihan status salah!',
+            'uom.not_in' => 'Pilihan satuan salah!',
+            // 'customer_price.numeric' => 'Pilihan satuan salah!',
         ]);
         $photo = $request->file('photo')->store('image');
         DB::table('products')->insert([

@@ -7,7 +7,7 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Tambah Data Product</h6>
+                        <h6>Edit Data Product</h6>
                     </div>
                     <div class="card-body p-3">
                         <form action="{{ route('product.update', ['product' => $product->id]) }}" method="post"
@@ -44,20 +44,31 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="uom">Satuan Berat <span class="text-danger">*</span></label>
+                                <label for="uom">Satuan Produk <span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">
-                                    <option value="Kilogram" @if ($product->uom == 'Kilogram') {{ 'selected' }} @endif>KG
+                                <option value="Karton/Dus" @if ($product->uom == 'Karton/Dus') {{ 'selected' }} @endif> Karton/Dus</option>
+                                    <option value="Kilogram" @if ($product->uom == 'Kilogram') {{ 'selected' }} @endif> KG
                                     </option>
-                                    <option value="Box" @if ($product->uom == 'Box') {{ 'selected' }} @endif>Box
+                                    <option value="Box" @if ($product->uom == 'Box') {{ 'selected' }} @endif> Box
                                     </option>
-                                    <option value="Liter" @if ($product->uom == 'Liter') {{ 'selected' }} @endif>L
+                                    <option value="Liter" @if ($product->uom == 'Liter') {{ 'selected' }} @endif> L
                                     </option>
-                                    <option value="Rincing" @if ($product->uom == 'Rincing') {{ 'selected' }} @endif>
-                                        Rincing</option>
+                                    <option value="Rincing" @if ($product->uom == 'Rincing') {{ 'selected' }} @endif> Rincing</option>
+                                    <option value="Paket" @if ($product->uom == 'Paket') {{ 'selected' }} @endif>Paket
+                                    </option>
+                                    <option value="Pcs" @if ($product->uom == 'Pcs') {{ 'selected' }} @endif>Pcs
+                                    </option>
+                                    <option value="Toples" @if ($product->uom == 'Toples') {{ 'selected' }} @endif>Toples
+                                    </option>
+                                    <option value="BAL" @if ($product->uom == 'BAL') {{ 'selected' }} @endif> BAL
+                                    </option>
+                                    <option value="PAK" @if ($product->uom == 'PAK') {{ 'selected' }} @endif> PAK
+                                    </option>
+                                        
                                 </select>
                             </div>
                             <div class="form-group mb-3">
-                                <label for="weight">Berat Produk (KG)</label>
+                                <label for="weight">Ukuran Produk</label>
                                 <input type="number" name="weight" class="form-control" value="{{ $product->weight }}">
                             </div>
                             <div class="form-group mb-3">

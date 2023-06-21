@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -41,7 +42,7 @@ class DriverController extends Controller
         return view('driver.confirm-recive', [
             'title' => 'DnG Store | Konfirmasi Paket',
             'user' => $user,
-            'menu' => ['Drop Shipping', 'Konfirmasi Paket'],
+            'menu' => ['List Pengiriman', 'Konfirmasi Paket'],
             'invoice' => $invoice
         ]);
     }

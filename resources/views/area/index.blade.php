@@ -14,7 +14,7 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('area.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-                        <h6>Area Pemesanan</h6>
+                        <h6>Area Pengiriman</h6>
                     </div>
                     <div class="card-body px-5 pt-0 pb-2">
                         <div class="row justify-content-end mx-2">

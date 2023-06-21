@@ -11,14 +11,14 @@
     <div class="container-fluid py-4">
         <div class="card z-index-2 p-3">
             <div class="card-header pb-0">
-                <h6>Tabel Pesanan</h6>
+                <h6>Tabel Pengiriman Pesanan</h6>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-stripped table-hover" id="example">
                         <thead>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                #</th>
+                                No</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Invoice Code</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">

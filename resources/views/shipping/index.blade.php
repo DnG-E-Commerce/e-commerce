@@ -20,7 +20,11 @@
                             <table class="table align-items-center mb-0" id="example">
                                 <thead>
                                     <tr>
-                                        <th class="text-center">#</th>
+                                        
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            No</th>
+                                        <th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Invoice</th>

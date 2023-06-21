@@ -128,7 +128,7 @@ class InvoiceController extends Controller
                 ['kelurahan', '=', $request->kelurahan]
             ])->first();
 
-        $ongkir = $area ? $area->ongkir : 10000;
+        $ongkir = $area ? $area->ongkir : 0;
         $params = [
             'payment_type' => 'bank_transfer',
             'transaction_details' => [
@@ -198,8 +198,8 @@ class InvoiceController extends Controller
     {
         DB::table('invoices')->where('id', $invoice['id'])
             ->update([
-                'status' => 'Pending',
-                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'status' => 'Belum Lunas',
+                // 'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
                 'ongkir' => 0,
                 'grand_total' => $invoice['grand_total'],
                 'payment_method' => $data['payment_method'],
@@ -222,7 +222,7 @@ class InvoiceController extends Controller
 
         DB::table('invoices')->where('id', $invoice['id'])
             ->update([
-                'status' => 'Pending',
+                'status' => 'Belum Lunas',
                 'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
                 'ongkir' => $ongkir,
                 'grand_total' => $invoice['grand_total'] + $ongkir,

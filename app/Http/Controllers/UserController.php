@@ -107,7 +107,7 @@ class UserController extends Controller
 
     public function resellerCreate()
     {
-        return view('customer.create-reseller', [
+        return view('reseller.create-reseller', [
             'title' => 'DnG Store | Tambah Reseller',
             'user' => auth()->user(),
             'menu' => ['Reseller', 'Tambah']

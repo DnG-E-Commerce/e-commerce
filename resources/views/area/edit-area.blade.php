@@ -7,7 +7,7 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Tambah Data Product</h6>
+                        <h6>Edit Data Product</h6>
                     </div>
                     <div class="card-body p-3">
                         <form action="{{ route('area.update', ['area' => $area->id]) }}" method="post"
@@ -18,10 +18,10 @@
                             <hr class="border border-1 border-dark">
                             <div class="row">
                                 <div class="col-lg-6">
-                                    <div class="form-group mb-3">
+                                <div class="form-group mb-3">
                                         <label for="provinsi">Provinsi</label>
                                         <select name="provinsi" id="provinsi" class="form-select">
-                                            <option value="pilih">Pilih</option>
+                                            <option value="pilih">{{ $area->provinsi }}</option>
                                         </select>
                                         @error('provinsi')
                                             <small class="text-danger">{{ $message }}</small>
@@ -30,7 +30,7 @@
                                     <div class="form-group mb-3">
                                         <label for="kabupaten">Kabupaten</label>
                                         <select name="kabupaten" id="kabupaten" class="form-select">
-                                            <option value="pilih">Pilih</option>
+                                            <option value="pilih">{{ $area->kabupaten }}</option>
                                         </select>
                                         @error('kabupaten')
                                             <small class="text-danger">{{ $message }}</small>
@@ -41,7 +41,7 @@
                                     <div class="form-group mb-3">
                                         <label for="kecamatan">Kecamatan</label>
                                         <select name="kecamatan" id="kecamatan" class="form-select">
-                                            <option value="pilih">Pilih</option>
+                                            <option value="pilih">{{ $area->kecamatan }}</option>
                                         </select>
                                         @error('kecamatan')
                                             <small class="text-danger">{{ $message }}</small>
@@ -50,7 +50,7 @@
                                     <div class="form-group mb-3">
                                         <label for="kelurahan">Kelurahan</label>
                                         <select name="kelurahan" id="kelurahan" class="form-select">
-                                            <option value="pilih">Pilih</option>
+                                            <option value="pilih">{{ $area->kelurahan }}</option>
                                         </select>
                                         @error('kelurahan')
                                             <small class="text-danger">{{ $message }}</small>

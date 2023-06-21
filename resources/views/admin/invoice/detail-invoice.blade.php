@@ -73,7 +73,7 @@
                                     <tr>
                                         <th>Catatan</th>
                                         <td>:</td>
-                                        <td>Rp. {{ $invoice->notes }}</td>
+                                        <td>{{ $invoice->notes }}</td>
                                     </tr>
                                     <tr>
                                         <th>Ongkir</th>
@@ -89,6 +89,12 @@
                                         <th>Status</th>
                                         <td>:</td>
                                         <td>{{ $invoice->status }}</td>
+                                    </tr>
+                                    <tr>
+                                    <tr>
+                                        <th>Metore Pembayaran</th>
+                                        <td>:</td>
+                                        <td>{{ $invoice->payment_method }}</td>
                                     </tr>
                                     <tr>
                                         <th>Status Orderan</th>
