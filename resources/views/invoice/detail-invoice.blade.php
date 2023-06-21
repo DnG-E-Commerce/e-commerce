@@ -72,7 +72,7 @@
                                     <tr>
                                         <th>Catatan</th>
                                         <td>:</td>
-                                        <td>Rp. {{ $invoice->notes }}</td>
+                                        <td>{{ $invoice->notes }}</td>
                                     </tr>
                                     <tr>
                                         <th>Ongkir</th>

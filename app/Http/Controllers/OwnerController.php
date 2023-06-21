@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Charts\CustomersAndResellerChart;
 use App\Charts\OrderChart;
+use App\Charts\OrdersChart;
+use App\Charts\ProductsChart;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,31 +13,23 @@ use Illuminate\Support\Facades\DB;
 
 class OwnerController extends Controller
 {
-    public function index()
+    public function index(OrdersChart $ordersChart, ProductsChart $productsChart, CustomersAndResellerChart $customersAndResellerChart)
     {
         $user = auth()->user();
-        $month = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-        $data = [];
-        foreach ($month as $key => $m) {
-            $order = DB::table('orders')->whereMonth('created_at', '=', $key + 1)->get()->all();
-            array_push($data, [count($order)]);
-        }
-        $orderChart = new OrderChart();
-        $orderChart->labels($month);
-        $orderChart->dataset('Order by trimister', 'line', $data);
         return view('owner.index', [
             'title' => 'DnG Store | Dashboard Owner',
             'user'  => $user,
             'menu'  => ['Dashboard'],
             'users' => User::all(),
             'orders' => Order::all(),
-            'orderChart' => $orderChart
+            'orderChart' => $ordersChart->build(),
+            'productChart' => $productsChart->build(),
+            'CustomerResellerChart' => $customersAndResellerChart->build(),
         ]);
     }
 
     public function salesReport()
     {
-        //
     }
 
     public function profile()

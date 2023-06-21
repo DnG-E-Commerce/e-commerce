@@ -33,7 +33,7 @@
                         <tbody>
                             @foreach ($invoices as $key => $invoice)
                                 @foreach ($invoice->order as $i => $order)
-                                    @if ($order->status == 'Dikirim')
+                                    @if (in_array($order->status, ['Dikirim', 'Diterima']))
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>

@@ -75,7 +75,19 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-lg mb-lg-0 mb-4">
+            <div class="col-lg-4 mb-lg-0 mb-4">
+                <div class="card z-index-2 h-100">
+                    <div class="card-header pb-0 pt-3 bg-transparent">
+                        <h6 class="text-capitalize">Insight Pelanggan Loyal</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="chart">
+                            {!! $CustomerResellerChart->container() !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <h6 class="text-capitalize">Grafik Penjualan</h6>
@@ -83,7 +95,18 @@
                     <div class="card-body p-3">
                         <div class="chart">
                             {!! $orderChart->container() !!}
-                            {!! $orderChart->script() !!}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-lg-0 mb-4">
+                <div class="card z-index-2 h-100">
+                    <div class="card-header pb-0 pt-3 bg-transparent">
+                        <h6 class="text-capitalize">Grafik Produk</h6>
+                    </div>
+                    <div class="card-body p-3">
+                        <div class="chart">
+                            {!! $productChart->container() !!}
                         </div>
                     </div>
                 </div>
@@ -110,4 +133,10 @@
             </div>
         </div>
     </div>
+    <script src="{{ $CustomerResellerChart->cdn() }}"></script>
+    <script src="{{ $orderChart->cdn() }}"></script>
+    <script src="{{ $productChart->cdn() }}"></script>
+    {{ $CustomerResellerChart->script() }}
+    {{ $orderChart->script() }}
+    {{ $productChart->script() }}
 @endsection

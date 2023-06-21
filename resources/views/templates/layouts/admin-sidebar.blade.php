@@ -52,7 +52,7 @@
             'id' => 9,
             'name' => 'Laporan Penjualan',
             'icon' => 'ni ni-send text-dark',
-            'url' => 'customer',
+            'url' => 'admin.sales-report',
         ],
     ];
 @endphp

@@ -97,7 +97,7 @@
                                                 href="{{ route('home.profile', ['user' => $user->id]) }}">Profile</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('order') }}">Pesanan</a>
+                                            <a class="dropdown-item" href="{{ route('invoice') }}">Pesanan</a>
                                         </li>
                                         <li>
                                             <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
@@ -109,9 +109,6 @@
                                                     Reseller</a>
                                             </li>
                                         @endif
-                                        <li><a class="dropdown-item" href="{{ route('invoice') }}">Riwayat
-                                                Transaksi</a>
-                                        </li>
                                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
                                     </ul>
                                 </div>

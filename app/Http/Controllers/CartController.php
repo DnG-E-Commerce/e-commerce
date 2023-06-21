@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
+use Nette\Utils\Random;
 
 class CartController extends Controller
 {
@@ -103,35 +104,35 @@ class CartController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
+        DB::beginTransaction();
+        DB::table('invoices')->insert([
+            'user_id' => $user->id,
+            'invoice_code' => 'INV-1003' . Random::generate(4, '0-9') . date('Y') * date('m') * date('d'),
+            'grand_total' => 0,
+            'status' => 'Pending',
+            'created_at' => now('Asia/Jakarta')
+        ]);
+        $total = 0;
+        $last_invoice = DB::table('invoices')->latest('id')->first();
         foreach ($request->cart as $key => $data) {
-            $productId = $request->input('product_id')[$key];
-            $qty = $request->input('qty')[$key];
-            $total = $request->input('total')[$key];
-            $order = DB::table('orders')->where([
-                ['status', '=', null],
-                ['user_id', '=', "$user->id"],
-                ['product_id', '=', "$productId"]
-            ])->first();
-            if (!$order) {
-                DB::table('orders')->insert([
-                    'user_id' => $user->id,
-                    'product_id' => $productId,
-                    'qty' => $qty,
-                    'total' => $total,
-                ]);
-            } else {
-                DB::table('orders')->where([
-                    ['user_id', '=', "$user->id"],
-                    ['product_id', '=', "$productId"],
-                    ['status', '=', null]
-                ])->update([
-                    'qty' => $order->qty + $qty,
-                    'total' => $total
-                ]);
-            }
+            $productId = $request->product_id[$key];
+            $total += $request->total[$key];
+            DB::table('orders')->insert([
+                'user_id' => $user->id,
+                'product_id' => $productId,
+                'invoice_id' => $last_invoice->id,
+                'qty' => $request->qty[$key],
+                'total' => $request->total[$key],
+                'created_at' => now('Asia/Jakarta')
+            ]);
             DB::table('carts')->delete($key);
         }
-        return redirect()->route('order')->with($session);
+        DB::table('invoices')->where('invoice_code', $last_invoice->invoice_code)->update([
+            'grand_total' => $total,
+            'updated_at' => now('Asia/Jakarta'),
+        ]);
+        DB::commit();
+        return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function show(Cart $cart)

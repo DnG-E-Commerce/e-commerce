@@ -15,14 +15,7 @@ class ShippingController extends Controller
      */
     public function index()
     {
-        $user = auth()->user();
-        $invoices = Invoice::all();
-        return view('shipping.index', [
-            'title' => 'DnG Store | Pengiriman',
-            'user' => $user,
-            'menu' => ['Pengiriman'],
-            'invoices' => $invoices,
-        ]);
+        //
     }
 
     /**

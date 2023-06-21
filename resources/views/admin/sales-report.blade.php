@@ -13,65 +13,60 @@
             <div class="col-lg mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('customer.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-                        <h6>Tabel Customer</h6>
+                        <h6>Laporan Penjualan</h6>
                     </div>
                     <div class="card-body px-5 pt-0 pb-2">
-                        <div class="row justify-content-end mx-2">
-                            <div class="col-lg-4 col-md-6 col-sm-4">
-                                <form action="" method="get">
-                                    <!-- <div class="input-group">
-                                                                <input type="text" name="search" class="form-control">
-                                                                <button class="input-group-text bg-success text-white" type="submit">Cari</button>
-                                                            </div> -->
-                                </form>
-                            </div>
-                        </div>
-                        <div class="table-responsive p-0">
+                        <div class="table-responsive p-1">
                             <table class="table align-items-center mb-0" id="example">
                                 <thead>
                                     <tr>
-                                        <th class="text-center text-uppercase text-secondary text-xxs">No</th>
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            No</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Tanggal</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Nama</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Email</th>
+                                            Produk</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Kontak</th>
+                                            Cara Bayar</th>
                                         <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                            Opsi</th>
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            QTY</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Jumlah</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($customers as $key => $data)
+                                    @foreach ($orders as $key => $data)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->name }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->created_at }}</span>
+                                            </td>
+                                            <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{ $data->user->name }}</span>
+                                            </td>
+                                            <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{ $data->product->name }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span
-                                                    class="text-xs font-weight-bold">{{ $data->email ? $data->email : '-' }}</span>
+                                                    class="text-xs font-weight-bold">{{ $data->invoice->payment_method }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span
-                                                    class="text-xs font-weight-bold">{{ $data->phone ? $data->phone : 'Belum ada' }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $data->qty }}</span>
                                             </td>
-                                            <td class="text-center align-end">
-                                                @if ($data->request_upgrade == 1)
-                                                    <a class="btn btn-sm bg-gradient-primary"
-                                                        href="{{ route('request-upgrade', ['user' => $data->id]) }}">Upgrade</a>
-                                                @endif
-                                                <a href="{{ route('user.show', ['user' => $data->id]) }}"
-                                                    class="btn btn-sm bg-gradient-warning">
-                                                    Detail
-                                                </a>
+                                            <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{ $data->total }}</span>
                                             </td>
                                         </tr>
                                     @endforeach

@@ -52,6 +52,8 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/invoice/{invoice}', 'showInvoice')->name('admin.detail.invoice');
     Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
+    Route::get('/admin/laporan-penjualan', 'salesReport')->name('admin.sales-report');
+
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');
     Route::put('/admin/order/update/{order}', 'orderUpdate')->name('admin.order.update');
 });
@@ -69,6 +71,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/user/show/{user}', 'show')->name('user.show');
     Route::get('/user/edit/{user}', 'edit')->name('user.edit');
     Route::get('/user/customer/update/{user}', 'update')->name('customer.update');
+    Route::get('/user/customer/request-upgrade/{user}', 'review')->name('request-upgrade');
 
     Route::get('/user/reseller', 'reseller')->name('reseller');
     Route::get('/user/reseller/create', 'resellerCreate')->name('reseller.create');
@@ -77,6 +80,7 @@ Route::controller(UserController::class)->group(function () {
     Route::post('/user/reseller', 'resellerStore')->name('reseller.store');
 
     Route::post('/user/mengajukan-reseller/{user}', 'storePengajuan')->name('pengajuan.store');
+    Route::put('/user/customer/request-upgrade/{user}', 'acceptRequest')->name('pengajuan.accept');
 });
 
 Route::controller(CartController::class)->group(function () {
