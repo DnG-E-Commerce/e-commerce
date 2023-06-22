@@ -126,7 +126,7 @@ class ProductController extends Controller
         ]);
         DB::table('products')->where('id', $product->id)->update([
             'qty' => intval($product->qty + $request->qty),
-            'status' => 'Ready',
+            'qty_status' => 'Ready',
         ]);
         $session = [
             'message' => "berhasil menambahkan stock pada $product->name!",
