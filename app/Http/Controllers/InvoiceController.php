@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Invoice;
+use App\Models\Order;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -254,7 +255,8 @@ class InvoiceController extends Controller
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
-
+             
+            $whatsapp = $this->sendWhatsapp();
             // $accountSid = config('app.twilio_sid');
             // $authToken = config('app.twilio_auth_token');
             // $twilioNumber = config('app.twilio_whatsapp_number');
@@ -271,6 +273,30 @@ class InvoiceController extends Controller
             // );
             
             // return response()->json(['message' => 'WhatsApp message sent successfully']);
+    }
+
+    public function sendWhatsapp()
+    {
+        $user = auth()->user();
+
+        $sid = "ACeeae51f34b58855ae6f4f64439905adc";
+        $token = "37bad0b2faaa3c3caeb30e58a2db5de9";
+        $twilioNumber = "+14155238886";
+        $recipientNumber = "+6283138578369";
+        $nama_pemesan = "$name";
+        
+
+        $client = new Client($sid, $token);
+    
+        $message = $client->messages->create(
+            'whatsapp:' . $recipientNumber, // Replace with the recipient's WhatsApp number
+            [
+                'from' => 'whatsapp:' . $twilioNumber,
+                'body' => 'Selamat Transaksi Anda Berhasil dengan nama ', // Replace with your desired message
+            ]
+        );
+    
+        return response()->json(['message' => 'WhatsApp message sent successfully.', 'messageSid' => $message->sid]);
     }
 
     /**
