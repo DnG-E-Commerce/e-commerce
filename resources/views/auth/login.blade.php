@@ -41,7 +41,8 @@
                                         <label class="form-check-label" for="rememberMe">Ingat Saya</label>
                                     </div>
                                     <div class="text-center">
-                                        <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Login</button>
+                                        <button type="submit"
+                                            class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Login</button>
                                     </div>
                                 </form>
                             </div>
@@ -57,10 +58,11 @@
                     <div
                         class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
                         <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden"
-                            style="background-image: url('https://elements-cover-images-0.imgix.net/16f562f4-e2bf-4904-a5f0-dc31dc9162f7?auto=compress%2Cformat&fit=max&w=1170&s=b2d602997d4875e8ba900f603d8bcafc');
+                            style="background-image: url('https://i.ibb.co/WpK2ThV/Whats-App-Image-2023-06-23-at-01-12-19-1.jpg');
         background-size: cover;">
                             <span class="mask bg-gradient-primary opacity-6"></span>
-                            <h4 class="mt-5 text-white font-weight-bolder position-relative">"SELAMAT DATANG DI SISTEM INFORMASI E-COMMERCE D&G STORE"</h4>
+                            <h4 class="mt-5 text-white font-weight-bolder position-relative">"SELAMAT DATANG DI SISTEM
+                                INFORMASI E-COMMERCE D&G STORE"</h4>
                             <!-- <p class="text-white position-relative">Menyediakan Berbagai Macam Makanan dan Minuman</p> -->
                         </div>
                     </div>

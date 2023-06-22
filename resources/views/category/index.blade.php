@@ -12,26 +12,19 @@
         <div class="row justify-content-center mt-4">
             <div class="col-lg-8 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
-                    <div class="card-header pb-0">
-                        <a href="{{ route('category.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
-                        <h6>Tabel Kategori</h6>
-                    </div>
-                    <div class="card-body px-5 pt-0 pb-2">
-                        <div class="row justify-content-end mx-2">
-                            <div class="col-lg-4 col-mg-6 col-sm-4">
-                                <form action="" method="get">
-                                    <!-- <div class="input-group">
-                                        <input type="text" name="search" class="form-control">
-                                        <button type="submit" class="input-group-text bg-success text-white">Cari</button>
-                                    </div> -->
-                                </form>
+                    <div class="card-body p-3 pb-2">
+                        <div class="row my-3">
+                            <div class="d-flex justify-content-between">
+                                <h4>Tabel Kategori</h4>
+                                <a href="{{ route('category.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                    Data</a>
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0" id="example">
+                            <table class="table align-items-center mb-0" id="table_category">
                                 <thead>
                                     <tr>
-                                    <th class="text-center text-uppercase text-secondary text-xxs">No</th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs">No</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Kategori</th>
@@ -87,4 +80,9 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#table_category').DataTable();
+        })
+    </script>
 @endsection

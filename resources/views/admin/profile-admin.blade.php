@@ -1,6 +1,25 @@
-@extends('templates.admin')
+@php
+    switch ($user->role) {
+        case 'Owner':
+            $templates = 'templates.owner';
+            $layout = 'templates.layouts.owner-navbar';
+            break;
+    
+        case 'Admin':
+            $templates = 'templates.admin';
+            $layout = 'templates.layouts.admin-navbar';
+            break;
+    
+        case 'Driver':
+            $templates = 'templates.driver';
+            $layout = 'templates.layouts.driver-navbar';
+            break;
+    }
+@endphp
+
+@extends($templates)
 @section('content')
-    @include('templates.layouts.admin-navbar')
+    @include($layout)
     @if (Session::get('message'))
         <script>
             $(document).ready(function() {
@@ -14,9 +33,7 @@
                 <div class="card z-index-2 p-2">
                     {{-- <img src="{{asset('storage/'.$select_user->photo)}}" alt="Photo {{$select_user->name}}" style="width: 12rem; background-size: cover;"> --}}
                     <div class="card-body mt-0">
-                        <div class="card-header text-center">
-                            <h4>{{ $user->role }}</h4>
-                        </div>
+                        <h4 class="text-center">{{ $user->role }}</h4>
                         <div class="d-grid justify-content-center" style="width: 100%; height: 15rem;">
                             <img src="{{ asset('storage/' . $user->photo) }}"
                                 style="width:12rem;height: 12rem; border-radius: 100%; object-fit: cover; border:1px solid black"
@@ -49,7 +66,19 @@
                 <div class="d-flex gap-2 float-end">
                     <a href="{{ route('admin.edit', ['user' => $user->id]) }}"
                         class="btn btn-sm bg-gradient-warning mt-2 float-end">Edit</a>
-                    <a href="{{ route('admin') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                    @switch($user->role)
+                        @case('Owner')
+                            <a href="{{ route('owner') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+
+                        @case('Admin')
+                            <a href="{{ route('admin') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+
+                        @case('Driver')
+                            <a href="{{ route('driver') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+                    @endswitch
                 </div>
             </div>
         </div>

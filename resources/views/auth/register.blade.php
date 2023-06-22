@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
-        style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signup-cover.jpg'); background-position: top;">
+        style="background-image: url('https://i.ibb.co/WpK2ThV/Whats-App-Image-2023-06-23-at-01-12-19-1.jpg'); background-position: cover;">
         <!-- <img src="{{ asset('argon/img/logos/logo.png') }}" class="navbar-brand-img h-100" alt="main_logo"> -->
         <span class="mask bg-gradient-dark opacity-6"></span>
         <div class="container">
@@ -10,7 +10,7 @@
                 <div class="col-lg-5 text-center mx-auto">
                     <h1 class="text-white mb-2 mt-5">D&G Store</h1>
                     <!-- <p class="text-lead text-white">Use these awesome forms to login or create new account in your project
-                        for free.</p> -->
+                                for free.</p> -->
                 </div>
             </div>
         </div>
@@ -61,13 +61,13 @@
                                 @enderror
                             </div>
                             <!-- <div class="form-check form-check-info text-start">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                    checked>
-                                <label class="form-check-label" for="flexCheckDefault">
-                                    I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and
-                                        Conditions</a>
-                                </label>
-                            </div> -->
+                                        <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                            checked>
+                                        <label class="form-check-label" for="flexCheckDefault">
+                                            I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and
+                                                Conditions</a>
+                                        </label>
+                                    </div> -->
                             <div class="text-center">
                                 <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit">Register</button>
                             </div>

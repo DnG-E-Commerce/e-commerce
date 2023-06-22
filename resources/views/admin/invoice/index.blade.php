@@ -12,12 +12,10 @@
         <div class="row mt-4">
             <div class="col-lg mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
-                    <div class="card-header pb-0">
-                        <h6>Tabel Pesanan</h6>
-                    </div>
-                    <div class="card-body px-5 pt-0 pb-2">
-                        <div class="table-responsive p-1">
-                            <table class="table align-items-center mb-0" id="example">
+                    <div class="card-body px-5 p-3 pb-2">
+                        <h4 class="my-3">Tabel Pesanan</h4>
+                        <div class="table-responsive my-3">
+                            <table class="table align-items-center mb-0" id="table_invoice">
                                 <thead>
                                     <tr>
                                         <th
@@ -69,15 +67,15 @@
                                             </span>
                                         </td>
                                         <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->payment_method }}</span>
-                                            </td>
+                                            <span class="text-xs font-weight-bold">{{ $data->payment_method }}</span>
+                                        </td>
                                         <td class="align-middle text-sm">
                                             <a href="{{ route('admin.detail.invoice', ['invoice' => $data->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary">Detail</a>
-                                                <a href="{{ route('admin.detail.invoice', ['invoice' => $data->id]) }}"
-                                                class="btn btn-sm bg-gradient-primary">Cetak Invoice</a>
+                                            <a href="{{ route('admin.print_pdf', ['invoice' => $data->id]) }}"
+                                                class="btn btn-sm bg-gradient-primary" target="_blank">Cetak Invoice</a>
                                         </td>
-                                       
+
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -108,4 +106,9 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#table_invoice').DataTable();
+    });
+</script>
 @endsection

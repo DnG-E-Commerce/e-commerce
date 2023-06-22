@@ -2,9 +2,9 @@
 
 namespace App\Charts;
 
-use App\Models\Order;
 use App\Models\User;
 use ArielMejiaDev\LarapexCharts\LarapexChart;
+use Illuminate\Support\Facades\DB;
 
 class CustomersAndResellerChart
 {
@@ -17,13 +17,20 @@ class CustomersAndResellerChart
 
     public function build(): \ArielMejiaDev\LarapexCharts\PieChart
     {
-        $users = User::where('role', '=', 'Customer')->orWhere('role', '=', 'Reseller')->get()->all();
+        $users = User::select('users.name', DB::raw('SUM(orders.qty) as total_order'))
+            ->join('orders', 'users.id', '=', 'orders.user_id')
+            ->join('products', 'products.id', '=', 'orders.product_id')
+            ->where('role', '=', 'Customer')
+            ->orWhere('role', '=', 'Reseller')
+            ->groupBy('users.id', 'users.name')
+            ->orderByDesc('total_order')
+            ->limit(10)
+            ->get();
         $XAxis = [];
         $data = [];
         foreach ($users as $u => $user) {
-            $order = Order::where('user_id', $user->id)->count();
             array_push($XAxis, $user->name);
-            array_push($data, $order);
+            array_push($data, $user->total_order);
         }
         return $this->chart->pieChart()
             ->addData($data)

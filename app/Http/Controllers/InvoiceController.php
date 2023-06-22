@@ -255,47 +255,44 @@ class InvoiceController extends Controller
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
-             
-            $whatsapp = $this->sendWhatsapp();
-            // $accountSid = config('app.twilio_sid');
-            // $authToken = config('app.twilio_auth_token');
-            // $twilioNumber = config('app.twilio_whatsapp_number');
-            
-            // $client = new Client($accountSid, $authToken);
-            
-            // $message = $client->messages->create(
-            //     $request->input('to'),
-            //     [
-            //         'from' => $twilioNumber,
-            //         'body' => "XXX"
+        // $accountSid = config('app.twilio_sid');
+        // $authToken = config('app.twilio_auth_token');
+        // $twilioNumber = config('app.twilio_whatsapp_number');
 
-            //     ]
-            // );
-            
-            // return response()->json(['message' => 'WhatsApp message sent successfully']);
+        // $client = new Client($accountSid, $authToken);
+
+        // $message = $client->messages->create(
+        //     $request->input('to'),
+        //     [
+        //         'from' => $twilioNumber,
+        //         'body' => "XXX"
+
+        //     ]
+        // );
+
+        // return response()->json(['message' => 'WhatsApp message sent successfully']);
     }
 
     public function sendWhatsapp()
     {
         $user = auth()->user();
-
         $sid = "ACeeae51f34b58855ae6f4f64439905adc";
         $token = "37bad0b2faaa3c3caeb30e58a2db5de9";
         $twilioNumber = "+14155238886";
         $recipientNumber = "+6283138578369";
-        $nama_pemesan = "$name";
-        
+        $nama_pemesan = "$user->name";
+
 
         $client = new Client($sid, $token);
-    
+
         $message = $client->messages->create(
             'whatsapp:' . $recipientNumber, // Replace with the recipient's WhatsApp number
             [
                 'from' => 'whatsapp:' . $twilioNumber,
-                'body' => 'Selamat Transaksi Anda Berhasil dengan nama ', // Replace with your desired message
+                'body' => 'Selamat Transaksi Anda Berhasil dengan ' . $nama_pemesan, // Replace with your desired message
             ]
         );
-    
+
         return response()->json(['message' => 'WhatsApp message sent successfully.', 'messageSid' => $message->sid]);
     }
 
@@ -305,6 +302,24 @@ class InvoiceController extends Controller
      * @param  \App\Models\Invoice  $invoice
      * @return \Illuminate\Http\Response
      */
+    public function confirmRecive(Invoice $invoice)
+    {
+        DB::table('invoices')->where([
+            ['id', $invoice->id],
+            ['invoice_code', $invoice->invoice_code]
+        ])->update([
+            'is_recive' => 1,
+        ]);
+        $session = [
+            'message' => 'Pesanan Berhasil diterima! Terimakasih telah berbelanja di D&G Store',
+            'type' => 'Penerimaan Pesanan',
+            'alert' => 'Notifikasi berhasil!',
+            'class' => 'success'
+        ];
+        return redirect()->route('invoice.show', ['invoice' => $invoice->id])->with($session);
+    }
+
+
     public function destroy(Invoice $invoice)
     {
         //

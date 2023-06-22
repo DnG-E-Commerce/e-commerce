@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller
 {
@@ -20,6 +22,7 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
+        $this->detect();
         $user = auth()->user();
         $query = $request->search;
         if ($query) {
@@ -46,6 +49,34 @@ class HomeController extends Controller
             'products' => $products,
             'notifications' => $notification
         ]);
+    }
+
+    public function detect()
+    {
+        $user = auth()->user();
+        $detect = DB::table('orders')
+            ->where('user_id', $user->id)
+            ->where('total', '>', 200000)
+            ->count();
+        $notification = Notification::where([
+            ['user_id', $user->id],
+            ['title', '=', 'Tawaran Menjadi Reseller']
+        ])->first();
+        if ($detect > 5 && $user->role == 'Customer') {
+            session()->flash('message', 'Anda telah memenuhi persyaratan untuk menjadi reseller');
+            session()->flash('type', 'Tawaran Upgrade');
+            session()->flash('alert', 'Selamat!');
+            session()->flash('class', 'success');
+            if (!$notification) {
+                DB::table('notifications')->insert([
+                    'user_id' => $user->id,
+                    'title' => 'Tawaran Menjadi Reseller',
+                    'message' => htmlspecialchars("Anda telah memenuhi persyaratan untuk menjadi reseller, anda dapat mengunjungi halaman <a href='/home/pengajuan-reseller'>ini</a>"),
+                    'is_read' => 0,
+                    'created_at' => now('Asia/Jakarta')
+                ]);
+            }
+        }
     }
 
     public function product(Product $product)

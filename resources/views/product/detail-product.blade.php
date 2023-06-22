@@ -14,12 +14,22 @@
                                     alt="Photo {{ $product->name }}">
                             </div>
                             <div class="col-lg-6">
-                                <h3>{{ $product->name }} </h3>
-                                <h4 class="fst-italic text-secondary">
-                                    {{ $product->category->category }}
-                                    <span
-                                        class="badge badge-sm bg-gradient-{{ $product->qty_status == 'Ready' ? 'success' : 'danger' }} float-end">{{ $product->qty_status }}</span>
-                                </h4>
+                                <div class="row">
+                                    <div class="d-flex justify-content-between">
+                                        <div class="d-grid">
+                                            <h3>{{ $product->name }} </h3>
+                                            <h4 class="fst-italic text-secondary">
+                                                {{ $product->category->category }}
+                                            </h4>
+                                        </div>
+                                        <div class="float-end">
+                                            <span
+                                                class="badge badge-sm bg-gradient-{{ $product->qty_status == 'Ready' ? 'success' : 'danger' }}">{{ $product->qty_status }}</span>
+                                            <span
+                                                class="badge badge-sm bg-gradient-secondary">{{ $product->special_status }}</span>
+                                        </div>
+                                    </div>
+                                </div>
                                 <hr class="border border-1 border-dark">
                                 <h6>Satuan : {{ $product->uom }}</h6>
                                 <h6>Stock : {{ $product->qty }}</h6>
