@@ -1,6 +1,6 @@
-@extends('templates.admin')
+@extends('templates.owner')
 @section('content')
-    @include('templates.layouts.admin-navbar')
+    @include('templates.layouts.owner-navbar')
     @if (Session::get('message'))
         <script>
             $(document).ready(function() {

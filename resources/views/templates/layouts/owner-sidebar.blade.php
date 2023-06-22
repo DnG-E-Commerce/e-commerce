@@ -10,7 +10,7 @@
             'id' => 2,
             'name' => 'Laporan Penjualan',
             'icon' => 'ni ni-send text-dark',
-            'url' => 'owner.report',
+            'url' => 'owner.sales-report',
         ],
     ];
 @endphp

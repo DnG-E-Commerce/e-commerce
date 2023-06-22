@@ -40,6 +40,19 @@ class AdminController extends Controller
         ]);
     }
 
+    public function grafik(OrdersChart $ordersChart, ProductsChart $productsChart, CustomersAndResellerChart $customersAndResellerChart)
+    {
+        return view('admin.grafik', [
+            'title' => 'DnG Store | Grafik',
+            'menu' => ['Grafik Penjualan'],
+            'user' => auth()->user(),
+            
+            'orderChart' => $ordersChart->build(),
+            'productChart' => $productsChart->build(),
+            'CustomerResellerChart' => $customersAndResellerChart->build(),
+        ]);
+    }
+
     public function salesReport()
     {
         $user = auth()->user();

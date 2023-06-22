@@ -43,7 +43,7 @@ Route::controller(HomeController::class)->group(function () {
 Route::controller(OwnerController::class)->group(function () {
     Route::get('/owner', 'index')->name('owner');
     Route::get('/owner/profile', 'profile')->name('owner.profile');
-    Route::get('/owner/laporan-penjualan', 'salesReport')->name('owner.report');
+    Route::get('/owner/laporan-penjualan', 'salesReport')->name('owner.sales-report');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -52,6 +52,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/invoice/{invoice}', 'showInvoice')->name('admin.detail.invoice');
     Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
+    Route::get('/admin/grafik', 'grafik')->name('admin.grafik');
     Route::get('/admin/laporan-penjualan', 'salesReport')->name('admin.sales-report');
 
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');

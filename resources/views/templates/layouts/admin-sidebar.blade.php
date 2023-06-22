@@ -52,7 +52,7 @@
             'id' => 9,
             'name' => 'Grafik Penjualan',
             'icon' => 'ni ni-map-big text-dark',
-            'url' => 'area',
+            'url' => 'admin.grafik',
         ],
         10 => [
             'id' => 11,

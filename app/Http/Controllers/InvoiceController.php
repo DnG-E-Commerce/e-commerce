@@ -198,7 +198,7 @@ class InvoiceController extends Controller
     {
         DB::table('invoices')->where('id', $invoice['id'])
             ->update([
-                'status' => 'Pending',
+                'status' => 'Belum Lunas',
                 'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
                 'ongkir' => 0,
                 'grand_total' => $invoice['grand_total'],

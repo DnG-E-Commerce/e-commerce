@@ -30,6 +30,13 @@ class OwnerController extends Controller
 
     public function salesReport()
     {
+        $user = auth()->user();
+        return view('owner.sales-report', [
+            'title' => 'DnG Store | Laporan Penjualan',
+            'user' => $user,
+            'menu' => ['Laporan Penjualan'],
+            'orders' => Order::all(),
+        ]);
     }
 
     public function profile()
