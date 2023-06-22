@@ -23,6 +23,7 @@ return new class extends Migration
             $table->text('notes')->nullable();
             $table->enum('status', ['Lunas', 'Belum Lunas', 'Pending'])->nullable();
             $table->enum('payment_method', ['transfer', 'cash', 'cod'])->nullable();
+            $table->integer('is_recive')->nullable();
             $table->timestamps();
         });
     }

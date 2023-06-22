@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 @php
-                                    $unitofmeasure = ['Pcs', 'Karton/Dus', 'Box', 'Liter','Kilogram' ,'Rincing', 'PAK', 'BAL', 'Paket', 'Toples'];
+                                    $unitofmeasure = ['Pcs', 'Karton/Dus', 'Box', 'Liter', 'Kilogram', 'Rincing', 'PAK', 'BAL', 'Paket', 'Toples'];
                                 @endphp
                                 <label for="uom">Satuan<span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">

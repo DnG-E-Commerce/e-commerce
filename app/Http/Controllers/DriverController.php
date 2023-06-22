@@ -29,7 +29,7 @@ class DriverController extends Controller
     public function profile()
     {
         $user = auth()->user();
-        return view('driver.profile-driver', [
+        return view('admin.profile-admin', [
             'title' => 'Profile Driver',
             'user' => $user,
             'menu' => ['Profile'],

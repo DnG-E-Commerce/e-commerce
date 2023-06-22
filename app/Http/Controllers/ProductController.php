@@ -62,15 +62,14 @@ class ProductController extends Controller
             'uom' => 'required',
             'photo' => 'required',
             'qty' => 'required',
-            'special_status' => 'required',
             'weight' => 'required',
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',
             'uom' => 'required|not_in:pilih',
             'status' => 'required|not_in:pilih',
             'category' => 'required|not_in:pilih',
-            
-        ],[
+
+        ], [
             'name.required' => 'Nama Produk wajib diisi!',
             'desc.required' => 'Deskripsi Produk wajib diisi!',
             'photo.required' => 'Foto Produk wajib diisi!',

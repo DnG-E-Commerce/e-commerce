@@ -24,7 +24,7 @@
                     <div class="card z-index-2 p-3 mb-3">
                         <div class="card-body">
                             <h5 class="card-title">{{ $notif->title }}</h5>
-                            <p>{{ $notif->message }}</p>
+                            <p>{!! htmlspecialchars_decode($notif->message) !!}</p>
                             <footer class="blockquote-footer">{{ $notif->created_at }}</footer>
                         </div>
                     </div>

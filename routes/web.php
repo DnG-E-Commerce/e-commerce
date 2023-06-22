@@ -54,6 +54,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
     Route::get('/admin/grafik', 'grafik')->name('admin.grafik');
     Route::get('/admin/laporan-penjualan', 'salesReport')->name('admin.sales-report');
+    Route::get('/admin/cetak-invoice/{invoice}', 'print_pdf')->name('admin.print_pdf');
 
     Route::put('/admin/edit/{user}', 'update')->name('admin.update');
     Route::put('/admin/order/update/{order}', 'orderUpdate')->name('admin.order.update');
@@ -138,6 +139,7 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::get('/invoice/order/{invoice}', 'invoice')->name('invoice.order');
     Route::get('/invoice/edit/{invoice}', 'edit')->name('invoice.edit');
     Route::put('/invoice/update/{invoice}', 'update')->name('invoice.update');
+    Route::get('/invoice/recive/{invoice}', 'confirmRecive')->name('invoice.recive');
 });
 
 Route::controller(AreaController::class)->group(function () {

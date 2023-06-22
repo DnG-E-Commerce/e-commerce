@@ -1,6 +1,24 @@
-@extends('templates.admin')
+@php
+    switch ($user->role) {
+        case 'Owner':
+            $templates = 'templates.owner';
+            $layout = 'templates.layouts.owner-navbar';
+            break;
+    
+        case 'Admin':
+            $templates = 'templates.admin';
+            $layout = 'templates.layouts.admin-navbar';
+            break;
+    
+        case 'Driver':
+            $templates = 'templates.driver';
+            $layout = 'templates.layouts.driver-navbar';
+            break;
+    }
+@endphp
+@extends($templates)
 @section('content')
-    @include('templates.layouts.admin-navbar')
+    @include($layout)
     <div class="container-fluid py-4">
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 col-md-6 mb-lg-0 mb-4">

@@ -18,14 +18,18 @@ class ProductsChart
 
     public function build(): \ArielMejiaDev\LarapexCharts\HorizontalBar
     {
-        $products = Product::all();
+        $products = Product::select('products.name', DB::raw('SUM(orders.qty) as total_order'))
+            ->join('orders', 'products.id', '=', 'orders.product_id')
+            ->where('orders.status', '!=', null)
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_order')
+            ->limit(10)
+            ->get();
         $arrProduct = [];
-        $arrPenjualanProduct = [];
         $qty = [];
         foreach ($products as $p => $product) {
-            $order = DB::table('orders')->where('product_id', $product->id)->sum('qty');
             array_push($arrProduct, $product->name);
-            array_push($qty, $order);
+            array_push($qty, $product->total_order);
         }
         return $this->chart->horizontalBarChart()
             ->setColors(['#FFC107', '#D32F2F'])

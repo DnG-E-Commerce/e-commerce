@@ -10,12 +10,14 @@
     @endif
     <div class="container-fluid py-4">
         <div class="card z-index-2 p-3">
-            <div class="card-header pb-0">
-                <h6>Tabel Pengiriman Pesanan</h6>
-            </div>
             <div class="card-body">
-                <div class="table-responsive">
-                    <table class="table table-stripped table-hover" id="example">
+                <div class="row my-3">
+                    <div class="d-flex justify-content-between">
+                        <h4>Tabel Pengiriman Pesanan</h4>
+                    </div>
+                </div>
+                <div class="table-responsive p-0">
+                    <table class="table table-stripped table-hover" id="table_driver">
                         <thead>
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 No</th>
@@ -90,4 +92,9 @@
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $('#table_driver').DataTable();
+    });
+</script>
 @endsection
