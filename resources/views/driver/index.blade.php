@@ -57,7 +57,7 @@
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <a href="{{ route('driver.invoice', ['invoice' => $invoice->id]) }}"
-                                                    class="btn btn-sm bg-gradient-primary">Detail</a>
+                                                    class="btn btn-sm bg-gradient-primary">Upload Pengiriman</a>
                                             </td>
                                         </tr>
                                     @endif

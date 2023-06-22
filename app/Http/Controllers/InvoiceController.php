@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Nette\Utils\Random;
 use PhpParser\Node\Expr\Cast\Array_;
+use Twilio\Rest\Client;
 
 class InvoiceController extends Controller
 {
@@ -253,6 +254,23 @@ class InvoiceController extends Controller
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
+
+            // $accountSid = config('app.twilio_sid');
+            // $authToken = config('app.twilio_auth_token');
+            // $twilioNumber = config('app.twilio_whatsapp_number');
+            
+            // $client = new Client($accountSid, $authToken);
+            
+            // $message = $client->messages->create(
+            //     $request->input('to'),
+            //     [
+            //         'from' => $twilioNumber,
+            //         'body' => "XXX"
+
+            //     ]
+            // );
+            
+            // return response()->json(['message' => 'WhatsApp message sent successfully']);
     }
 
     /**

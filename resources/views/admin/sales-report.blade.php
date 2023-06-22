@@ -16,6 +16,28 @@
                         <h6>Laporan Penjualan</h6>
                     </div>
                     <div class="card-body px-5 pt-0 pb-2">
+                    <form action="{{route('admin.sales-report')}}" method="post">
+                            @csrf 
+                            <br>
+                            <div class="container">
+                                <div class="container-fluid">
+                                    <div class="form-group row">
+                                        <label for="date" class="col-form-label col-sm-1"> Dari Tanggal </label>
+                                        <div class="col-sm-3">
+                                            <input type="date" class="form-control input-sm" id="from" name="fromDate" required/>
+                                        </div>
+                                        <label for="date" class="col-form-label col-sm-1"> Sampai Tanggal </label>
+                                        <div class="col-sm-3">
+                                            <input type="date" class="form-control input-sm" id="to" name="toDate" required/>
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <button type="submit" class="btn" name="search">Filter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        
+                        </form>
                         <div class="table-responsive p-1">
                             <table class="table align-items-center mb-0" id="example">
                                 <thead>
@@ -68,12 +90,15 @@
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $data->total }}</span>
                                             </td>
+                                            
                                         </tr>
                                     @endforeach
                                 </tbody>
+                               
                             </table>
-                        </div>
+                           
                     </div>
+                    <a href="{{ route('admin.sales-report') }}" class="btn btn-sm bg-gradient-danger">Print</a>
                 </div>
             </div>
         </div>

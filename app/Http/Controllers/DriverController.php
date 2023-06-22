@@ -21,7 +21,7 @@ class DriverController extends Controller
         return view('driver.index', [
             'title'    => 'DnG Store | Dashboard Driver',
             'user'     => $user,
-            'menu'     => ['Drop Shipping'],
+            'menu'     => ['List Pengiriman'],
             'invoices' => $invoices
         ]);
     }
@@ -40,9 +40,9 @@ class DriverController extends Controller
     {
         $user = auth()->user();
         return view('driver.confirm-recive', [
-            'title' => 'DnG Store | Konfirmasi Paket',
+            'title' => 'DnG Store | List Pengiriman',
             'user' => $user,
-            'menu' => ['Drop Shipping', 'Konfirmasi Paket'],
+            'menu' => ['List Pengiriman', 'Upload Bukti Pengiriman'],
             'invoice' => $invoice
         ]);
     }

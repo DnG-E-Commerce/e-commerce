@@ -39,7 +39,7 @@
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Metode Pembayaran</th>
                                         <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Opsi</th>
                                     </tr>
                                 </thead>
@@ -74,7 +74,10 @@
                                         <td class="align-middle text-sm">
                                             <a href="{{ route('admin.detail.invoice', ['invoice' => $data->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary">Detail</a>
+                                                <a href="{{ route('admin.detail.invoice', ['invoice' => $data->id]) }}"
+                                                class="btn btn-sm bg-gradient-primary">Cetak Invoice</a>
                                         </td>
+                                       
                                     </tr>
                                 @endforeach
                             </tbody>
