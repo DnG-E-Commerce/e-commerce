@@ -32,7 +32,7 @@
                                                 class="form-control">
                                         </div>
                                         <div class="form-group align-self-end">
-                                            <button class="btn bg-gradient-success">Cari</button>
+                                            <button class="btn bg-gradient-success">Filter</button>
                                         </div>
                                     </div>
                                 </form>
@@ -105,7 +105,7 @@
                                                 class="form-control">
                                         </div>
                                         <div class="form-group align-self-end">
-                                            <button class="btn bg-gradient-success">Cari</button>
+                                            <button class="btn bg-gradient-success">Filter</button>
                                         </div>
                                     </div>
                                 </form>

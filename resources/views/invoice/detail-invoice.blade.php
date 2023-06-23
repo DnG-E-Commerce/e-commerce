@@ -108,13 +108,7 @@
                         </div>
                     </div>
                     <a href="{{ route('invoice') }}" class="btn btn-sm bg-gradient-danger">Kembali</a>
-                    @if (in_array($invoice->is_recive, [null, 0]))
-                        <form action="{{ route('invoice.recive', ['invoice' => $invoice->id]) }}" method="post">
-                            @csrf
-                            @method('PUT')
-                            <button type="submit" class="btn btn-sm bg-gradient-success">Menerima Paket</button>
-                        </form>
-                    @endif
+                    
                 </div>
             </div>
         </div>

@@ -255,6 +255,8 @@ class InvoiceController extends Controller
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
+
+        $this->sendWhatsapp();
         // $accountSid = config('app.twilio_sid');
         // $authToken = config('app.twilio_auth_token');
         // $twilioNumber = config('app.twilio_whatsapp_number');
@@ -266,7 +268,7 @@ class InvoiceController extends Controller
         //     [
         //         'from' => $twilioNumber,
         //         'body' => "XXX"
-
+    
         //     ]
         // );
 
@@ -277,10 +279,10 @@ class InvoiceController extends Controller
     {
         $user = auth()->user();
         $sid = "ACeeae51f34b58855ae6f4f64439905adc";
-        $token = "37bad0b2faaa3c3caeb30e58a2db5de9";
+        $token = "000804a847c501ae4e771e052205ef4a";
         $twilioNumber = "+14155238886";
         $recipientNumber = "+6283138578369";
-        $nama_pemesan = "$user->name";
+       
 
 
         $client = new Client($sid, $token);
@@ -289,7 +291,7 @@ class InvoiceController extends Controller
             'whatsapp:' . $recipientNumber, // Replace with the recipient's WhatsApp number
             [
                 'from' => 'whatsapp:' . $twilioNumber,
-                'body' => 'Selamat Transaksi Anda Berhasil dengan ' . $nama_pemesan, // Replace with your desired message
+                'body' => 'Selamat Transaksi Anda Berhasil dengan', // Replace with your desired message
             ]
         );
 
@@ -303,7 +305,8 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function confirmRecive(Invoice $invoice)
-    {
+    {   
+        
         DB::table('invoices')->where([
             ['id', $invoice->id],
             ['invoice_code', $invoice->invoice_code]
