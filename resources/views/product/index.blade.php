@@ -16,7 +16,7 @@
                         <div class="row my-3">
                             <div class="d-flex justify-content-between">
                                 <h4>Tabel Produk</h4>
-                                <a href="{{ route('product.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                <a href="{{ route('su.product.create') }}" class="btn btn-sm btn-success float-end">Tambah
                                     Data</a>
                             </div>
                         </div>
@@ -76,19 +76,19 @@
                                                     class="text-secondary text-xs font-weight-bold">{{ $data->category }}</span>
                                             </td>
                                             <td class="text-center align-end">
-                                                <a href="{{ route('product.stock', ['product' => $data->id]) }}"
+                                                <a href="{{ route('su.product.stock', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-success">
                                                     Tambah Stok
                                                 </a>
-                                                <a href="{{ route('product.edit', ['product' => $data->id]) }}"
+                                                <a href="{{ route('su.product.edit', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-warning">
                                                     Edit
                                                 </a>
-                                                <a href="{{ route('product.show', ['product' => $data->id]) }}"
+                                                <a href="{{ route('su.product.detail', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-primary">
                                                     Detail
                                                 </a>
-                                                <a href="{{ route('product.delete', ['product' => $data->id]) }}"
+                                                <a href="{{ route('su.product.delete', ['product' => $data->id]) }}"
                                                     class="badge badge-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $data->name }} ?')">
                                                     Hapus

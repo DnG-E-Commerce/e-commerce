@@ -12,11 +12,8 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-4 mb-lg-0 mb-4">
                 <div class="card z-index-2 p-2">
-                    {{-- <img src="{{asset('storage/'.$select_user->photo)}}" alt="Photo {{$select_user->name}}" style="width: 12rem; background-size: cover;"> --}}
                     <div class="card-body mt-0">
-                        <div class="card-header text-center">
-                            <h4>{{ $select_user->role }}</h4>
-                        </div>
+                        <h4 class="text-center mb-3">{{ $select_user->role }}</h4>
                         <div class="d-grid justify-content-center" style="width: 100%; height: 15rem;">
                             <img src="{{ asset('storage/' . $select_user->photo) }}"
                                 style="width:12rem;height: 12rem; border-radius: 100%; object-fit: cover; border:1px solid black"
@@ -26,7 +23,7 @@
                             <h3 class="fst-italic">{{ $select_user->name }}</h3>
                             <hr class="border border-1 border-dark">
                             <p class="text-break">
-                                {{ $select_user->address }}
+                                {{ $select_user->address ? $select_user->address : '-' }}
                             </p>
                             <hr class="border border-1 border-dark">
                             <div class="row">
@@ -48,9 +45,9 @@
                 </div>
                 <div class="d-flex gap-2 float-end">
                     @if ($select_user->role == 'Customer')
-                        <a href="{{ route('customer') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        <a href="{{ route('su.customer') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
                     @else
-                        <a href="{{ route('reseller') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        <a href="{{ route('su.reseller') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
                     @endif
                 </div>
             </div>

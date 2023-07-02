@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
+use App\Models\Invoice;
 use App\Models\Notification;
+use App\Models\Order;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
+use Termwind\Components\Raw;
 
 class HomeController extends Controller
 {
@@ -22,8 +26,10 @@ class HomeController extends Controller
      */
     public function index(Request $request)
     {
-        $this->detect();
         $user = auth()->user();
+        if ($user) {
+            $this->detect();
+        }
         $query = $request->search;
         if ($query) {
             $products = DB::table('products as p')
@@ -31,12 +37,12 @@ class HomeController extends Controller
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
                 ->where('name', 'like', "%$query%")
                 ->orWhere('category', 'like', "%$query%")
-                ->paginate(6);
+                ->paginate(12);
         } else {
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
-                ->paginate(6);
+                ->paginate(12);
         }
         $notification = null;
         if ($user) {
@@ -47,6 +53,46 @@ class HomeController extends Controller
             'menu' => 'home',
             'user' => $user,
             'products' => $products,
+            'notifications' => $notification
+        ]);
+    }
+
+    public function cart()
+    {
+        $user = auth()->user();
+        $carts = Cart::where('user_id', $user->id)->get()->all();
+        $notification = Notification::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('cart.index', [
+            'title' => 'DnG Store | My Cart',
+            'user' => $user,
+            'menu' => ['Cart', 'Detail'],
+            'carts' => $carts,
+            'notifications' => $notification,
+        ]);
+    }
+
+    public function order()
+    {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        $invoices = Invoice::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        return view('invoice.index', [
+            'title' => 'DnG Store | Transaksi',
+            'menu' => ['Transaksi'],
+            'user' => $user,
+            'notifications' => $notification,
+            'invoices' => $invoices
+        ]);
+    }
+
+    public function notification()
+    {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->get()->all();
+        return view('notification.index', [
+            'title' => 'DnG Store | Notifikasi',
+            'menu' => ['Notification'],
+            'user' => $user,
             'notifications' => $notification
         ]);
     }
@@ -79,21 +125,7 @@ class HomeController extends Controller
         }
     }
 
-    public function product(Product $product)
-    {
-        $user = auth()->user();
-        $product = DB::table('products as p')->select('p.*', 'c.category')->join('categories as c', 'p.category_id', '=', 'c.id')->where('p.id', '=', $product->id)->first();
-        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
-        return view('home.detail-product', [
-            'title' => 'DnG Store | Detail Product',
-            'user' => $user,
-            'menu' => ['Product', 'Detail'],
-            'product' => $product,
-            'notifications' => $notification
-        ]);
-    }
-
-    public function pengajuanReseller()
+    public function requestReseller()
     {
         $user = auth()->user();
         $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
@@ -165,11 +197,24 @@ class HomeController extends Controller
     {
         $user = auth()->user();
         $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        $total = Order::select(DB::raw('COUNT(id) as total_order'), DB::raw('SUM(total) as total_pengeluaran'))->where('user_id', $user->id)->get();
+        $product = Product::select('products.name', DB::raw('SUM(orders.qty) as total_order'))
+            ->join('orders', 'products.id', '=', 'orders.product_id')
+            ->where([
+                ['orders.status', '!=', null],
+                ['orders.user_id', '=', $user->id]
+            ])
+            ->groupBy('products.id', 'products.name')
+            ->orderByDesc('total_order')
+            ->limit(10)
+            ->get();
         return view('home.profile', [
             'title' => 'DnG Store | Profile',
-            'menu' => 'profile',
+            'menu' => ['Home', 'profile'],
             'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customers'],
             'user' => $user,
+            'total' => $total,
+            'product' => $product,
             'notifications' => $notification
         ]);
     }

@@ -6,11 +6,11 @@
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        <a href="{{ route('su.product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
                         <h6>Stock {{ $product->name }}</h6>
                     </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('stock.store', ['product' => $product->id]) }}" method="post"
+                        <form action="{{ route('su.stock.store', ['product' => $product->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

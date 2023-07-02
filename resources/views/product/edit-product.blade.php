@@ -6,11 +6,11 @@
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        <a href="{{ route('su.product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
                         <h6>Edit Data Product</h6>
                     </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('product.update', ['product' => $product->id]) }}" method="post"
+                        <form action="{{ route('su.product.update', ['product' => $product->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')
@@ -44,27 +44,15 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
+                                @php
+                                    $uom = ['Karton/Dus', 'Kilogram', 'Box', 'Liter', 'Rincing', 'Paket', 'Pcs', 'Toples', 'BAL', 'PAK'];
+                                @endphp
                                 <label for="uom">Satuan Produk <span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">
-                                <option value="Karton/Dus" @if ($product->uom == 'Karton/Dus') {{ 'selected' }} @endif> Karton/Dus</option>
-                                    <option value="Kilogram" @if ($product->uom == 'Kilogram') {{ 'selected' }} @endif> KG
-                                    </option>
-                                    <option value="Box" @if ($product->uom == 'Box') {{ 'selected' }} @endif> Box
-                                    </option>
-                                    <option value="Liter" @if ($product->uom == 'Liter') {{ 'selected' }} @endif> L
-                                    </option>
-                                    <option value="Rincing" @if ($product->uom == 'Rincing') {{ 'selected' }} @endif> Rincing</option>
-                                    <option value="Paket" @if ($product->uom == 'Paket') {{ 'selected' }} @endif>Paket
-                                    </option>
-                                    <option value="Pcs" @if ($product->uom == 'Pcs') {{ 'selected' }} @endif>Pcs
-                                    </option>
-                                    <option value="Toples" @if ($product->uom == 'Toples') {{ 'selected' }} @endif>Toples
-                                    </option>
-                                    <option value="BAL" @if ($product->uom == 'BAL') {{ 'selected' }} @endif> BAL
-                                    </option>
-                                    <option value="PAK" @if ($product->uom == 'PAK') {{ 'selected' }} @endif> PAK
-                                    </option>
-                                        
+                                    @foreach ($uom as $satuan)
+                                        <option value="{{ $satuan }}"
+                                            {{ $product->uom == $satuan ? 'selected' : '' }}>{{ $satuan }}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="form-group mb-3">
@@ -82,10 +70,22 @@
                                 <label for="category">Kategori <span class="text-danger">*</span></label>
                                 <select name="category" class="form-select">
                                     @foreach ($categories as $key => $data)
-                                        @if ($product->category_id == $data->id)
-                                            <option value="{{ $data->id }}" selected>{{ $data->category }}</option>
-                                        @endif
-                                        <option value="{{ $data->id }}">{{ $data->category }}</option>
+                                        <option value="{{ $data->id }}"
+                                            {{ $product->category_id == $data->id ? 'selected' : '' }}>
+                                            {{ $data->category }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group mb-3">
+                                @php
+                                    $special_status = ['Pre Order', 'Biasa', 'Limited Edition'];
+                                @endphp
+                                <label for="special_status">Status <span class="text-danger">*</span></label>
+                                <select name="special_status" class="form-select">
+                                    @foreach ($special_status as $ss)
+                                        <option value="{{ $ss }}"
+                                            {{ $product->special_status == $ss ? 'selected' : '' }}>
+                                            {{ $ss }}</option>
                                     @endforeach
                                 </select>
                             </div>

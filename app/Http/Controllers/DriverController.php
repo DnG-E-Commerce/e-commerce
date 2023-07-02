@@ -11,29 +11,7 @@ class DriverController extends Controller
 {
     public function __construct()
     {
-        //
-    }
-
-    public function index()
-    {
-        $user = auth()->user();
-        $invoices = Invoice::where('status', 'Lunas')->orWhere('status', 'Belum Lunas')->orderBy('created_at', 'desc')->get()->all();
-        return view('driver.index', [
-            'title'    => 'DnG Store | Dashboard Driver',
-            'user'     => $user,
-            'menu'     => ['List Pengiriman'],
-            'invoices' => $invoices
-        ]);
-    }
-
-    public function profile()
-    {
-        $user = auth()->user();
-        return view('admin.profile-admin', [
-            'title' => 'Profile Driver',
-            'user' => $user,
-            'menu' => ['Profile'],
-        ]);
+        $this->middleware('auth');
     }
 
     public function invoice(Invoice $invoice)
@@ -70,6 +48,6 @@ class DriverController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('driver')->with($session);
+        return redirect()->route('su.delivery')->with($session);
     }
 }

@@ -1,35 +1,17 @@
-@php
-    switch ($user->role) {
-        case 'Owner':
-            $templates = 'templates.owner';
-            $layout = 'templates.layouts.owner-navbar';
-            break;
-    
-        case 'Admin':
-            $templates = 'templates.admin';
-            $layout = 'templates.layouts.admin-navbar';
-            break;
-    
-        case 'Driver':
-            $templates = 'templates.driver';
-            $layout = 'templates.layouts.driver-navbar';
-            break;
-    }
-@endphp
-@extends($templates)
+@extends('templates.admin')
 @section('content')
-    @include($layout)
+    @include('templates.layouts.admin-navbar')
     <div class="container-fluid py-4">
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 col-md-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 p-2">
-                    <div class="card-header">
-                        <h5 class="text-center">
-                            {{ $user->name }}
-                        </h5>
-                    </div>
-                    {{-- <img src="{{asset('storage/'.$select_user->photo)}}" alt="Photo {{$select_user->name}}" style="width: 12rem; background-size: cover;"> --}}
                     <div class="card-body mt-0">
+                        <div class="d-flex justify-content-between">
+                            <h5 class="text-center mb-3">
+                                Edit Profile
+                            </h5>
+                            <a href="{{ route('su.profile') }}" class="btn btn-close bg-danger float-end p-2"></a>
+                        </div>
                         <div class="d-grid justify-content-center" style="width: 100%; height: 15rem;">
                             <img src="{{ asset('storage/' . $user->photo) }}"
                                 style="width:12rem;height: 12rem; border-radius: 100%; object-fit: cover; border:1px solid black"

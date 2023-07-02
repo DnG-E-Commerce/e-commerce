@@ -27,7 +27,7 @@
                             <div class="col-lg-6">
                                 <h3>{{ $product->name }} </h3>
                                 <h4 class="fst-italic text-secondary">
-                                    {{ $product->category }}
+                                    {{ $product->category->category }}
                                     @if ($product->qty_status == 'Ready')
                                         <span
                                             class="badge badge-sm bg-gradient-success float-end">{{ $product->qty_status }}</span>
@@ -39,7 +39,6 @@
                                 <hr class="border border-1 border-dark">
                                 <form method="post" id="form-checkout-cart">
                                     @csrf
-                                    <input type="hidden" name="mode" id="mode">
                                     <input type="hidden" name="product_id" id="product_id" value="{{ $product->id }}">
                                     <div class="row g-3 align-items-center mb-3">
                                         <div class="col-3">

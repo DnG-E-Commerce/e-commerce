@@ -8,7 +8,6 @@ use App\Http\Controllers\CustomAuthController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\KurirController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\OwnerController;
@@ -29,60 +28,66 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return redirect()->route('home');
+    return redirect()->route('us.home');
 });
+
+// Route::get('/{page}', '')
 
 Route::controller(HomeController::class)->group(function () {
-    Route::get('/home', 'index')->name('home');
-    Route::get('/home/profile/{user}', 'profile')->name('home.profile');
-    Route::get('/home/product/{product}', 'product')->name('home.product');
-    Route::get('/home/pengajuan-reseller', 'pengajuanReseller')->name('home.pengajuan-reseller');
-    Route::put('/home/mengajukan-reseller/{user}', 'pengajuanReseller')->name('pengajuan');
-});
+    // Profile
+    Route::get('/us/home', 'index')->name('us.home');
+    Route::get('/us/profile', 'profile')->name('us.profile');
+    Route::get('/us/apply-request-reseller', 'requestReseller')->name('us.apply-request-reseller');
 
-Route::controller(OwnerController::class)->group(function () {
-    Route::get('/owner', 'index')->name('owner');
-    Route::get('/owner/profile', 'profile')->name('owner.profile');
-    Route::get('/owner/laporan-penjualan', 'salesReport')->name('owner.sales-report');
+    // Other Menu
+    Route::get('/us/cart', 'cart')->name('us.cart');
+    Route::get('/us/order', 'order')->name('us.order');
+    Route::get('/us/notification', 'notification')->name('us.notification');
 });
 
 Route::controller(AdminController::class)->group(function () {
-    Route::get('/admin', 'index')->name('admin');
-    Route::get('/admin/invoices', 'invoice')->name('admin.invoices');
-    Route::get('/admin/invoice/{invoice}', 'showInvoice')->name('admin.detail.invoice');
-    Route::get('/admin/profile/{user}', 'show')->name('admin.profile');
-    Route::get('/admin/edit/{user}', 'edit')->name('admin.edit');
-    Route::get('/admin/grafik', 'grafik')->name('admin.grafik');
-    Route::get('/admin/laporan-penjualan', 'salesReport')->name('admin.sales-report');
-    Route::get('/admin/cetak-invoice/{invoice}', 'print_pdf')->name('admin.print_pdf');
+    // Only Return View
+    Route::get('/su/dashboard', 'index')->name('su.dashboard');
+    Route::get('/su/product', 'product')->name('su.product');
+    Route::get('/su/category', 'category')->name('su.category');
+    Route::get('/su/reseller', 'reseller')->name('su.reseller');
+    Route::get('/su/customer', 'customer')->name('su.customer');
+    Route::get('/su/order', 'order')->name('su.order');
+    Route::get('/su/area', 'area')->name('su.area');
+    Route::get('/su/sales-graph', 'salesGraph')->name('su.sales-graph');
+    Route::get('/su/sales-report', 'salesReport')->name('su.sales-report');
+    Route::get('/su/delivery', 'delivery')->name('su.delivery');
 
-    Route::put('/admin/edit/{user}', 'update')->name('admin.update');
-    Route::put('/admin/order/update/{order}', 'orderUpdate')->name('admin.order.update');
+    // Profile
+    Route::get('/su/profile', 'profile')->name('su.profile');
+    Route::get('/su/profile/edit', 'edit')->name('su.profile.edit');
+
+
+    Route::put('/su/profile/edit/{user}', 'update')->name('admin.update');
+    Route::put('/su/order/update/{order}', 'orderUpdate')->name('admin.order.update');
 });
 
 Route::controller(DriverController::class)->group(function () {
-    Route::get('/driver', 'index')->name('driver');
-    Route::get('/driver/profile', 'profile')->name('driver.profile');
     Route::get('/driver/invoice/{invoice}', 'invoice')->name('driver.invoice');
     Route::post('/driver/confirm-recive/{invoice}', 'store')->name('drive.store');
 });
 
 Route::controller(UserController::class)->group(function () {
-    Route::get('/user/customer', 'customer')->name('customer');
-    Route::get('/user/customer/create', 'customerCreate')->name('customer.create');
-    Route::get('/user/show/{user}', 'show')->name('user.show');
-    Route::get('/user/edit/{user}', 'edit')->name('user.edit');
-    Route::get('/user/customer/update/{user}', 'update')->name('customer.update');
-    Route::get('/user/customer/request-upgrade/{user}', 'review')->name('request-upgrade');
+    // Customer
+    Route::get('/su/customer/create', 'createCustomer')->name('su.customer.create');
+    Route::get('/su/customer/show/{user}', 'show')->name('su.customer.show');
+    Route::get('/su/customer/edit/{user}', 'edit')->name('su.customer.edit');
+    Route::get('/su/customer/update/{user}', 'update')->name('su.customer.update');
+    Route::get('/su/customer/request-upgrade/{user}', 'review')->name('su.customer.request-upgrade');
+    Route::post('/su/customer/request-reseller/{user}', 'storeRequest')->name('su.customer.request.store');
+    Route::put('/su/customer/request-upgrade/{user}', 'acceptRequest')->name('su.customer.request.accept');
 
-    Route::get('/user/reseller', 'reseller')->name('reseller');
-    Route::get('/user/reseller/create', 'resellerCreate')->name('reseller.create');
+    // Reseller
+    Route::get('/su/reseller/create', 'createReseller')->name('reseller.create');
 
-    Route::post('/user/customer', 'customerStore')->name('customer.store');
-    Route::post('/user/reseller', 'resellerStore')->name('reseller.store');
-
-    Route::post('/user/mengajukan-reseller/{user}', 'storePengajuan')->name('pengajuan.store');
-    Route::put('/user/customer/request-upgrade/{user}', 'acceptRequest')->name('pengajuan.accept');
+    // Dynamic
+    Route::get('/su/{role}/profile/{user}', 'profileUser')->name('su.user.profile');
+    Route::post('/su/{role}/store', 'storeUser')->name('su.user.create');
 });
 
 Route::controller(CartController::class)->group(function () {
@@ -94,25 +99,27 @@ Route::controller(CartController::class)->group(function () {
 });
 
 Route::controller(ProductController::class)->group(function () {
-    Route::get('/product', 'index')->name('product');
-    Route::get('/product/create', 'create')->name('product.create');
-    Route::get('/product/stock/{product}', 'stock')->name('product.stock');
-    Route::get('/product/delete/{product}', 'delete')->name('product.delete');
-    Route::get('/product/edit/{product}', 'edit')->name('product.edit');
-    Route::get('/product/show/{product}', 'show')->name('product.show');
+    // Client
+    Route::get('/us/product/{product}', 'usDetailProduct')->name('us.product.detail');
 
-    Route::put('/product/edit/{product}', 'update')->name('product.update');
-    Route::post('/product', 'store')->name('product');
-    Route::put('/product/stock/{product}', 'stockStore')->name('stock.store');
+    // Admin
+    Route::get('/su/product/create', 'create')->name('su.product.create');
+    Route::get('/su/product/stock/{product}', 'stock')->name('su.product.stock');
+    Route::get('/su/product/delete/{product}', 'delete')->name('su.product.delete');
+    Route::get('/su/product/edit/{product}', 'edit')->name('su.product.edit');
+    Route::get('/su/product/{product}', 'suDetailProduct')->name('su.product.detail');
+    Route::put('/su/product/edit/{product}', 'update')->name('su.product.update');
+    Route::post('/su/product', 'store')->name('su.store.product');
+    Route::put('/su/product/stock/{product}', 'stockStore')->name('su.stock.store');
 });
 
 Route::controller(CategoryController::class)->group(function () {
-    Route::get('/category', 'index')->name('category');
-    Route::get('/category/create', 'create')->name('category.create');
-    Route::get('/category/edit/{category}', 'edit')->name('category.edit');
-    Route::get('/category/delete/{category}', 'destroy')->name('category.delete');
-    Route::post('/category', 'store')->name('category.store');
-    Route::put('/category/edit/{category}', 'update')->name('category.update');
+    // Admin
+    Route::get('/su/category/create', 'create')->name('su.category.create');
+    Route::get('/su/category/edit/{category}', 'edit')->name('su.category.edit');
+    Route::get('/su/category/delete/{category}', 'destroy')->name('su.category.delete');
+    Route::post('/su/category', 'store')->name('su.category.store');
+    Route::put('/su/category/edit/{category}', 'update')->name('su.category.update');
 });
 
 Route::controller(CustomAuthController::class)->group(function () {
@@ -124,39 +131,39 @@ Route::controller(CustomAuthController::class)->group(function () {
 });
 
 Route::controller(OrderController::class)->group(function () {
-    Route::get('/order', 'index')->name('order');
-    Route::get('/order/{order}', 'show')->name('order.show');
-    Route::get('/order/delete/{order}', 'delete')->name('order.delete');
-    Route::post('/order/checkout', 'checkout')->name('order.checkout');
-    Route::post('/order/store', 'storeToOrder')->name('StoreOrder');
-    Route::post('/cart/store', 'storeToCart')->name('StoreCart');
-    Route::put('/admin/order/update-status/{invoice}', 'updateStatus')->name('admin-order.update-status');
+    // Admin
+    Route::put('/su/order/update-status/{invoice}', 'suUpdateStatus')->name('su.order.update-status');
+
+    // Client
+    Route::get('/us/order/{order}', 'show')->name('order.show');
+    Route::get('/us/order/delete/{order}', 'delete')->name('order.delete');
+    Route::post('/us/order/checkout', 'checkout')->name('order.checkout');
+    Route::post('/us/order/store', 'storeToOrder')->name('StoreOrder');
+    Route::post('/us/cart/store', 'storeToCart')->name('StoreCart');
 });
 
 Route::controller(InvoiceController::class)->group(function () {
-    Route::get('/invoice', 'index')->name('invoice');
-    Route::get('/invoice/{invoice}', 'show')->name('invoice.show');
-    Route::get('/invoice/order/{invoice}', 'invoice')->name('invoice.order');
-    Route::get('/invoice/edit/{invoice}', 'edit')->name('invoice.edit');
-    Route::put('/invoice/update/{invoice}', 'update')->name('invoice.update');
-    Route::get('/invoice/recive/{invoice}', 'confirmRecive')->name('invoice.recive');
+    // Routes Admin
+    Route::get('/su/invoice/{invoice}', 'suDetailInvoice')->name('su.invoice.detail');
+    Route::get('/su/invoice/confirm-cash/{invoice}', 'confirmCash')->name('su.invoice.confirm-cash');
+    Route::get('/su/invoice/print/{invoice}', 'print_pdf')->name('su.invoice.print_pdf');
+
+    // Routes Client
+    Route::get('/us/invoice', 'index')->name('us.invoice');
+    Route::get('/us/invoice/{invoice}', 'show')->name('us.invoice.show');
+    Route::get('/us/invoice/order/{invoice}', 'invoice')->name('us.invoice.order');
+    Route::get('/us/invoice/edit/{invoice}', 'edit')->name('us.invoice.edit');
+    Route::put('/us/invoice/update/{invoice}', 'update')->name('us.invoice.update');
+    Route::get('/us/invoice/recive/{invoice}', 'confirmRecive')->name('us.invoice.recive');
 });
 
 Route::controller(AreaController::class)->group(function () {
-    Route::get('/area', 'index')->name('area');
-    Route::get('/area/create', 'create')->name('area.create');
-    Route::get('/area/{area}', 'edit')->name('area.edit');
-    Route::get('/area/delete/{area}', 'destroy')->name('area.delete');
-    Route::post('/area/store', 'store')->name('area.store');
-    Route::put('/area/edit/{area}', 'update')->name('area.update');
-});
+    Route::get('/su/area/create', 'create')->name('su.area.create');
+    Route::get('/su/area/{area}', 'edit')->name('su.area.edit');
+    Route::get('/su/area/delete/{area}', 'destroy')->name('su.area.delete');
 
-Route::controller(ShippingController::class)->group(function () {
-    Route::get('/pengiriman', 'index')->name('pengiriman');
-});
-
-Route::controller(NotificationController::class)->group(function () {
-    Route::get('/notification', 'index')->name('notification');
+    Route::post('/su/area/store', 'store')->name('su.area.store');
+    Route::put('/su/area/edit/{area}', 'update')->name('su.area.update');
 });
 
 Route::post('/send-whatsapp-message', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send.whatsapp');

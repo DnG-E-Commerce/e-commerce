@@ -11,7 +11,7 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <h4 class="mb-4">{{ $title }}</h4>
-                <form action="{{ route('invoice.update', ['invoice' => $invoice->id]) }}" method="post"
+                <form action="{{ route('us.invoice.update', ['invoice' => $invoice->id]) }}" method="post"
                     enctype="multipart/form-data" id="form-checkout">
                     @csrf
                     @method('PUT')
@@ -23,9 +23,9 @@
                             @endforeach
                         </select>
                     </div>
-                   
-                        <label for="">Isi Alamat Jika Produk Anda ingin di Kirim</label>
-                    
+
+                    <label for="">Isi Alamat Jika Produk Anda ingin di Kirim</label>
+
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="form-group">
@@ -119,7 +119,7 @@
                 } else {
                     $.ajax({
                         url: "{{ route('api.invoice.checkout', ['invoice' => $invoice->id]) }}",
-                        type: 'post',
+                        type: 'POST',
                         data: {
                             provinsi: provinsi,
                             kabupaten: kabupaten,

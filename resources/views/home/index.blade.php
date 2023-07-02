@@ -33,7 +33,7 @@
                             <div class="card-body">
                                 <h3>{{ $product->name }}</h3>
                                 <p class="fst-italic">{{ substr($product->desc, 0, 50) . '.....' }}</p>
-                                <a href="{{ route('home.product', ['product' => $product->id]) }}"
+                                <a href="{{ route('us.product.detail', ['product' => $product->id]) }}"
                                     class="text-primary">Lihat Lebih Detail <i class="fa fa-arrow-right"></i></a>
                             </div>
                         </div>

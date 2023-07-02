@@ -4,61 +4,71 @@
             'id' => 1,
             'name' => 'Dashboard',
             'icon' => 'ni ni-tv-2 text-primary',
-            'url' => 'admin',
+            'url' => 'su.dashboard',
+            'role' => ['Admin', 'Owner'],
         ],
         1 => [
             'id' => 2,
             'name' => 'Produk',
             'icon' => 'ni ni-app text-warning',
-            'url' => 'product',
+            'url' => 'su.product',
+            'role' => ['Admin'],
         ],
         2 => [
             'id' => 3,
             'name' => 'Kategori',
             'icon' => 'ni ni-tag text-primary',
-            'url' => 'category',
+            'url' => 'su.category',
+            'role' => ['Admin'],
         ],
         3 => [
             'id' => 4,
             'name' => 'Reseller',
             'icon' => 'ni ni-cart text-danger',
-            'url' => 'reseller',
+            'url' => 'su.reseller',
+            'role' => ['Admin'],
         ],
         4 => [
             'id' => 5,
             'name' => 'Customer',
             'icon' => 'ni ni-circle-08 text-dark',
-            'url' => 'customer',
-        ],
-        5 => [
-            'id' => 6,
-            'name' => 'Orders',
-            'icon' => 'ni ni-cart text-dark',
-            'url' => 'admin.orders',
+            'url' => 'su.customer',
+            'role' => ['Admin'],
         ],
         5 => [
             'id' => 6,
             'name' => 'Pesanan',
             'icon' => 'ni ni-box-2 text-warning',
-            'url' => 'admin.invoices',
+            'url' => 'su.order',
+            'role' => ['Admin'],
         ],
         6 => [
             'id' => 7,
             'name' => 'Area',
             'icon' => 'ni ni-map-big text-dark',
-            'url' => 'area',
+            'url' => 'su.area',
+            'role' => ['Admin'],
         ],
         8 => [
             'id' => 9,
             'name' => 'Grafik Penjualan',
-            'icon' => 'ni ni-map-big text-dark',
-            'url' => 'admin.grafik',
+            'icon' => 'ni ni-chart-pie-35 text-dark',
+            'url' => 'su.sales-graph',
+            'role' => ['Admin', 'Owner'],
         ],
         10 => [
             'id' => 11,
             'name' => 'Laporan Penjualan',
             'icon' => 'ni ni-send text-dark',
-            'url' => 'admin.sales-report',
+            'url' => 'su.sales-report',
+            'role' => ['Admin', 'Owner'],
+        ],
+        11 => [
+            'id' => 12,
+            'name' => 'List Pengiriman',
+            'icon' => 'ni ni-app text-warning',
+            'url' => 'su.delivery',
+            'role' => ['Driver'],
         ],
     ];
 @endphp
@@ -78,23 +88,24 @@
     <div class="collapse navbar-collapse" id="sidenav-collapse-main">
         <ul class="navbar-nav">
             @foreach ($dataSidebar as $data)
-                <li class="nav-item">
-                    <a class="nav-link {{ $data['name'] == $menu[0] ? 'active' : '' }}"
-                        href="{{ route($data['url']) }}">
-                        <div
-                            class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
-                            <i class="{{ $data['icon'] }} text-sm opacity-10"></i>
-                        </div>
-                        <span class="nav-link-text ms-1">{{ $data['name'] }}</span>
-                    </a>
-                </li>
+                @if (in_array($user->role, $data['role']))
+                    <li class="nav-item">
+                        <a class="nav-link {{ $data['name'] == $menu[0] ? 'active' : '' }}"
+                            href="{{ route($data['url']) }}">
+                            <div
+                                class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                                <i class="{{ $data['icon'] }} text-sm opacity-10"></i>
+                            </div>
+                            <span class="nav-link-text ms-1">{{ $data['name'] }}</span>
+                        </a>
+                    </li>
+                @endif
             @endforeach
             <li class="nav-item mt-3">
                 <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ $menu[0] == 'Profile' ? 'active' : '' }}"
-                    href="{{ route('admin.profile', ['user' => session('id')]) }}">
+                <a class="nav-link {{ $menu[0] == 'Profile' ? 'active' : '' }}" href="{{ route('su.profile') }}">
                     <div
                         class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                         <i class="ni ni-single-02 text-dark text-sm opacity-10"></i>

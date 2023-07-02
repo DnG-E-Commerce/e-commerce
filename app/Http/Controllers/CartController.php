@@ -116,6 +116,18 @@ class CartController extends Controller
         $last_invoice = DB::table('invoices')->latest('id')->first();
         foreach ($request->cart as $key => $data) {
             $productId = $request->product_id[$key];
+            $product = Product::where('id', $productId)->first();
+
+            if ($request->qty[$key] > $product->qty) {
+                $session = [
+                    'message' => 'Anda tidak dapat memesan barang melebihi kuantitas yang tersedia!',
+                    'type' => 'Checkout!',
+                    'alert' => 'Notifikasi Gagal!',
+                    'class' => 'danger'
+                ];
+                return redirect()->route('us.cart')->with($session);
+            }
+
             $total += $request->total[$key];
             DB::table('orders')->insert([
                 'user_id' => $user->id,
@@ -132,7 +144,7 @@ class CartController extends Controller
             'updated_at' => now('Asia/Jakarta'),
         ]);
         DB::commit();
-        return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
+        return redirect()->route('us.invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function show(Cart $cart)

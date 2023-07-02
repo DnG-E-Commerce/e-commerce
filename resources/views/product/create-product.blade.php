@@ -5,12 +5,12 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
-                    <div class="card-header pb-0">
-                        <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Tambah Data Product</h6>
-                    </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('product') }}" method="post" enctype="multipart/form-data">
+                        <div class="d-flex justify-content-between">
+                            <h4>Tambah Data Product</h4>
+                            <a href="{{ route('su.product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        </div>
+                        <form action="{{ route('su.store.product') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="name">Nama Produk <span class="text-danger">*</span></label>
@@ -43,7 +43,7 @@
                             </div>
                             <div class="form-group mb-3">
                                 @php
-                                    $unitofmeasure = ['Pcs', 'Karton/Dus', 'Box', 'Liter', 'Kilogram', 'Rincing', 'PAK', 'BAL', 'Paket', 'Toples'];
+                                    $unitofmeasure = ['Karton/Dus', 'Kilogram', 'Box', 'Liter', 'Rincing', 'Paket', 'Pcs', 'Toples', 'BAL', 'PAK'];
                                 @endphp
                                 <label for="uom">Satuan<span class="text-danger">*</span></label>
                                 <select name="uom" class="form-select">

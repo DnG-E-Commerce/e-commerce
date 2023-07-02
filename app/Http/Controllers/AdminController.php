@@ -42,13 +42,89 @@ class AdminController extends Controller
         ]);
     }
 
-    public function grafik(OrdersChart $ordersChart, ProductsChart $productsChart, CustomersAndResellerChart $customersAndResellerChart)
+    public function product()
     {
-        return view('admin.grafik', [
-            'title' => 'DnG Store | Grafik',
-            'menu' => ['Grafik Penjualan'],
-            'user' => auth()->user(),
+        $user = auth()->user();
+        $products = DB::table('products as p')
+            ->select('p.id as product_id', 'p.*', 'c.category')
+            ->join('categories as c', 'p.category_id', '=', 'c.id')
+            ->get()->all();
+        return view('product.index', [
+            'title' => 'DnG Store | Produk',
+            'menu' => ['Produk'],
+            'user' => $user,
+            'products' => $products,
+        ]);
+    }
 
+    public function category()
+    {
+        $user = auth()->user();
+        $categories = DB::table('categories')->get()->all();
+        return view('category.index', [
+            'title' => 'DnG Store | Kategori',
+            'menu' => ['Kategori'],
+            'user' => $user,
+            'categories' => $categories,
+        ]);
+    }
+
+    public function reseller()
+    {
+        $user = auth()->user();
+        $resellers = User::where('role', 'Reseller')->get();
+        return view('user.reseller.index', [
+            'title' => 'DnG Store | Reseller',
+            'menu' => ['Reseller'],
+            'user' => $user,
+            'resellers' => $resellers
+        ]);
+    }
+
+    public function customer()
+    {
+        $user = auth()->user();
+        $customers = User::where('role', 'Customer')->get();
+        return view('user.customer.index', [
+            'title' => 'DnG Store | Customer',
+            'menu' => ['Customer'],
+            'user' => $user,
+            'customers' => $customers,
+        ]);
+    }
+
+    public function order()
+    {
+        $user = auth()->user();
+        $invoices = Invoice::all();
+        return view('admin.invoice.index', [
+            'title' => 'DnG Store | Menu Invoice',
+            'menu' => ['Pesanan'],
+            'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
+            'user' => $user,
+            'invoices' => $invoices,
+        ]);
+    }
+
+    public function area()
+    {
+        $user = auth()->user();
+        $areas = DB::table('areas')->get()->all();
+        return view('area.index', [
+            'title' => 'DnG Store | Area Pemesanan',
+            'menu'  => ['Area'],
+            'user' => $user,
+            'areas' => $areas
+        ]);
+    }
+
+    public function salesGraph(OrdersChart $ordersChart, ProductsChart $productsChart, CustomersAndResellerChart $customersAndResellerChart)
+    {
+        $user = auth()->user();
+        return view('admin.grafik', [
+            'title' => 'DnG Store | Grafik Penjualan',
+            'menu' => ['Grafik Penjualan'],
+            'user' => $user,
             'orderChart' => $ordersChart->build(),
             'productChart' => $productsChart->build(),
             'CustomerResellerChart' => $customersAndResellerChart->build(),
@@ -87,24 +163,36 @@ class AdminController extends Controller
         ]);
     }
 
-    public function invoice()
+    public function delivery()
     {
-        $invoices = Invoice::all();
-        return view('admin.invoice.index', [
-            'title' => 'DnG Store | Menu Invoice',
-            'menu' => ['Pesanan'],
-            'user' => auth()->user(),
-            'invoices' => $invoices,
-            'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
+        $user = auth()->user();
+        $invoices = Invoice::where('status', 'Lunas')->orWhere('status', 'Belum Lunas')->orderBy('created_at', 'desc')->get()->all();
+        return view('driver.index', [
+            'title'    => 'DnG Store | Pengiriman Barang',
+            'menu'     => ['List Pengiriman'],
+            'user'     => $user,
+            'invoices' => $invoices
         ]);
     }
 
+    public function profile()
+    {
+        $user = auth()->user();
+        return view('admin.profile-admin', [
+            'title' => 'DnG Store | My Profile',
+            'menu' => ['Profile'],
+            'user' => $user,
+        ]);
+    }
+
+
     public function showInvoice(Invoice $invoice)
     {
+        $user = auth()->user();
         return view('admin.invoice.detail-invoice', [
             'title' => 'DnG Store | Admin | Detail Invoice',
             'menu' => ['Pesanan', 'Detail Pesanan'],
-            'user' => auth()->user(),
+            'user' => $user,
             'invoice' => $invoice,
             'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
         ]);
@@ -165,11 +253,11 @@ class AdminController extends Controller
      */
     public function show()
     {
-        return view('admin.profile-admin', [
-            'title' => 'DnG Store | My Profile',
-            'user' => auth()->user(),
-            'menu' => ['Profile'],
-        ]);
+        // return view('admin.profile-admin', [
+        //     'title' => 'DnG Store | My Profile',
+        //     'user' => auth()->user(),
+        //     'menu' => ['Profile'],
+        // ]);
     }
 
     /**
@@ -180,11 +268,12 @@ class AdminController extends Controller
      */
     public function edit()
     {
+        $user = auth()->user();
         return view('admin.edit-admin', [
             'title' => 'DnG Store | Edit Profile',
-            'user' => auth()->user(),
             'menu' => ['Profile', 'Edit Profile'],
-            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer']
+            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customer'],
+            'user' => $user,
         ]);
     }
 
@@ -223,7 +312,7 @@ class AdminController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('admin.profile', ['user' => $user->id])->with($session);
+        return redirect()->route('su.profile')->with($session);
     }
 
     /**
@@ -235,96 +324,5 @@ class AdminController extends Controller
     public function destroy($id)
     {
         //
-    }
-
-    public function print_pdf(Invoice $invoice)
-    {
-        $html = "
-        <!doctype html>
-        <html lang='en'>
-        <head>
-            <meta charset='utf-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1'>
-            <title>Bootstrap demo</title>
-            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM' crossorigin='anonymous'>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='row justify-content-center mt-5'>
-                    <h1 class='text-center'>Invoice</h1>
-                    <hr class='border border-1 border-dark'>
-                    <div class='col-lg-6'>
-                        <h4>List Pesanan</h4>
-                        <ul class='list-group list-group-flush'>
-                            ";
-        foreach ($invoice->order as $o => $order) {
-            $html .= "<li class='list-group-item'>" . $order->product->name . " ($order->qty) </li>";
-        }
-        $html .= "
-                        </ul>
-                    </div>
-                    <hr class='border border-1 border-dark'>
-                    <div class='col-lg-6'>
-                        <table class='table'>
-                            <tr>
-                                <th>No Invoice</th>
-                                <td>:</td>
-                                <td>$invoice->invoice_code</td>
-                            </tr>
-                            <tr>
-                                <th>Tanggal</th>
-                                <td>:</td>
-                                <td>" . substr($invoice->created_at, 0, 10) . "</td>
-                            </tr>
-                            <tr>
-                                <th>Nama Pemesan</th>
-                                <td>:</td>
-                                <td>";
-        foreach ($invoice->order as $key => $order) {
-            $html .= $order->user->name;
-        }
-        $html .= "</td>
-                            </tr>
-                            <tr>
-                                <th>Alamat</th>
-                                <td>:</td>
-                                <td>$invoice->send_to</td>
-                            </tr>
-                            <tr>
-                                <th>Alamat</th>
-                                <td>:</td>
-                                <td>$invoice->notes</td>
-                            </tr>
-                            <tr>
-                                <th>Ongkir</th>
-                                <td>:</td>
-                                <td>" . number_format($invoice->ongkir, 0, ',', '.') . "</td>
-                            </tr>
-                            <tr>
-                                <th>Total Harga</th>
-                                <td>:</td>
-                                <td>" . number_format($invoice->grand_total, 0, ',', '.') . "</td>
-                            </tr>
-                            <tr>
-                                <th>Status</th>
-                                <td>:</td>
-                                <td>$invoice->status</td>
-                            </tr>
-                            <tr>
-                                <th>Metode Pembayaran</th>
-                                <td>:</td>
-                                <td>$invoice->payment_method</td>
-                            </tr>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js' integrity='sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz' crossorigin='anonymous'></script>
-        </body>
-        </html>
-        ";
-        $pdf = App::make('dompdf.wrapper');
-        $pdf->loadHTML($html);
-        return $pdf->stream();
     }
 }

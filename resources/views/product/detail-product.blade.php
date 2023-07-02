@@ -52,7 +52,7 @@
                         <p style="text-align: justify;">{{ $product->desc }}</p>
                     </div>
                 </div>
-                <a href="{{ route('product') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                <a href="{{ route('su.product') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
             </div>
         </div>
     </div>

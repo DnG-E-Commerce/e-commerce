@@ -16,7 +16,7 @@
                                     id="instance_photo">
                             </div>
                         </div>
-                        <form action="{{ route('pengajuan.store', ['user' => $user->id]) }}" method="post"
+                        <form action="{{ route('su.customer.request.store', ['user' => $user->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">

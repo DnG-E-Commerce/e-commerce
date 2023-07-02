@@ -15,19 +15,18 @@
                     <div class="card-body px-5 p-3 pb-2">
                         <div class="row my-3">
                             <div class="d-flex justify-content-between">
-                                <h4>Tabel Customer</h4>
-                                <a href="{{ route('customer.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                <h4>Tabel Reseller</h4>
+                                <a href="{{ route('reseller.create') }}" class="btn btn-sm btn-success float-end">Tambah
                                     Data</a>
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0" id="table_customer">
+                            <table class="table align-items-center mb-0" id="table_reseller">
                                 <thead>
                                     <tr>
-                                        <th class="text-center text-uppercase text-secondary text-xxs">No</th>
-                                        <th
-                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                            Nama</th>
+                                        <th class="text-center text-center text-uppercase text-secondary text-xxs">No</th>
+                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama
+                                        </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Email</th>
@@ -35,33 +34,29 @@
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Kontak</th>
                                         <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($customers as $key => $data)
+                                    @foreach ($resellers as $key => $reseller)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->name }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $reseller->name }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span
-                                                    class="text-xs font-weight-bold">{{ $data->email ? $data->email : '-' }}</span>
+                                                    class="text-xs font-weight-bold">{{ $reseller->email ? $reseller->email : '-' }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span
-                                                    class="text-xs font-weight-bold">{{ $data->phone ? $data->phone : 'Belum ada' }}</span>
+                                                    class="text-xs font-weight-bold">{{ $reseller->phone ? $reseller->phone : 'Belum ada' }}</span>
                                             </td>
                                             <td class="text-center align-end">
-                                                @if ($data->request_upgrade == 1)
-                                                    <a class="btn btn-sm bg-gradient-primary"
-                                                        href="{{ route('request-upgrade', ['user' => $data->id]) }}">Upgrade</a>
-                                                @endif
-                                                <a href="{{ route('user.show', ['user' => $data->id]) }}"
+                                                <a href="{{ route('su.user.profile', ['role' => 'reseller', 'user' => $reseller->id]) }}"
                                                     class="btn btn-sm bg-gradient-warning">
                                                     Detail
                                                 </a>
@@ -76,6 +71,7 @@
             </div>
         </div>
     </div>
+
     {{-- Modal Notification --}}
     <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
         aria-hidden="true">
@@ -98,7 +94,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#table_customer').DataTable();
+            $('#table_reseller').DataTable();
         });
     </script>
 @endsection

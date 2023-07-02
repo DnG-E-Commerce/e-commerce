@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Models\Area;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Redis;
 
 class AreaController extends Controller
 {
@@ -17,18 +16,6 @@ class AreaController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
-    }
-
-
-    public function index()
-    {
-        $areas = DB::table('areas')->get()->all();
-        return view('area.index', [
-            'title' => 'DnG Store | Area Pemesanan',
-            'menu'  => ['Area'],
-            'user' => auth()->user(),
-            'areas' => $areas
-        ]);
     }
 
     /**
@@ -54,17 +41,19 @@ class AreaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'provinsi'  => 'required|not_in:pilih',
-            'kabupaten' => 'required|not_in:pilih',
-            'kecamatan' => 'required|not_in:pilih',
-            'ongkir'    => 'required|numeric',
+            'ongkir' => 'required|numeric',
+            'provinsi' => 'not_in:pilih',
+            'kabupaten' => 'not_in:pilih',
+            'kecamatan' => 'not_in:pilih',
+            'kelurahan' => 'not_in:pilih',
         ]);
         DB::table('areas')->insert([
             'provinsi'  => $request->provinsi,
             'kabupaten' => $request->kabupaten,
             'kecamatan' => $request->kecamatan,
             'kelurahan' => $request->kelurahan,
-            'ongkir'    => $request->ongkir
+            'ongkir'    => $request->ongkir,
+            'created_at' => now('Asia/Jakarta'),
         ]);
         $session = [
             'message' => 'Berhasil menambahkan area pengiriman!',
@@ -72,7 +61,7 @@ class AreaController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('area')->with($session);
+        return redirect()->route('su.area')->with($session);
     }
 
     /**

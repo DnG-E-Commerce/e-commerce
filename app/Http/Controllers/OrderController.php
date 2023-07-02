@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Nette\Utils\Random;
@@ -36,6 +37,20 @@ class OrderController extends Controller
         $request->validate([
             'qty' => 'required|numeric'
         ]);
+
+        // Check QTY
+        $product = Product::where('id', $request->product_id)->first();
+        // dd($request->qty > $product->qty);
+        if ($request->qty > $product->qty) {
+            $session = [
+                'message' => 'Anda tidak dapat memesan barang melebihi kuantitas yang tersedia!',
+                'type' => 'Checkout!',
+                'alert' => 'Notifikasi Gagal!',
+                'class' => 'danger'
+            ];
+            return redirect()->route('us.product.detail', ['product' => $request->product_id])->with($session);
+        }
+
         $user = auth()->user();
         DB::beginTransaction();
         DB::table('invoices')->insert([
@@ -66,7 +81,7 @@ class OrderController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
+        return redirect()->route('us.invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function storeToCart(Request $request)
@@ -105,7 +120,7 @@ class OrderController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('home.product', ['product' => $request->product_id])->with($session);
+        return redirect()->route('us.product.detail', ['product' => $request->product_id])->with($session);
     }
     public function show(Order $order)
     {
@@ -164,7 +179,7 @@ class OrderController extends Controller
             'created_at' => now('Asia/Jakarta')
         ]);
         DB::commit();
-        return redirect()->route('invoice.edit', ['invoice' => $last_invoice->id])->with($session);
+        return redirect()->route('us.invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
     public function delete(Order $order)
@@ -212,10 +227,10 @@ class OrderController extends Controller
                     'class' => 'success'
                 ];
         }
-        return redirect()->route('order')->with($session);
+        return redirect()->route('us.invoice')->with($session);
     }
 
-    public function updateStatus(Request $request, Invoice $invoice)
+    public function suUpdateStatus(Request $request, Invoice $invoice)
     {
         DB::table('orders')->where('invoice_id', $invoice->id)
             ->update([
@@ -237,6 +252,6 @@ class OrderController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('admin.detail.invoice', ['invoice' => $invoice->id])->with($session);
+        return redirect()->route('su.invoice.detail', ['invoice' => $invoice->id])->with($session);
     }
 }

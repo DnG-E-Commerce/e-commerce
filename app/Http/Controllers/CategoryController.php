@@ -68,7 +68,7 @@ class CategoryController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('category')->with($session);
+        return redirect()->route('su.category')->with($session);
     }
 
     /**
@@ -119,7 +119,7 @@ class CategoryController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('category')->with($session);
+        return redirect()->route('su.category')->with($session);
     }
 
     /**
@@ -137,6 +137,6 @@ class CategoryController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('category')->with($session);
+        return redirect()->route('su.category')->with($session);
     }
 }

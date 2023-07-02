@@ -15,18 +15,19 @@
                     <div class="card-body px-5 p-3 pb-2">
                         <div class="row my-3">
                             <div class="d-flex justify-content-between">
-                                <h4>Tabel Reseller</h4>
-                                <a href="{{ route('reseller.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                <h4>Tabel Customer</h4>
+                                <a href="{{ route('su.customer.create') }}" class="btn btn-sm btn-success float-end">Tambah
                                     Data</a>
                             </div>
                         </div>
                         <div class="table-responsive p-0">
-                            <table class="table align-items-center mb-0" id="table_reseller">
+                            <table class="table align-items-center mb-0" id="table_customer">
                                 <thead>
                                     <tr>
-                                        <th class="text-center text-center text-uppercase text-secondary text-xxs">No</th>
-                                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Nama
-                                        </th>
+                                        <th class="text-center text-uppercase text-secondary text-xxs">No</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Nama</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Email</th>
@@ -34,12 +35,12 @@
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Kontak</th>
                                         <th
-                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Opsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($resellers as $key => $data)
+                                    @foreach ($customers as $key => $data)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
@@ -56,7 +57,11 @@
                                                     class="text-xs font-weight-bold">{{ $data->phone ? $data->phone : 'Belum ada' }}</span>
                                             </td>
                                             <td class="text-center align-end">
-                                                <a href="{{ route('user.show', ['user' => $data->id]) }}"
+                                                @if ($data->request_upgrade == 1)
+                                                    <a class="btn btn-sm bg-gradient-primary"
+                                                        href="{{ route('su.customer.request-upgrade', ['user' => $data->id]) }}">Upgrade</a>
+                                                @endif
+                                                <a href="{{ route('su.user.profile', ['role' => 'customer', 'user' => $data->id]) }}"
                                                     class="btn btn-sm bg-gradient-warning">
                                                     Detail
                                                 </a>
@@ -71,7 +76,6 @@
             </div>
         </div>
     </div>
-
     {{-- Modal Notification --}}
     <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
         aria-hidden="true">
@@ -94,7 +98,7 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#table_reseller').DataTable();
+            $('#table_customer').DataTable();
         });
     </script>
 @endsection

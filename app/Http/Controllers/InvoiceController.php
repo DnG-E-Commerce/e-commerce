@@ -5,10 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Nette\Utils\Random;
-use PhpParser\Node\Expr\Cast\Array_;
 use Twilio\Rest\Client;
 
 class InvoiceController extends Controller
@@ -29,6 +29,18 @@ class InvoiceController extends Controller
             'user' => $user,
             'notifications' => $notification,
             'invoices' => $invoices
+        ]);
+    }
+
+    public function suDetailInvoice(Invoice $invoice)
+    {
+        $user = auth()->user();
+        return view('admin.invoice.detail-invoice', [
+            'title' => 'DnG Store |  Detail Invoice',
+            'menu' => ['Pesanan', 'Detail Pesanan'],
+            'user' => $user,
+            'invoice' => $invoice,
+            'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
         ]);
     }
 
@@ -193,7 +205,7 @@ class InvoiceController extends Controller
             'alert' => 'Notifikasi berhasil!',
             'class' => 'success'
         ];
-        return redirect()->route('invoice.show', ['invoice' => $invoice->id])->with($session);
+        return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
     }
 
     public function handleCash($data, $invoice)
@@ -201,7 +213,7 @@ class InvoiceController extends Controller
         DB::table('invoices')->where('id', $invoice['id'])
             ->update([
                 'status' => 'Belum Lunas',
-                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'send_to' => '-',
                 'ongkir' => 0,
                 'grand_total' => $invoice['grand_total'],
                 'payment_method' => $data['payment_method'],
@@ -268,7 +280,7 @@ class InvoiceController extends Controller
         //     [
         //         'from' => $twilioNumber,
         //         'body' => "XXX"
-    
+
         //     ]
         // );
 
@@ -282,7 +294,7 @@ class InvoiceController extends Controller
         $token = "000804a847c501ae4e771e052205ef4a";
         $twilioNumber = "+14155238886";
         $recipientNumber = "+6283138578369";
-       
+
 
 
         $client = new Client($sid, $token);
@@ -305,13 +317,14 @@ class InvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function confirmRecive(Invoice $invoice)
-    {   
-        
+    {
+
         DB::table('invoices')->where([
             ['id', $invoice->id],
             ['invoice_code', $invoice->invoice_code]
         ])->update([
             'is_recive' => 1,
+            'updated_at' => now('Asia/Jakarta'),
         ]);
         $session = [
             'message' => 'Pesanan Berhasil diterima! Terimakasih telah berbelanja di D&G Store',
@@ -319,12 +332,126 @@ class InvoiceController extends Controller
             'alert' => 'Notifikasi berhasil!',
             'class' => 'success'
         ];
-        return redirect()->route('invoice.show', ['invoice' => $invoice->id])->with($session);
+        return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
     }
 
 
     public function destroy(Invoice $invoice)
     {
         //
+    }
+
+    public function confirmCash(Invoice $invoice)
+    {
+        foreach ($invoice->order as $order) {
+            DB::table('orders')->where('id', $order->id)->update([
+                'status' => 'Diterima'
+            ]);
+        }
+
+        DB::table('invoices')->where('invoice_code', $invoice->invoice_code)->update([
+            'status' => 'Lunas',
+            'is_recive' => 1,
+            'updated_at' => now('Asia/Jakarta')
+        ]);
+
+        $session = [
+            'message' => 'Berhasil mengupdate status pembayaran invoice',
+            'type' => 'Status Pembayaran Invoice',
+            'alert' => 'Notifikasi berhasil!',
+            'class' => 'success'
+        ];
+        return redirect()->route('su.order')->with($session);
+    }
+
+    public function print_pdf(Invoice $invoice)
+    {
+        $html = "
+        <!doctype html>
+        <html lang='en'>
+        <head>
+            <meta charset='utf-8'>
+            <meta name='viewport' content='width=device-width, initial-scale=1'>
+            <title>Bootstrap demo</title>
+            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM' crossorigin='anonymous'>
+        </head>
+        <body>
+            <div class='container'>
+                <div class='row justify-content-center mt-5'>
+                    <h1 class='text-center'>Invoice</h1>
+                    <hr class='border border-1 border-dark'>
+                    <div class='col-lg-6'>
+                        <h4>List Pesanan</h4>
+                        <ul class='list-group list-group-flush'>
+                            ";
+        foreach ($invoice->order as $o => $order) {
+            $html .= "<li class='list-group-item'>" . $order->product->name . " ($order->qty) </li>";
+        }
+        $html .= "
+                        </ul>
+                    </div>
+                    <hr class='border border-1 border-dark'>
+                    <div class='col-lg-6'>
+                        <table class='table'>
+                            <tr>
+                                <th>No Invoice</th>
+                                <td>:</td>
+                                <td>$invoice->invoice_code</td>
+                            </tr>
+                            <tr>
+                                <th>Tanggal</th>
+                                <td>:</td>
+                                <td>" . substr($invoice->created_at, 0, 10) . "</td>
+                            </tr>
+                            <tr>
+                                <th>Nama Pemesan</th>
+                                <td>:</td>
+                                <td>";
+        foreach ($invoice->order as $key => $order) {
+            $html .= $order->user->name;
+        }
+        $html .= "</td>
+                            </tr>
+                            <tr>
+                                <th>Alamat</th>
+                                <td>:</td>
+                                <td>$invoice->send_to</td>
+                            </tr>
+                            <tr>
+                                <th>Alamat</th>
+                                <td>:</td>
+                                <td>$invoice->notes</td>
+                            </tr>
+                            <tr>
+                                <th>Ongkir</th>
+                                <td>:</td>
+                                <td>" . number_format($invoice->ongkir, 0, ',', '.') . "</td>
+                            </tr>
+                            <tr>
+                                <th>Total Harga</th>
+                                <td>:</td>
+                                <td>" . number_format($invoice->grand_total, 0, ',', '.') . "</td>
+                            </tr>
+                            <tr>
+                                <th>Status</th>
+                                <td>:</td>
+                                <td>$invoice->status</td>
+                            </tr>
+                            <tr>
+                                <th>Metode Pembayaran</th>
+                                <td>:</td>
+                                <td>$invoice->payment_method</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js' integrity='sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz' crossorigin='anonymous'></script>
+        </body>
+        </html>
+        ";
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHTML($html);
+        return $pdf->stream();
     }
 }

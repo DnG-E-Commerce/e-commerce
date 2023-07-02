@@ -32,19 +32,6 @@
                     @foreach ($invoices as $key => $invoice)
                         <div class="card shadow-lg mb-3">
                             <div class="card-body">
-                                <div class="d-flex gap-5 form-check form-check-inline float-end">
-                                    <div class="dropdown">
-                                        <button class="fa-solid fa-ellipsis-vertical" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item" href=""
-                                                    onclick="return confirm('Apakah anda ingin menghapus produk ini dari keranjang?')">Hapus</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-
                                 <div class="row">
                                     <div class="col-lg-8">
                                         <div class="d-flex gap-3">
@@ -104,11 +91,11 @@
                             </div>
                             <div class="float-end">
                                 @if ($invoice->status == 'Pending')
-                                    <a href="{{ route('invoice.edit', ['invoice' => $invoice->id]) }}"
+                                    <a href="{{ route('us.invoice.edit', ['invoice' => $invoice->id]) }}"
                                         class="btn btn-sm bg-gradient-warning">Lakukan
                                         Pembayaran</a>
                                 @endif
-                                <a href="{{ route('invoice.show', ['invoice' => $invoice->id]) }}"
+                                <a href="{{ route('us.invoice.show', ['invoice' => $invoice->id]) }}"
                                     class="btn btn-sm bg-gradient-primary">Detail
                                     Invoice</a>
                             </div>

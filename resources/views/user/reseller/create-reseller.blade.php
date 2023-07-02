@@ -5,12 +5,13 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
-                    <div class="card-header pb-0">
-                        <a href="{{ route('customer') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Tambah Data Customer</h6>
-                    </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('customer.store') }}" method="post" enctype="multipart/form-data">
+                        <div class="d-flex justify-content-between">
+                            <h4>Tambah Data Reseller</h4>
+                            <a href="{{ route('su.reseller') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        </div>
+                        <form action="{{ route('su.user.create', ['role' => 'reseller']) }}" method="post"
+                            enctype="multipart/form-data">
                             @csrf
                             <div class="form-group mb-3">
                                 <label for="name">Nama Lengkap <span class="text-danger">*</span></label>

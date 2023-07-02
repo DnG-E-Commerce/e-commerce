@@ -16,7 +16,8 @@
                         <div class="row my-3">
                             <div class="d-flex justify-content-between">
                                 <h4>Area Pengiriman</h4>
-                                <a href="{{ route('area.create') }}" class="btn btn-sm btn-success float-end">Tambah Data</a>
+                                <a href="{{ route('su.area.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                    Data</a>
                             </div>
                         </div>
                         <div class="table-responsive my-3 p-0">

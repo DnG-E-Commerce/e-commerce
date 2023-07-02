@@ -51,18 +51,24 @@
                                                 <span class="text-xs font-weight-bold">{{ $data->invoice_code }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->grand_total }}</span>
+                                                <span class="text-xs font-weight-bold">Rp.
+                                                    {{ number_format($data->grand_total, 0, ',', '.') }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->status }}</span>
+                                                @if ($data->payment_method == 'cash' && $data->status != 'Lunas')
+                                                    <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $data->id]) }}"
+                                                        class="btn btn-sm bg-gradient-warning">Konfirmasi</a>
+                                                @else
+                                                    <span class="text-xs font-weight-bold">
+                                                        {{ $data->status }}
+                                                    </span>
+                                                @endif
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">
                                                     @foreach ($data->order as $key => $order)
-                                                        @if ($key == 0)
-                                                            {{ $order->status }}
-                                                        @break
-                                                    @endif
+                                                        {{ $order->status }}
+                                                    @break
                                                 @endforeach
                                             </span>
                                         </td>
@@ -70,9 +76,9 @@
                                             <span class="text-xs font-weight-bold">{{ $data->payment_method }}</span>
                                         </td>
                                         <td class="align-middle text-sm">
-                                            <a href="{{ route('admin.detail.invoice', ['invoice' => $data->id]) }}"
+                                            <a href="{{ route('su.invoice.detail', ['invoice' => $data->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary">Detail</a>
-                                            <a href="{{ route('admin.print_pdf', ['invoice' => $data->id]) }}"
+                                            <a href="{{ route('su.invoice.print_pdf', ['invoice' => $data->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary" target="_blank">Cetak Invoice</a>
                                         </td>
 

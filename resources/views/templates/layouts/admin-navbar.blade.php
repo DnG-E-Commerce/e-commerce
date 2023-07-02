@@ -4,19 +4,13 @@
     <div class="container-fluid py-1 px-3">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
-                <li class="breadcrumb-item text-sm text-white">Admin</li>
+                <li class="breadcrumb-item text-sm text-white">{{ $user->role }}</li>
                 @foreach ($menu as $data)
                     <li class="breadcrumb-item text-sm text-white">{{ $data }}</li>
                 @endforeach
             </ol>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
-            {{-- <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-      <div class="input-group">
-        <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-        <input type="text" class="form-control" placeholder="Type here...">
-      </div>
-    </div> --}}
             <ul class="navbar-nav ms-md-auto pe-md-3 text-dark">
                 <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
@@ -35,8 +29,7 @@
                     <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
                         aria-labelledby="dropdownMenuButton">
                         <li class="mb-2">
-                            <a class="dropdown-item border-radius-md"
-                                href="{{ route('admin.profile', ['user' => session('id')]) }}">
+                            <a class="dropdown-item border-radius-md" href="{{ route('su.profile') }}">
                                 <div class="d-flex py-1">
                                     <div class="d-flex flex-column justify-content-center">
                                         <h6 class="text-sm font-weight-normal mb-1">

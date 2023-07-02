@@ -36,7 +36,7 @@
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg position-sticky top-0 z-index-3 w-100 shadow-none bg-dark">
         <div class="container">
-            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-white" href="{{ route('home') }}">
+            <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-white" href="{{ route('us.home') }}">
                 DnG Store
             </a>
             <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse"
@@ -80,7 +80,7 @@
                                             </li>
                                         @endforeach
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('notification') }}">Lihat
+                                            <a class="dropdown-item" href="{{ route('us.notification') }}">Lihat
                                                 lebih...</a>
                                         </li>
 
@@ -93,19 +93,18 @@
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-dark">
                                         <li>
-                                            <a class="dropdown-item"
-                                                href="{{ route('home.profile', ['user' => $user->id]) }}">Profile</a>
+                                            <a class="dropdown-item" href="{{ route('us.profile') }}">Profile</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('invoice') }}">Pesanan</a>
+                                            <a class="dropdown-item" href="{{ route('us.order') }}">Pesanan</a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item" href="{{ route('cart') }}">Keranjang</a>
+                                            <a class="dropdown-item" href="{{ route('us.cart') }}">Keranjang</a>
                                         </li>
                                         @if ($user->role == 'Customer')
                                             <li>
                                                 <a class="dropdown-item"
-                                                    href="{{ route('home.pengajuan-reseller') }}">Pengajuan
+                                                    href="{{ route('us.apply-request-reseller') }}">Pengajuan
                                                     Reseller</a>
                                             </li>
                                         @endif

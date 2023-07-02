@@ -27,7 +27,7 @@
                                                 <ul>
                                                     <li>Harga Satuan :
                                                         Rp.
-                                                        {{ number_format($order->user->role == 'customer' ? $order->product->customer_price : $order->product->reseller_price, 0, ',', '.') }}
+                                                        {{ number_format(($order->total - $order->invoice->ongkir) / $order->qty, 0, ',', '.') }}
                                                     </li>
                                                     <li>Total Harga :
                                                         Rp. {{ number_format($order->total, 0, ',', '.') }}
@@ -73,7 +73,7 @@
                                     <tr>
                                         <th>Catatan</th>
                                         <td>:</td>
-                                        <td>{{ $invoice->notes }}</td>
+                                        <td>{{ $invoice->notes ? $invoice->notes : '-' }}</td>
                                     </tr>
                                     <tr>
                                         <th>Ongkir</th>
@@ -107,7 +107,7 @@
 
                                             @else
                                                 <form
-                                                    action="{{ route('admin-order.update-status', ['invoice' => $invoice->id]) }}"
+                                                    action="{{ route('su.order.update-status', ['invoice' => $invoice->id]) }}"
                                                     method="post">
                                                     @csrf
                                                     @method('PUT')
@@ -130,17 +130,18 @@
                                                 </div>
                                             </form>
                                         @endif
-                                    @endforeach
-                                </td>
-                            </tr>
+                                    @break
+                                @endforeach
+                            </td>
+                        </tr>
 
-                        </table>
-                    </div>
+                    </table>
                 </div>
             </div>
-            <a href="{{ route('admin.invoices') }}" class="btn btn-sm bg-gradient-danger">Kembali</a>
         </div>
+        <a href="{{ route('su.order') }}" class="btn btn-sm bg-gradient-danger">Kembali</a>
     </div>
+</div>
 </div>
 </div>
 </div>
@@ -149,18 +150,18 @@
 aria-hidden="true">
 <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
 <div class="modal-content">
-    <div class="modal-header">
-        <h6 class="modal-title" id="modal-title-notification">{{ Session::get('type') }}</h6>
-        <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
-        </button>
+<div class="modal-header">
+    <h6 class="modal-title" id="modal-title-notification">{{ Session::get('type') }}</h6>
+    <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
+    </button>
+</div>
+<div class="modal-body">
+    <div class="py-3 text-center">
+        <i class="ni ni-bell-55 ni-3x"></i>
+        <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
+        <p>{{ Session::get('message') }}</p>
     </div>
-    <div class="modal-body">
-        <div class="py-3 text-center">
-            <i class="ni ni-bell-55 ni-3x"></i>
-            <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
-            <p>{{ Session::get('message') }}</p>
-        </div>
-    </div>
+</div>
 </div>
 </div>
 </div>

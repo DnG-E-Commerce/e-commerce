@@ -5,14 +5,14 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
-                    <div class="card-header pb-0">
-                        <a href="{{ route('category') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h5 class="fst-italic text-center">
-                            Edit Kategori
-                        </h5>
-                    </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('category.update', ['category' => $category->id]) }}" method="post"
+                        <div class="d-flex justify-content-between">
+                            <h4 class="fst-italic text-center">
+                                Edit Kategori
+                            </h4>
+                            <a href="{{ route('su.category') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        </div>
+                        <form action="{{ route('su.category.update', ['category' => $category->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

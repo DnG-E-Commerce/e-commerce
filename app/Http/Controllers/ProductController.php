@@ -104,7 +104,7 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('product')->with($session);
+        return redirect()->route('su.product')->with($session);
     }
 
     public function stock($id)
@@ -133,7 +133,7 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('product')->with($session);
+        return redirect()->route('su.product')->with($session);
     }
 
     /**
@@ -142,13 +142,27 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function usDetailProduct(Product $product)
     {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('home.detail-product', [
+            'title' => 'DnG Store | Detail Product',
+            'menu' => ['Product', 'Detail'],
+            'user' => $user,
+            'product' => $product,
+            'notifications' => $notification
+        ]);
+    }
+
+    public function suDetailProduct(Product $product)
+    {
+        $user = auth()->user();
         return view('product.detail-product', [
             'title' => 'DnG Store | Detail Produk',
-            'user' => auth()->user(),
             'menu' => ['Produk', 'Detail'],
-            'product' => Product::findOrFail($id),
+            'user' => $user,
+            'product' => $product,
         ]);
     }
 
@@ -205,7 +219,7 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('product')->with($session);
+        return redirect()->route('su.product')->with($session);
     }
 
     /**
@@ -223,6 +237,6 @@ class ProductController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('product')->with($session);
+        return redirect()->route('su.product')->with($session);
     }
 }

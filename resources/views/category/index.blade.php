@@ -16,7 +16,7 @@
                         <div class="row my-3">
                             <div class="d-flex justify-content-between">
                                 <h4>Tabel Kategori</h4>
-                                <a href="{{ route('category.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                <a href="{{ route('su.category.create') }}" class="btn btn-sm btn-success float-end">Tambah
                                     Data</a>
                             </div>
                         </div>
@@ -44,8 +44,8 @@
                                             </td>
                                             <td class="text-center align-end">
                                                 <a class="btn btn-sm bg-gradient-warning"
-                                                    href="{{ route('category.edit', ['category' => $data->id]) }}">Edit</a>
-                                                <a href="{{ route('category.delete', ['category' => $data->id]) }}"
+                                                    href="{{ route('su.category.edit', ['category' => $data->id]) }}">Edit</a>
+                                                <a href="{{ route('su.category.delete', ['category' => $data->id]) }}"
                                                     class="btn btn-sm bg-gradient-danger">
                                                     Hapus
                                                 </a>

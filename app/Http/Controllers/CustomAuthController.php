@@ -39,27 +39,9 @@ class CustomAuthController extends Controller
                 'alert' => 'Notifikasi Sukses!',
                 'class' => 'success'
             ];
-            switch ($user->role) {
-                case 'Owner':
-                    return redirect()->route('owner')->with($session);
-                    break;
-
-                case 'Admin':
-                    return redirect()->route('admin')->with($session);
-                    break;
-
-                case 'Driver':
-                    return redirect()->route('driver')->with($session);
-                    break;
-
-                case 'Reseller':
-                    return redirect()->route('home')->with($session);
-                    break;
-
-                case 'Customer':
-                    return redirect()->route('home')->with($session);
-                    break;
-            }
+            if (in_array($user->role, ['Owner', 'Admin'])) return redirect()->route('su.dashboard')->with($session);
+            if ($user->role == 'Driver') return redirect()->route('su.delivery')->with($session);
+            return redirect()->route('us.home')->with($session);
         }
         return redirect()->back()->with(['message' => 'Email atau password salah, harap login kembali!', 'type' => 'Credentials Error', 'alert' => 'Notifikasi Gagal!', 'class' => 'success']);
     }
