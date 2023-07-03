@@ -57,9 +57,7 @@
                                                 <label for="total" class="col-form-label">Ongkir</label>
                                             </div>
                                             <div class="col-4">
-                                                <input type="number" name="ongkir" id="ongkir"
-                                                    class="form-control-plaintext"
-                                                    value="{{ $invoice->ongkir ? $invoice->ongkir : 0 }}" readonly>
+                                                <h5>Rp. {{ number_format($invoice->ongkir, 0, ',', '.') }}</h5>
                                             </div>
                                         </div>
                                         <div class="row gap-3 g-3 align-items-center mb-3">
@@ -67,9 +65,7 @@
                                                 <label for="total" class="col-form-label">Grand Total</label>
                                             </div>
                                             <div class="col-4">
-                                                <input type="number" name="grand_total" id="grand_total"
-                                                    class="form-control-plaintext" value="{{ $invoice->grand_total }}"
-                                                    readonly>
+                                                <h5>Rp. {{ number_format($invoice->grand_total, 0, ',', '.') }}</h5>
                                             </div>
                                         </div>
                                         <div class="row gap-3 g-3 align-items-center mb-3">
@@ -79,9 +75,7 @@
                                             <div class="col-4">
                                                 @foreach ($invoice->order as $key => $o)
                                                     @if ($key == 0)
-                                                        <input type="text" name="grand_total" id="grand_total"
-                                                            class="form-control-plaintext" value="{{ $o->status }}"
-                                                            readonly>
+                                                        <h5>{{ $o->status }}</h5>
                                                     @break
                                                 @endif
                                             @endforeach

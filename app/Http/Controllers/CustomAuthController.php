@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OTPMail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class CustomAuthController extends Controller
 {
@@ -27,6 +30,20 @@ class CustomAuthController extends Controller
     public function credentials(Request $request)
     {
         $user = DB::table('users')->where('email', $request->email)->first();
+        if (!$user->email_verified_at) {
+            $message = "Akun anda belum terverifikasi, harap lakukan verifikasi
+            <div class='d-flex justify-content-center'>
+                <a class='btn btn-sm btn-success' href='/login/send-otp/$user->id'>Verifikasi</a>
+            </div>
+            ";
+            $session = [
+                'message' => $message,
+                'type' => 'Login',
+                'alert' => 'Notifikasi Gagal!',
+                'class' => 'danger'
+            ];
+            return redirect()->back()->with($session);
+        }
         $credentials = $request->validate([
             'email' => 'required',
             'password' => 'required',
@@ -44,6 +61,40 @@ class CustomAuthController extends Controller
             return redirect()->route('us.home')->with($session);
         }
         return redirect()->back()->with(['message' => 'Email atau password salah, harap login kembali!', 'type' => 'Credentials Error', 'alert' => 'Notifikasi Gagal!', 'class' => 'success']);
+    }
+
+    public function sendOTPFromLogin(User $user)
+    {
+        $check = DB::table('email_verifications')->where('email', $user->email)->first();
+        $otp = mt_rand(100000, 999999);
+        $data = [
+            'from' => 'dngstore.admin@gmail.com',
+            'to' => $user->email,
+            'title' => 'Email Verification',
+            'body' => "Kode OTP Anda : $otp"
+        ];
+        Mail::send('auth.mail-otp', ['data' => $data], function ($message) use ($data) {
+            $message->from($data['from'])->to($data['to'])->subject($data['title']);
+        });
+        if ($check) {
+            DB::table('email_verifications')->where('email', $user->email)->update([
+                'otp' => $otp,
+                'updated' => now('Asia/Jakarta'),
+            ]);
+        } else {
+            DB::table('email_verifications')->insert([
+                'email' => $user->email,
+                'otp' => $otp,
+                'created_at' => now('Asia/Jakarta'),
+            ]);
+        }
+        $session = [
+            'message' => 'Harap cek email untuk mendapatkan OTP',
+            'type' => 'Email Verifikasi',
+            'alert' => 'Notifikasi!',
+            'class' => 'success'
+        ];
+        return redirect()->route('email-verification')->with($session);
     }
 
     // All proccess stored data here's
@@ -65,19 +116,71 @@ class CustomAuthController extends Controller
             'created_at' => now('Asia/Jakarta')
         ]);
         $latest = DB::table('users')->latest('id')->first();
+        $otp = mt_rand(100000, 999999);
+        $data = [
+            'from' => 'dngstore.admin@gmail.com',
+            'to' => $request->email,
+            'title' => 'Email Verification',
+            'body' => "Kode OTP Anda : $otp"
+        ];
+        Mail::send('auth.mail-otp', ['data' => $data], function ($message) use ($data) {
+            $message->from($data['from'])->to($data['to'])->subject($data['title']);
+        });
         DB::table('notifications')->insert([
             'user_id' => $latest->id,
             'title' => 'Membuat Akun baru',
             'message' => "Berhasil menbuat akun baru pada " . now('Asia/Jakarta'),
             'is_read' => 1
         ]);
+
+        DB::table('email_verifications')->insert([
+            'email' => $latest->email,
+            'otp' => $otp,
+            'created_at' => now('Asia/Jakarta'),
+        ]);
+
         $session = [
-            'message' => 'Berhasil membuat akun!',
+            'message' => 'Berhasil membuat akun! Harap untuk lakukan verifikasi email untuk melanjutkannya!',
             'type' => 'Insert Data',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->intended('login')->with($session);
+        return redirect()->route('email-verification')->with($session);
+    }
+
+    public function emailVerification()
+    {
+        return view('auth.email-verification', [
+            'title' => "DnG Store | Verifikasi Email",
+        ]);
+    }
+
+    public function check(Request $request)
+    {
+        $request->validate([
+            'otp' => 'required|numeric'
+        ]);
+        $data = DB::table('email_verifications')->where('otp', $request->otp)->first();
+        if ($request->otp == $data->otp) {
+            DB::table('users')->where('email', $data->email)->update([
+                'email_verified_at' => now('Asia/Jakarta')
+            ]);
+            DB::table('email_verifications')->delete($data->id);
+            $session = [
+                'message' => 'Berhasil memverifikasi email! Login untuk mulai berlanja',
+                'type' => 'Email Verifikasi',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            return redirect()->route('login')->with($session);
+        }
+        $session = [
+            'message' => 'OTP yang anda inputkan tidak sesuai, harap cek kembali email anda!',
+            'type' => 'Email Verifikasi',
+            'alert' => 'Notifikasi Gagal!',
+            'class' => 'danger'
+        ];
+        return redirect()->route('email-verification')->with($session);
     }
 
     public function logout()

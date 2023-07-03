@@ -113,7 +113,9 @@
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('login') }}" class="btn btn-sm btn-secondary mb-0">Login</a>
+                            <a href="{{ route('login') }}" class="btn btn-sm bg-gradient-secondary mb-0">Login</a>
+                            <a href="{{ route('register') }}"
+                                class="btn btn-sm bg-gradient-secondary mb-0">Registrasi</a>
                         @endif
                     </li>
                 </ul>

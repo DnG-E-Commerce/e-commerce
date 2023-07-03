@@ -77,7 +77,8 @@
                                                 <label for="total" class="col-form-label">Total</label>
                                             </div>
                                             <div class="col-4">
-                                                <input type="number" name="total[{{ $cart->id }}]" id="total"
+                                                <h5>Rp. {{ number_format($cart->total, 0, ',', '.') }}</h5>
+                                                <input type="hidden" name="total[{{ $cart->id }}]" id="total"
                                                     class="form-control-plaintext" value="{{ $cart->total }}" readonly>
                                             </div>
                                         </div>

@@ -11,7 +11,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth');
+        $this->middleware('auth')->except('usDetailProduct');
     }
 
     /**
@@ -69,20 +69,6 @@ class ProductController extends Controller
             'status' => 'required|not_in:pilih',
             'category' => 'required|not_in:pilih',
 
-        ], [
-            'name.required' => 'Nama Produk wajib diisi!',
-            'desc.required' => 'Deskripsi Produk wajib diisi!',
-            'photo.required' => 'Foto Produk wajib diisi!',
-            'qty.required' => 'Stok Produk wajib diisi!',
-            'customer_price.required' => 'Harga Customer wajib diisi!',
-            'reseller_price.required' => 'Harga Reseller wajib diisi!',
-            'category.required' => 'Kategori Produk wajib diisi!',
-            'uom.required' => 'Satuan Produk wajib diisi!',
-            'weight.required' => 'Ukuran Produk wajib diisi!',
-            'category.not_in' => 'Pilihan Kategori salah!',
-            'status.not_in' => 'Pilihan status salah!',
-            'uom.not_in' => 'Pilihan satuan salah!',
-            // 'customer_price.numeric' => 'Pilihan satuan salah!',
         ]);
         $photo = $request->file('photo')->store('image');
         DB::table('products')->insert([
@@ -145,7 +131,10 @@ class ProductController extends Controller
     public function usDetailProduct(Product $product)
     {
         $user = auth()->user();
-        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        $notification = null;
+        if ($user) {
+            $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        }
         return view('home.detail-product', [
             'title' => 'DnG Store | Detail Product',
             'menu' => ['Product', 'Detail'],

@@ -18,9 +18,10 @@ class OTPMail extends Mailable
      *
      * @return void
      */
+    public $otp;
     public function __construct($otp)
     {
-        //
+        $this->otp = $otp;
     }
 
     /**
@@ -35,15 +36,20 @@ class OTPMail extends Mailable
         );
     }
 
+    // public function build()
+    // {
+    //     return $this->subject('Kode OTP')->view('auth.mail-otp');
+    // }
+
     /**
      * Get the message content definition.
      *
      * @return \Illuminate\Mail\Mailables\Content
      */
-    public function content()
+    public function content(): Content
     {
         return new Content(
-            view: 'view.name',
+            view: 'auth.mail-otp',
         );
     }
 
@@ -52,8 +58,8 @@ class OTPMail extends Mailable
      *
      * @return array
      */
-    public function attachments()
-    {
-        return [];
-    }
+    // public function attachments()
+    // {
+    //     return [];
+    // }
 }

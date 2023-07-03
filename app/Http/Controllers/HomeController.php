@@ -10,6 +10,7 @@ use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\User;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Termwind\Components\Raw;
 
@@ -109,7 +110,15 @@ class HomeController extends Controller
             ['title', '=', 'Tawaran Menjadi Reseller']
         ])->first();
         if ($detect > 5 && $user->role == 'Customer') {
-            session()->flash('message', 'Anda telah memenuhi persyaratan untuk menjadi reseller');
+            $message = "Anda telah memenuhi persyaratan untuk menjadi reseller
+        <br>
+        Apakah anda ingin mengajukan menjadi reseller?
+        <br>
+        <div class='d-flex justify-content-evenly'>
+        <a class='btn btn-sm btn-success' href='/us/apply-request-reseller'>Ya</a>
+        <a class='btn btn-sm btn-danger' data-bs-dismiss='modal'>Tidak</a>
+        </div>";
+            session()->flash('message', $message);
             session()->flash('type', 'Tawaran Upgrade');
             session()->flash('alert', 'Selamat!');
             session()->flash('class', 'success');
@@ -217,6 +226,94 @@ class HomeController extends Controller
             'product' => $product,
             'notifications' => $notification
         ]);
+    }
+
+    public function editProfile()
+    {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('home.edit-profile', [
+            'title' => 'DnG Store | Edit Profile',
+            'menu' => ['Home', 'profile'],
+            'role' => ['Owner', 'Admin', 'Driver', 'Reseller', 'Customers'],
+            'user' => $user,
+            'notifications' => $notification
+        ]);
+    }
+
+    public function updateProfile(Request $request, User $user)
+    {
+        $request->validate([
+            'name' => 'required',
+            'phone' => 'required|numeric',
+            'photo' => 'image|max:8192',
+        ]);
+        $photo = $request->file('photo');
+        if ($photo) {
+            $filename = $photo->store('image');
+        } else {
+            $filename = $user->photo;
+        }
+
+        $address = $user->address;
+        if (!in_array('pilih', [$request->provinsi, $request->kabupaten, $request->kecamatan, $request->kelurahan])) {
+            $address = "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi";
+        }
+
+        DB::table('users')->where('id', $user->id)->update([
+            'name' => $request->name,
+            'phone' => $request->phone,
+            'photo' => $filename,
+            'address' => $address
+        ]);
+        $session = [
+            'message' => 'Berhasil mengupdate Profile!',
+            'type' => 'Edit Profile',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->route('us.profile')->with($session);
+    }
+
+    public function changePassword()
+    {
+        $user = auth()->user();
+        $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
+        return view('home.change-password', [
+            'title' => 'DnG Store | Ubah Password',
+            'menu' => ['Home', 'profile'],
+            'user' => $user,
+            'notifications' => $notification
+        ]);
+    }
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|min:4',
+            'repeat_password' => 'required|same:password'
+        ]);
+        if (Hash::check($request->old_password, $user->password)) {
+            DB::table('users')->where('id', $user->id)->update([
+                'password' => Hash::make($request->password),
+                'updated_at' => now('Asia/Jakarta')
+            ]);
+            $session = [
+                'message' => 'Berhasil mengubah password!',
+                'type' => 'Ubah Password',
+                'alert' => 'Notifikasi Berhasil!',
+                'class' => 'success'
+            ];
+            return redirect()->route('us.profile')->with($session);
+        }
+        $session = [
+            'message' => 'Gagal Mengubah password, pastikan password lama benar!',
+            'type' => 'Ubah Password',
+            'alert' => 'Notifikasi Gagal!',
+            'class' => 'danger'
+        ];
+        return redirect()->route('us.change.password')->with($session);
     }
 
     /**

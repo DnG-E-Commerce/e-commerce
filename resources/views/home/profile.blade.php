@@ -1,9 +1,16 @@
 @extends('templates.main')
 @section('content')
+    @if (Session::get('message'))
+        <script>
+            $(document).ready(function() {
+                $('#modal-notification').modal("show");
+            })
+        </script>
+    @endif
     <div class="main-content position-relative max-height-vh-100 h-100">
         <div class="container-fluid py-4">
             <div class="row">
-                <div class="col-lg-8">
+                <div class="col-lg-8 mb-3">
                     <div class="row mb-3">
                         <div class="col-md-6">
                             <div class="card">
@@ -40,7 +47,7 @@
                                             </p>
                                             <h5 class="font-weight-bolder">
                                                 @foreach ($total as $o)
-                                                    {{ $o->total_pengeluaran }}
+                                                    Rp. {{ number_format($o->total_pengeluaran, 0, ',', '.') }}
                                                 @break
                                             @endforeach
                                         </h5>
@@ -87,9 +94,9 @@
             </div>
         </div>
         <div class="col-lg-4">
-            <div class="card card-profile">
-                <img src="{{ asset('argon/img/bg-profile.jpg') }}" alt="Image placeholder"
-                    class="card-img-top image-fluid">
+            <div class="card card-profile mb-3">
+                <img src="{{ asset('storage/image/curved-6.jpg') }}" style="height: 15rem; object-fit: cover;"
+                    alt="Image placeholder" class="card-img-top image-fluid">
                 <div class="row justify-content-center">
                     <div class="col-4 col-lg-4 order-lg-2">
                         <div class="mt-n4 mt-lg-n6 mb-4 mb-lg-0">
@@ -116,6 +123,31 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <div class="d-flex justify-content-evenly">
+                <a href="{{ route('us.edit.profile') }}" class="btn btn-sm bg-gradient-warning">Edit Profile</a>
+                <a href="{{ route('us.change.password') }}" class="btn btn-sm bg-gradient-secondary">Ubah
+                    Password</a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+{{-- Modal Notification --}}
+<div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
+aria-hidden="true">
+<div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h6 class="modal-title" id="modal-title-notification">{{ Session::get('type') }}</h6>
+            <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="py-3 text-center">
+                <i class="ni ni-bell-55 ni-3x"></i>
+                <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
+                <p>{{ Session::get('message') }}</p>
             </div>
         </div>
     </div>

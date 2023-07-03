@@ -45,15 +45,29 @@
                                             <label for="price" class="col-form-label">Harga</label>
                                         </div>
                                         <div class="col-auto">
-                                            <input type="number" name="price" id="price"
-                                                class="form-control-plaintext"
-                                                value="{{ $user->role == 'Customer' ? $product->customer_price : $product->reseller_price }}"
-                                                readonly>
+                                            @if (!$user)
+                                                <h5>Rp.
+                                                    {{ number_format($product->customer_price, 0, ',', '.') }}</h5>
+                                                <input type="hidden" name="price" id="price"
+                                                    class="form-control-plaintext" value="{{ $product->customer_price }}"
+                                                    readonly>
+                                            @else
+                                                <h5>Rp.
+                                                    {{ number_format($product->customer_price, 0, ',', '.') }}</h5>
+                                                <input type="hidden" name="price" id="price"
+                                                    class="form-control-plaintext"
+                                                    value="{{ $user->role == 'Customer' ? $product->customer_price : $product->reseller_price }}"
+                                                    readonly>
+                                            @endif
                                         </div>
                                         <div class="col-4">
-                                            <span id="prices_for" class="form-text">
-                                                {{ $user->role == 'Customer' ? 'Harga Customer' : 'Harga Reseller' }}
-                                            </span>
+                                            <h5 id="prices_for" class="form-text">
+                                                @if (!$user)
+                                                    Harga Satuan
+                                                @else
+                                                    {{ $user->role == 'Customer' ? 'Harga Customer' : 'Harga Reseller' }}
+                                                @endif
+                                                </span>
                                         </div>
                                     </div>
                                     <div class="row g-3 align-items-center mb-3">

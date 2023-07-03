@@ -37,7 +37,12 @@ Route::controller(HomeController::class)->group(function () {
     // Profile
     Route::get('/us/home', 'index')->name('us.home');
     Route::get('/us/profile', 'profile')->name('us.profile');
+    Route::get('/us/profile/edit', 'editProfile')->name('us.edit.profile');
+    Route::get('/us/profile/password/change', 'changePassword')->name('us.change.password');
     Route::get('/us/apply-request-reseller', 'requestReseller')->name('us.apply-request-reseller');
+
+    Route::put('/us/profile/update/{user}', 'updateProfile')->name('us.profile.update');
+    Route::put('/us/profile/password/update/{user}', 'updatePassword')->name('us.profile.password.update');
 
     // Other Menu
     Route::get('/us/cart', 'cart')->name('us.cart');
@@ -125,9 +130,14 @@ Route::controller(CategoryController::class)->group(function () {
 Route::controller(CustomAuthController::class)->group(function () {
     Route::get('/login', 'index')->name('login');
     Route::get('/register', 'create')->name('register');
+
+    Route::get('/login/send-otp/{user}', 'sendOTPFromLogin')->name('login.send-otp');
+    Route::get('/email-verification', 'emailVerification')->name('email-verification');
+
     Route::get('/logout', 'logout')->name('logout');
     Route::post('/login', 'credentials')->name('login');
     Route::post('/register', 'store')->name('register');
+    Route::post('/email-verification', 'check')->name('email-verification.check');
 });
 
 Route::controller(OrderController::class)->group(function () {

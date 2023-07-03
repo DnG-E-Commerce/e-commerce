@@ -65,11 +65,11 @@
                                             </td>
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">Rp.
-                                                    {{ $data->customer_price }}</span>
+                                                    {{ number_format($data->customer_price, 0, ',', '.') }}</span>
                                             </td>
                                             <td class="align-middle text-center">
                                                 <span class="text-secondary text-xs font-weight-bold">Rp.
-                                                    {{ $data->reseller_price }}</span>
+                                                    {{ number_format($data->reseller_price, 0, ',', '.') }}</span>
                                             </td>
                                             <td class="align-end text-center text-sm">
                                                 <span
