@@ -181,4 +181,4 @@ Route::controller(AreaController::class)->group(function () {
     Route::put('/su/area/edit/{area}', 'update')->name('su.area.update');
 });
 
-Route::post('/send-whatsapp-message', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send.whatsapp');
+// Route::post('/send-whatsapp-message', [WhatsAppController::class, 'sendWhatsAppMessage'])->name('send.whatsapp');
