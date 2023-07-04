@@ -210,8 +210,9 @@ class InvoiceController extends Controller
         return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
     }
 
-    public function handleCash($data, Invoice $invoice)
+    public function handleCash($data, $id)
     {
+        $invoice = Invoice::where('id', $id)->first();
         DB::table('invoices')->where('id', $invoice->id)
             ->update([
                 'status' => 'Belum Lunas',
@@ -224,8 +225,9 @@ class InvoiceController extends Controller
             ]);
     }
 
-    public function handleCOD($data, Invoice $invoice)
+    public function handleCOD($data, $id)
     {
+        $invoice = Invoice::where('id', $id)->first();
         $area = DB::table('areas')
             ->where([
                 ['provinsi', '=', $data['provinsi']],
@@ -255,9 +257,9 @@ class InvoiceController extends Controller
         }
     }
 
-    public function handleTransfer($data, Invoice $invoice)
+    public function handleTransfer($data, $id)
     {
-
+        $invoice = Invoice::where('id', $id)->first();
         $area = DB::table('areas')
             ->where([
                 ['provinsi', '=', $data['provinsi']],
@@ -287,8 +289,9 @@ class InvoiceController extends Controller
         $this->sendWhatsapp($invoice->id);
     }
 
-    public function sendWhatsapp(Invoice $invoice)
+    public function sendWhatsapp($id)
     {
+        $invoice = Invoice::where('id', $id)->first();
         $sid = "ACeeae51f34b58855ae6f4f64439905adc";
         $token = "8b571f74330c3fa29afe9ebb0400288d";
         $twilioNumber = "+14155238886";

@@ -24,31 +24,34 @@
         @endonce
     @endif
     <div class="container">
-        @foreach ($top_resellers as $tr)
-            @if ($tr->id == $user->id)
-                <div class="row justify-content-center mt-3">
-                    <div class="col-md-10 col-lg-10 col-sm-4">
-                        <h4 class="fst-italic">Produk Terbatas Khusus Reseller</h4>
-                        <div class="d-flex gap-3 mb-5" style="flex-wrap: wrap;">
-                            @foreach ($special_products as $key => $sp)
-                                <div class="card shadow-md" style="width: 20rem;">
-                                    <img src="{{ asset('storage/' . $sp->photo) }}" alt="Image {{ $sp->name }}"
-                                        class="image-fluid"
-                                        style="object-fit: cover; height: 15rem; padding: 12px; border-radius: 24px;">
-                                    <div class="card-body">
-                                        <h3>{{ $sp->name }}</h3>
-                                        <p class="fst-italic">{{ substr($sp->desc, 0, 50) . '.....' }}</p>
-                                        <a href="{{ route('us.product.detail', ['product' => $sp->id]) }}"
-                                            class="text-primary">Lihat Lebih Detail <i class="fa fa-arrow-right"></i></a>
+        @if ($user)
+            @foreach ($top_resellers as $tr)
+                @if ($tr->id == $user->id)
+                    <div class="row justify-content-center mt-3">
+                        <div class="col-md-10 col-lg-10 col-sm-4">
+                            <h4 class="fst-italic">Produk Terbatas Khusus Reseller</h4>
+                            <div class="d-flex gap-3 mb-5" style="flex-wrap: wrap;">
+                                @foreach ($special_products as $key => $sp)
+                                    <div class="card shadow-md" style="width: 20rem;">
+                                        <img src="{{ asset('storage/' . $sp->photo) }}" alt="Image {{ $sp->name }}"
+                                            class="image-fluid"
+                                            style="object-fit: cover; height: 15rem; padding: 12px; border-radius: 24px;">
+                                        <div class="card-body">
+                                            <h3>{{ $sp->name }}</h3>
+                                            <p class="fst-italic">{{ substr($sp->desc, 0, 50) . '.....' }}</p>
+                                            <a href="{{ route('us.product.detail', ['product' => $sp->id]) }}"
+                                                class="text-primary">Lihat Lebih Detail <i
+                                                    class="fa fa-arrow-right"></i></a>
+                                        </div>
                                     </div>
-                                </div>
-                            @endforeach
+                                @endforeach
+                            </div>
+                            {{ $special_products->links() }}
                         </div>
-                        {{ $special_products->links() }}
                     </div>
-                </div>
-            @endif
-        @endforeach
+                @endif
+            @endforeach
+        @endif
         <hr class="border border-1 border-dark">
         <div class="row justify-content-center mt-4">
             <div class="col-md-10 col-lg-10 col-sm-4">
