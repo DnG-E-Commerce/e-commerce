@@ -64,6 +64,18 @@ class AdminController extends Controller
         ]);
     }
 
+    public function admin()
+    {
+        $user = auth()->user();
+        $admin = User::all();
+        return view('user.admin.index', [
+            'title' => 'DnG Store | Admin',
+            'menu' => ['Admin'],
+            'user' => $user,
+            'admins' => $admin
+        ]);
+    }
+
     public function reseller()
     {
         $user = auth()->user();

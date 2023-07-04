@@ -23,27 +23,34 @@
         ],
         3 => [
             'id' => 4,
+            'name' => 'Admin',
+            'icon' => 'ni ni-single-02 text-danger',
+            'url' => 'su.admin',
+            'role' => ['Admin'],
+        ],
+        4 => [
+            'id' => 5,
             'name' => 'Reseller',
             'icon' => 'ni ni-cart text-danger',
             'url' => 'su.reseller',
             'role' => ['Admin'],
         ],
-        4 => [
-            'id' => 5,
+        5 => [
+            'id' => 6,
             'name' => 'Customer',
             'icon' => 'ni ni-circle-08 text-dark',
             'url' => 'su.customer',
             'role' => ['Admin'],
         ],
-        5 => [
-            'id' => 6,
+        6 => [
+            'id' => 7,
             'name' => 'Pesanan',
             'icon' => 'ni ni-box-2 text-warning',
             'url' => 'su.order',
             'role' => ['Admin'],
         ],
-        6 => [
-            'id' => 7,
+        7 => [
+            'id' => 8,
             'name' => 'Area',
             'icon' => 'ni ni-map-big text-dark',
             'url' => 'su.area',
@@ -56,15 +63,15 @@
             'url' => 'su.sales-graph',
             'role' => ['Admin', 'Owner'],
         ],
-        10 => [
-            'id' => 11,
+        9 => [
+            'id' => 10,
             'name' => 'Laporan Penjualan',
             'icon' => 'ni ni-send text-dark',
             'url' => 'su.sales-report',
             'role' => ['Admin', 'Owner'],
         ],
-        11 => [
-            'id' => 12,
+        10 => [
+            'id' => 11,
             'name' => 'List Pengiriman',
             'icon' => 'ni ni-app text-warning',
             'url' => 'su.delivery',

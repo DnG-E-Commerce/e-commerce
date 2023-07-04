@@ -44,11 +44,25 @@
                     </div>
                 </div>
                 <div class="d-flex gap-2 float-end">
-                    @if ($select_user->role == 'Customer')
-                        <a href="{{ route('su.customer') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
-                    @else
-                        <a href="{{ route('su.reseller') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
-                    @endif
+                    @switch($select_user->role)
+                        @case('Customer')
+                            <a href="{{ route('su.customer') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+
+                        @case('Reseller')
+                            <a href="{{ route('su.reseller') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+
+                        @case('Admin')
+                            <a href="{{ route('su.admin') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+
+                        @case('Driver')
+                            <a href="{{ route('su.admin') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
+                        @break
+
+                        @default
+                    @endswitch
                 </div>
             </div>
         </div>

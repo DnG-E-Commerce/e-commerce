@@ -33,6 +33,15 @@ class UserController extends Controller
         ]);
     }
 
+    public function createAdmin()
+    {
+        return view('user.admin.create-admin', [
+            'title' => 'DnG Store | Tambah Admin Atau Driver',
+            'user' => auth()->user(),
+            'menu' => ['Admin', 'Tambah']
+        ]);
+    }
+
     public function storeUser(Request $request, $role)
     {
         $request->validate([
@@ -47,14 +56,31 @@ class UserController extends Controller
             'photo' => 'image|file|required|max:8192'
         ]);
         $photo = $request->file('photo')->store('image');
+        switch ($role) {
+            case 'customer':
+                $role = 'Customer';
+                $email_verif = null;
+                break;
+
+            case 'reseller':
+                $role = 'Reseller';
+                $email_verif = null;
+                break;
+
+            case 'admin-driver':
+                $role = $request->role;
+                $email_verif = now('Asia/Jakarta');
+                break;
+        }
         DB::table('users')->insert([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'address' => "$request->kelurahan, $request->kecamatan, $request->kabupaten, $request->provinsi",
             'phone' => $request->phone,
-            'role' => ucfirst($role),
-            'photo' => $photo
+            'role' => $role,
+            'photo' => $photo,
+            'email_verified_at' => $email_verif
         ]);
         $session = [
             'message' => 'Berhasil menambahkan customer baru!',
@@ -62,7 +88,8 @@ class UserController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        if ($role == 'reseller') return redirect()->route('su.reseller')->with($session);
+        if ($role == 'Reseller') return redirect()->route('su.reseller')->with($session);
+        if ($role == 'Admin' || $role == 'Driver') return redirect()->route('su.admin')->with($session);
         return redirect()->route('su.customer')->with($session);
     }
 

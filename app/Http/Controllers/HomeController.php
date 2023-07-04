@@ -39,7 +39,9 @@ class HomeController extends Controller
                 ->where('name', 'like', "%$query%")
                 ->orWhere('category', 'like', "%$query%")
                 ->paginate(12);
+            $special_products = Product::where('special_status', '!=', 'Biasa')->paginate(3);
         } else {
+            $special_products = Product::where('special_status', '!=', 'Biasa')->paginate(3);
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
@@ -54,6 +56,7 @@ class HomeController extends Controller
             'menu' => 'home',
             'user' => $user,
             'products' => $products,
+            'special_products' => $special_products,
             'notifications' => $notification
         ]);
     }

@@ -28,13 +28,17 @@
                                 <h3>{{ $product->name }} </h3>
                                 <h4 class="fst-italic text-secondary">
                                     {{ $product->category->category }}
-                                    @if ($product->qty_status == 'Ready')
+                                    <div class="d-flex gap-3 float-end">
+                                        @if ($product->qty_status == 'Ready')
+                                            <span
+                                                class="badge badge-sm bg-gradient-success">{{ $product->qty_status }}</span>
+                                        @else
+                                            <span
+                                                class="badge badge-sm bg-gradient-danger">{{ $product->qty_status }}</span>
+                                        @endif
                                         <span
-                                            class="badge badge-sm bg-gradient-success float-end">{{ $product->qty_status }}</span>
-                                    @else
-                                        <span
-                                            class="badge badge-sm bg-gradient-danger float-end">{{ $product->qty_status }}</span>
-                                    @endif
+                                            class="badge badge-sm bg-gradient-primary">{{ $product->special_status }}</span>
+                                    </div>
                                 </h4>
                                 <hr class="border border-1 border-dark">
                                 <form method="post" id="form-checkout-cart">

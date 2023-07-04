@@ -55,6 +55,7 @@ Route::controller(AdminController::class)->group(function () {
     Route::get('/su/dashboard', 'index')->name('su.dashboard');
     Route::get('/su/product', 'product')->name('su.product');
     Route::get('/su/category', 'category')->name('su.category');
+    Route::get('/su/admin', 'admin')->name('su.admin');
     Route::get('/su/reseller', 'reseller')->name('su.reseller');
     Route::get('/su/customer', 'customer')->name('su.customer');
     Route::get('/su/order', 'order')->name('su.order');
@@ -88,7 +89,10 @@ Route::controller(UserController::class)->group(function () {
     Route::put('/su/customer/request-upgrade/{user}', 'acceptRequest')->name('su.customer.request.accept');
 
     // Reseller
-    Route::get('/su/reseller/create', 'createReseller')->name('reseller.create');
+    Route::get('/su/reseller/create', 'createReseller')->name('su.reseller.create');
+
+    // Admin & Driver
+    Route::get('/su/admin-driver/create', 'createAdmin')->name('su.admin-driver.create');
 
     // Dynamic
     Route::get('/su/{role}/profile/{user}', 'profileUser')->name('su.user.profile');

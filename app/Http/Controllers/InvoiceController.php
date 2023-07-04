@@ -385,7 +385,7 @@ class InvoiceController extends Controller
                         <ul class='list-group list-group-flush'>
                             ";
         foreach ($invoice->order as $o => $order) {
-            $html .= "<li class='list-group-item'>" . $order->product->name . " ($order->qty) </li>";
+            $html .= "<li class='list-group-item'>" . $order->product->name . " ($order->qty) (Rp. $order->total) </li>";
         }
         $html .= "
                         </ul>
@@ -409,28 +409,26 @@ class InvoiceController extends Controller
                                 <td>";
         foreach ($invoice->order as $key => $order) {
             $html .= $order->user->name;
+            break;
         }
         $html .= "</td>
                             </tr>
                             <tr>
                                 <th>Alamat</th>
                                 <td>:</td>
-                                <td>$invoice->send_to</td>
-                            </tr>
-                            <tr>
-                                <th>Alamat</th>
-                                <td>:</td>
-                                <td>$invoice->notes</td>
+                                <td>";
+        $invoice->send_to ? $html .= $invoice->send_to : $html .= "-";
+        $html .= "</td>
                             </tr>
                             <tr>
                                 <th>Ongkir</th>
                                 <td>:</td>
-                                <td>" . number_format($invoice->ongkir, 0, ',', '.') . "</td>
+                                <td>Rp. " . number_format($invoice->ongkir, 0, ',', '.') . "</td>
                             </tr>
                             <tr>
                                 <th>Total Harga</th>
                                 <td>:</td>
-                                <td>" . number_format($invoice->grand_total, 0, ',', '.') . "</td>
+                                <td>Rp. " . number_format($invoice->grand_total, 0, ',', '.') . "</td>
                             </tr>
                             <tr>
                                 <th>Status</th>
