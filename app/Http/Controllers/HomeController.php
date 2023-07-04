@@ -28,6 +28,14 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $user = auth()->user();
+        $top_resellers = User::select('users.*', DB::raw('SUM(orders.qty) as total_order'))
+            ->join('orders', 'users.id', '=', 'orders.user_id')
+            ->join('products', 'products.id', '=', 'orders.product_id')
+            ->where('role', '=', 'Reseller')
+            ->groupBy('users.id', 'users.name')
+            ->orderByDesc('total_order')
+            ->limit(2)
+            ->get();
         if ($user) {
             $this->detect();
         }
@@ -57,6 +65,7 @@ class HomeController extends Controller
             'user' => $user,
             'products' => $products,
             'special_products' => $special_products,
+            'top_resellers' => $top_resellers,
             'notifications' => $notification
         ]);
     }

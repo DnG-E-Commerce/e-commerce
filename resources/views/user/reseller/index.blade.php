@@ -16,7 +16,7 @@
                         <div class="row my-3">
                             <div class="d-flex justify-content-between">
                                 <h4>Tabel Reseller</h4>
-                                <a href="{{ route('reseller.create') }}" class="btn btn-sm btn-success float-end">Tambah
+                                <a href="{{ route('su.reseller.create') }}" class="btn btn-sm btn-success float-end">Tambah
                                     Data</a>
                             </div>
                         </div>
