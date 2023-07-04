@@ -119,10 +119,10 @@ class HomeController extends Controller
             ['user_id', $user->id],
             ['title', '=', 'Tawaran Menjadi Reseller']
         ])->first();
-        if ($detect > 5 && $user->role == 'Customer') {
+        if ($detect > 20 && $user->role == 'Customer') {
             $message = "Anda telah memenuhi persyaratan untuk menjadi reseller
         <br>
-        Apakah anda ingin mengajukan menjadi reseller?
+        Apakah anda ingin menjadi reseller?
         <br>
         <div class='d-flex justify-content-evenly'>
         <a class='btn btn-sm btn-success' href='/us/apply-request-reseller'>Ya</a>
