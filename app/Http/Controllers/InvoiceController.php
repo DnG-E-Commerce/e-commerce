@@ -291,9 +291,11 @@ class InvoiceController extends Controller
     public function sendWhatsapp($invoice)
     {
         $sid = "ACeeae51f34b58855ae6f4f64439905adc";
-        $token = "8b571f74330c3fa29afe9ebb0400288d";
+        $token = "6964838bdaf692c2998ae794f522ca85";
         $twilioNumber = "+14155238886";
         $recipientNumber = "+6283138578369";
+        $user = User::where('id', $invoice['user_id'])->first();
+        $client = new Client($sid, $token);
 
 
 
