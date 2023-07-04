@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
@@ -268,7 +269,7 @@ class InvoiceController extends Controller
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
 
-        $this->sendWhatsapp();
+        $this->sendWhatsapp($invoice);
         // $accountSid = config('app.twilio_sid');
         // $authToken = config('app.twilio_auth_token');
         // $twilioNumber = config('app.twilio_whatsapp_number');
@@ -287,23 +288,20 @@ class InvoiceController extends Controller
         // return response()->json(['message' => 'WhatsApp message sent successfully']);
     }
 
-    public function sendWhatsapp()
+    public function sendWhatsapp($invoice)
     {
-        $user = auth()->user();
         $sid = "ACeeae51f34b58855ae6f4f64439905adc";
         $token = "000804a847c501ae4e771e052205ef4a";
         $twilioNumber = "+14155238886";
         $recipientNumber = "+6283138578369";
-
-
-
+        $user = User::where('id', $invoice['user_id'])->first();
         $client = new Client($sid, $token);
 
         $message = $client->messages->create(
             'whatsapp:' . $recipientNumber, // Replace with the recipient's WhatsApp number
             [
                 'from' => 'whatsapp:' . $twilioNumber,
-                'body' => 'Selamat Transaksi Anda Berhasil dengan', // Replace with your desired message
+                'body' => "Selamat Transaksi $user->name dengan invoice kode " . $invoice['invoice_code'] . " Berhasil", // Replace with your desired message
             ]
         );
 

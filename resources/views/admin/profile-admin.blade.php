@@ -46,6 +46,9 @@
                 <div class="d-flex gap-2 float-end">
                     <a href="{{ route('su.profile.edit') }}" class="btn btn-sm bg-gradient-warning mt-2 float-end">Edit</a>
 
+                    <a href="{{ route('su.profile.change-password') }}"
+                        class="btn btn-sm bg-gradient-warning mt-2 float-end">Ubah Password</a>
+
                     @if (in_array($user->role, ['Owner', 'Admin']))
                         <a href="{{ route('su.dashboard') }}" class="btn btn-sm btn-danger mt-2 float-end">Kembali</a>
                     @else
