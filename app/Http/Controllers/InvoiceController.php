@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -174,15 +175,15 @@ class InvoiceController extends Controller
         DB::beginTransaction();
         switch ($request->payment_method) {
             case 'cash':
-                $this->handleCash($request->all(), $invoice);
+                $this->handleCash($request->all(), $invoice->id);
                 break;
 
             case 'cod':
-                $this->handleCOD($request->all(), $invoice);
+                $this->handleCOD($request->all(), $invoice->id);
                 break;
 
             case 'transfer':
-                $this->handleTransfer($request->all(), $invoice);
+                $this->handleTransfer($request->all(), $invoice->id);
                 break;
         }
         foreach ($invoice->order as $order) {
@@ -209,21 +210,21 @@ class InvoiceController extends Controller
         return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
     }
 
-    public function handleCash($data, $invoice)
+    public function handleCash($data, Invoice $invoice)
     {
-        DB::table('invoices')->where('id', $invoice['id'])
+        DB::table('invoices')->where('id', $invoice->id)
             ->update([
                 'status' => 'Belum Lunas',
                 'send_to' => '-',
                 'ongkir' => 0,
-                'grand_total' => $invoice['grand_total'],
+                'grand_total' => $invoice->grand_total,
                 'payment_method' => $data['payment_method'],
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
     }
 
-    public function handleCOD($data, $invoice)
+    public function handleCOD($data, Invoice $invoice)
     {
         $area = DB::table('areas')
             ->where([
@@ -235,20 +236,28 @@ class InvoiceController extends Controller
 
         $ongkir = $area ? $area->ongkir : 0;
 
-        DB::table('invoices')->where('id', $invoice['id'])
+        DB::table('invoices')->where('id', $invoice->id)
             ->update([
                 'status' => 'Belum Lunas',
                 'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
                 'ongkir' => $ongkir,
-                'grand_total' => $invoice['grand_total'] + $ongkir,
+                'grand_total' => $invoice->grand_total + $ongkir,
                 'payment_method' => $data['payment_method'],
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
+        foreach ($invoice->order as $order) {
+            $product = Product::where('id', $order->product_id)->first();
+            DB::table('products')->where('id', $order->product_id)->update([
+                'qty' => $product->qty - $order->qty,
+                'qty_status' => $product->qty - $order->qty == 0 ? 'Habis' : $product->qty_status,
+            ]);
+        }
     }
 
-    public function handleTransfer($data, $invoice)
+    public function handleTransfer($data, Invoice $invoice)
     {
+
         $area = DB::table('areas')
             ->where([
                 ['provinsi', '=', $data['provinsi']],
@@ -258,50 +267,40 @@ class InvoiceController extends Controller
             ])->first();
 
         $ongkir = $area ? $area->ongkir : 0;
-        DB::table('invoices')->where('id', $invoice['id'])
+        DB::table('invoices')->where('id', $invoice->id)
             ->update([
                 'status' => 'Lunas',
                 'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
                 'ongkir' => $ongkir,
-                'grand_total' => $invoice['grand_total'] + $ongkir,
+                'grand_total' => $invoice->grand_total + $ongkir,
                 'payment_method' => $data['payment_method'],
                 'notes' => $data['notes'],
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
-
-        $this->sendWhatsapp($invoice);
-        // $accountSid = config('app.twilio_sid');
-        // $authToken = config('app.twilio_auth_token');
-        // $twilioNumber = config('app.twilio_whatsapp_number');
-
-        // $client = new Client($accountSid, $authToken);
-
-        // $message = $client->messages->create(
-        //     $request->input('to'),
-        //     [
-        //         'from' => $twilioNumber,
-        //         'body' => "XXX"
-
-        //     ]
-        // );
-
-        // return response()->json(['message' => 'WhatsApp message sent successfully']);
+        foreach ($invoice->order as $order) {
+            $product = Product::where('id', $order->product_id)->first();
+            DB::table('products')->where('id', $order->product_id)->update([
+                'qty' => $product->qty - $order->qty,
+                'qty_status' => $product->qty - $order->qty == 0 ? 'Habis' : $product->qty_status,
+            ]);
+        }
+        $this->sendWhatsapp($invoice->id);
     }
 
-    public function sendWhatsapp($invoice)
+    public function sendWhatsapp(Invoice $invoice)
     {
         $sid = "ACa7891c81e256be11d45af7199de401bc";
         $token = "60eb164a807798fe6bbfa4da80dee8e8";
         $twilioNumber = "+14155238886";
         $recipientNumber = "+6285795069461";
-        $user = User::where('id', $invoice['user_id'])->first();
+        $user = User::where('id', $invoice->user_id)->first();
         $client = new Client($sid, $token);
 
         $message = $client->messages->create(
             'whatsapp:' . $recipientNumber, // Replace with the recipient's WhatsApp number
             [
                 'from' => 'whatsapp:' . $twilioNumber,
-                'body' => "Selamat Transaksi $user->name dengan invoice kode " . $invoice['invoice_code'] . " Berhasil", // Replace with your desired message
+                'body' => "Selamat Transaksi $user->name dengan invoice kode " . $invoice->invoice_code . " Berhasil", // Replace with your desired message
             ]
         );
 

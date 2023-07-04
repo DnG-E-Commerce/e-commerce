@@ -55,7 +55,7 @@
                 <h4 class="fst-italic">Produk</h4>
                 <div class="d-flex gap-3 mb-5" style="flex-wrap: wrap;">
                     @foreach ($products as $key => $product)
-                        @if ($product->special_status == 'Biasa')
+                        @if ($product->special_status != 'Limited Edition')
                             <div class="card shadow-md" style="width: 20rem;">
                                 <img src="{{ asset('storage/' . $product->photo) }}" alt="Image {{ $product->name }}"
                                     class="image-fluid"

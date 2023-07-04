@@ -49,7 +49,7 @@ class OrderController extends Controller
                 'class' => 'danger'
             ];
             return redirect()->route('us.product.detail', ['product' => $request->product_id])->with($session);
-        } 
+        }
 
         $user = auth()->user();
         DB::beginTransaction();
@@ -126,7 +126,7 @@ class OrderController extends Controller
             ];
             return redirect()->route('us.product.detail', ['product' => $request->product_id])->with($session);
         }
-        
+
         DB::commit();
         $session = [
             'message' => 'Berhasil memasukkan produk ke keranjang, ayo checkout sekarang!',
@@ -250,16 +250,6 @@ class OrderController extends Controller
             ->update([
                 'status' => $request->status
             ]);
-        if ($request->status == 'Dikonfirmasi/Dikemas') {
-            foreach ($invoice->order as $key => $order) {
-                $product = DB::table('products')->where('id', $order->product_id)->first();
-                DB::table('products')->where('id', $order->product_id)
-                    ->update([
-                        'qty'        =>    $product->qty - $order->qty,
-                        'qty_status' =>  $product->qty - $order->qty == 0 ? 'Habis' : 'Ready'
-                    ]);
-            }
-        }
         $session = [
             'message' => 'Berhasil mengupdate status pesanan!',
             'type' => 'Update Status Pesanan',
