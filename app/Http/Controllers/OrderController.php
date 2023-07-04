@@ -49,7 +49,7 @@ class OrderController extends Controller
                 'class' => 'danger'
             ];
             return redirect()->route('us.product.detail', ['product' => $request->product_id])->with($session);
-        }
+        } 
 
         $user = auth()->user();
         DB::beginTransaction();
@@ -113,6 +113,20 @@ class OrderController extends Controller
                 'created_at' => date('Y-m-d H:i:s'),
             ]);
         }
+
+        // Check QTY
+        $product = Product::where('id', $request->product_id)->first();
+        // dd($request->qty > $product->qty);
+        if ($request->qty > $product->qty) {
+            $session = [
+                'message' => 'Anda tidak dapat memesan barang melebihi kuantitas yang tersedia!',
+                'type' => 'Checkout!',
+                'alert' => 'Notifikasi Gagal!',
+                'class' => 'danger'
+            ];
+            return redirect()->route('us.product.detail', ['product' => $request->product_id])->with($session);
+        }
+        
         DB::commit();
         $session = [
             'message' => 'Berhasil memasukkan produk ke keranjang, ayo checkout sekarang!',
