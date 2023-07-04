@@ -17,7 +17,7 @@
                                 style="width:12rem;height: 12rem; border-radius: 100%; object-fit: cover; border:1px solid black"
                                 alt="Photo {{ $user->name }}" id="admin-photo">
                         </div>
-                        <form action="{{ route('admin.update', ['user' => $user->id]) }}" method="post"
+                        <form action="{{ route('su.profile.update', ['user' => $user->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

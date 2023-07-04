@@ -13,6 +13,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use PDF;
 
 class AdminController extends Controller
@@ -192,6 +193,15 @@ class AdminController extends Controller
         ]);
     }
 
+    public function changePassword()
+    {
+        $user = auth()->user();
+        return view('admin.change-password-admin', [
+            'title' => 'DnG Store | Ubah Password',
+            'menu' => ['Profile', 'Ubah Password'],
+            'user' => $user,
+        ]);
+    }
 
     public function showInvoice(Invoice $invoice)
     {
@@ -228,7 +238,7 @@ class AdminController extends Controller
                 'status' => $request->status
             ]);
         }
-        return redirect()->route('admin.orders')->with($session);
+        return redirect()->route('su.order')->with($session);
     }
 
     public function edit()
@@ -271,5 +281,34 @@ class AdminController extends Controller
             'class' => 'success'
         ];
         return redirect()->route('su.profile')->with($session);
+    }
+
+    public function updatePassword(Request $request, User $user)
+    {
+        $request->validate([
+            'old_password' => 'required',
+            'password' => 'required|min:4',
+            'repeat_password' => 'required|same:password'
+        ]);
+        if (Hash::check($request->old_password, $user->password)) {
+            DB::table('users')->where('id', $user->id)->update([
+                'password' => Hash::make($request->password),
+                'updated_at' => now('Asia/Jakarta')
+            ]);
+            $session = [
+                'message' => 'Berhasil mengubah password!',
+                'type' => 'Ubah Password',
+                'alert' => 'Notifikasi Berhasil!',
+                'class' => 'success'
+            ];
+            return redirect()->route('su.profile')->with($session);
+        }
+        $session = [
+            'message' => 'Gagal Mengubah password, pastikan password lama benar!',
+            'type' => 'Ubah Password',
+            'alert' => 'Notifikasi Gagal!',
+            'class' => 'danger'
+        ];
+        return redirect()->route('su.profile.change-password')->with($session);
     }
 }

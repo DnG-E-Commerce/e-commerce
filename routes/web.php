@@ -66,10 +66,11 @@ Route::controller(AdminController::class)->group(function () {
 
     // Profile
     Route::get('/su/profile', 'profile')->name('su.profile');
+    Route::get('/su/profile/change-password', 'changePassword')->name('su.profile.change-password');
     Route::get('/su/profile/edit', 'edit')->name('su.profile.edit');
 
-
-    Route::put('/su/profile/edit/{user}', 'update')->name('admin.update');
+    Route::put('/su/profile/edit/{user}', 'update')->name('su.profile.update');
+    Route::put('/su/profile/change-password/{user}', 'updatePassword')->name('su.profile.update-password');
     Route::put('/su/order/update/{order}', 'orderUpdate')->name('admin.order.update');
 });
 
