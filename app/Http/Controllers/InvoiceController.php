@@ -286,7 +286,7 @@ class InvoiceController extends Controller
                 'qty_status' => $product->qty - $order->qty == 0 ? 'Habis' : $product->qty_status,
             ]);
         }
-        $this->sendWhatsapp($invoice->id);
+        // $this->sendWhatsapp($invoice->id);
     }
 
     public function sendWhatsapp($id)

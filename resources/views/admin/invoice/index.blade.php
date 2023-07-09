@@ -42,43 +42,43 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($invoices as $key => $data)
+                                    @foreach ($invoices as $key => $invoice)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $data->invoice_code }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">Rp.
-                                                    {{ number_format($data->grand_total, 0, ',', '.') }}</span>
+                                                    {{ number_format($invoice->grand_total, 0, ',', '.') }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                @if ($data->payment_method == 'cash' && $data->status != 'Lunas')
-                                                    <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $data->id]) }}"
+                                                @if ($invoice->payment_method == 'cash' && $invoice->status != 'Lunas')
+                                                    <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $invoice->id]) }}"
                                                         class="btn btn-sm bg-gradient-warning">Konfirmasi</a>
                                                 @else
                                                     <span class="text-xs font-weight-bold">
-                                                        {{ $data->status }}
+                                                        {{ $invoice->status }}
                                                     </span>
                                                 @endif
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">
-                                                    @foreach ($data->order as $key => $order)
+                                                    @foreach ($invoice->order as $key => $order)
                                                         {{ $order->status }}
                                                     @break
                                                 @endforeach
                                             </span>
                                         </td>
                                         <td class="align-middle text-sm">
-                                            <span class="text-xs font-weight-bold">{{ $data->payment_method }}</span>
+                                            <span class="text-xs font-weight-bold">{{ $invoice->payment_method }}</span>
                                         </td>
                                         <td class="align-middle text-sm">
-                                            <a href="{{ route('su.invoice.detail', ['invoice' => $data->id]) }}"
+                                            <a href="{{ route('su.invoice.detail', ['invoice' => $invoice->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary">Detail</a>
-                                            <a href="{{ route('su.invoice.print_pdf', ['invoice' => $data->id]) }}"
+                                            <a href="{{ route('su.invoice.print_pdf', ['invoice' => $invoice->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary" target="_blank">Cetak Invoice</a>
                                         </td>
 

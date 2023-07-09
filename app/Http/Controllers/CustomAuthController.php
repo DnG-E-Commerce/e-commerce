@@ -30,25 +30,27 @@ class CustomAuthController extends Controller
     public function credentials(Request $request)
     {
         $user = DB::table('users')->where('email', $request->email)->first();
-        if (!$user->email_verified_at) {
-            $message = "Akun anda belum terverifikasi, harap lakukan verifikasi
-            <div class='d-flex justify-content-center'>
-                <a class='btn btn-sm btn-success' href='/login/send-otp/$user->id'>Verifikasi</a>
-            </div>
-            ";
-            $session = [
-                'message' => $message,
-                'type' => 'Login',
-                'alert' => 'Notifikasi Gagal!',
-                'class' => 'danger'
-            ];
-            return redirect()->back()->with($session);
-        }
         $credentials = $request->validate([
             'email' => 'required',
             'password' => 'required',
         ]);
         if (Auth::attempt($credentials)) {
+            if (!auth()->user()->email_verified_at) {
+                session()->flush();
+                Auth::logout();
+                $message = "Akun anda belum terverifikasi, harap lakukan verifikasi
+                    <div class='d-flex justify-content-center'>
+                        <a class='btn btn-sm btn-success' href='/login/send-otp/$user->id'>Verifikasi</a>
+                    </div>
+                    ";
+                $session = [
+                    'message' => $message,
+                    'type' => 'Login',
+                    'alert' => 'Notifikasi Gagal!',
+                    'class' => 'danger'
+                ];
+                return redirect()->route('login')->with($session);
+            }
             session(['id' => $user->id, 'email' => $request->email, 'name' => $user->name]);
             $session = [
                 'message' => 'Selamat datang di DnG Store!',
@@ -79,7 +81,7 @@ class CustomAuthController extends Controller
         if ($check) {
             DB::table('email_verifications')->where('email', $user->email)->update([
                 'otp' => $otp,
-                'updated' => now('Asia/Jakarta'),
+                'updated_at' => now('Asia/Jakarta'),
             ]);
         } else {
             DB::table('email_verifications')->insert([

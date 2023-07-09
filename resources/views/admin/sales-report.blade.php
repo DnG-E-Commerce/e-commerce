@@ -67,19 +67,26 @@
                                                     class="text-xs font-weight-bold">{{ substr($order->created_at, 0, 10) }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $order->user->name }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $order->user->name }}
+                                                    ({{ $order->user->role }})
+                                                </span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">Rp.
                                                     {{ number_format($order->total, 0, ',', '.') }}</span>
                                             </td>
-
                                         </tr>
                                     @endforeach
                                 </tbody>
-
                             </table>
-
+                            <hr>
+                            @php
+                                $salesReportTotal = [];
+                                foreach ($orders as $order) {
+                                    array_push($salesReportTotal, $order->total);
+                                }
+                            @endphp
+                            <h5>Total : Rp. {{ array_sum($salesReportTotal) }}</h5>
                         </div>
                     </div>
                 </div>
