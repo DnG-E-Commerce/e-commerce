@@ -286,16 +286,53 @@ class InvoiceController extends Controller
                 'qty_status' => $product->qty - $order->qty == 0 ? 'Habis' : $product->qty_status,
             ]);
         }
-        $this->sendWhatsapp($invoice->id);
+        
+        $this->sendWhatsappp($invoice->id);
     }
+
+    public function sendWhatsappp($id)
+    {
+        $invoice = Invoice::where('id', $id)->first();
+        $token = '9e6f44d3e1aa6e5609d8d0fb88d635610a531353d1aa95f7d7ab204fc4631ca4';
+        $whatsapp_phone = '+6283138578369';
+        $user = User::where('id', $invoice->user_id)->first();
+
+        $message = "Selamat Transaksi $user->name dengan invoice kode " . $invoice->invoice_code . " Berhasil";
+
+        $url = "https://sendtalk-api.taptalk.io/api/v1/message/send_whatsapp";
+
+        $data = [
+            "phone" => $whatsapp_phone,
+            "messageType" => "text",
+            "body" => $message
+        ];
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_URL, $url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $headers = array(
+            "API-Key: $token",
+            "Content-Type: application/json",
+        );
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+
+       //for debug only!
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+
+        curl_exec($curl);
+        curl_close($curl);
+     }
 
     public function sendWhatsapp($id)
     {
         $invoice = Invoice::where('id', $id)->first();
         $sid = "ACeeae51f34b58855ae6f4f64439905adc";
-        $token = "8b571f74330c3fa29afe9ebb0400288d";
+        $token = "6964838bdaf692c2998ae794f522ca85";
         $twilioNumber = "+14155238886";
-        $recipientNumber = "+6285795069461";
+        $recipientNumber = "+6283138578369";
         $user = User::where('id', $invoice->user_id)->first();
         $client = new Client($sid, $token);
 

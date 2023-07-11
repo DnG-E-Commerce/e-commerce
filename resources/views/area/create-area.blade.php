@@ -5,14 +5,13 @@
         <div class="row mt-4 justify-content-center">
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
+                    <div class="card-header pb-0">
+                        <a href="{{ route('su.area') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        <h4>Tambah Data Area</h4>
+                    </div>
                     <div class="card-body p-3">
-                        <div class="d-flex justify-content-between">
-                            <h4>Tambah Data Area</h4>
-                            <a href="{{ route('su.area') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        </div>
-                        <form action="{{ route('su.area.store') }}" method="POST">
-                            @csrf
-                            @method('POST')
+                        <form action="{{ route('su.area.store') }}" method="post" enctype="multipart/form-data">
+                            @csrf 
                             <label for="status">Alamat<span class="text-danger">*</span></label>
                             <hr class="border border-1 border-dark">
                             <div class="row">
@@ -59,7 +58,7 @@
                             </div>
                             <hr class="border border-1 border-dark">
                             <div class="form-group">
-                                <label for="">Ongkir</label>
+                                <label for="">Ongkir<span class="text-danger">*</span></label>
                                 <input type="number" name="ongkir" id="ongkir" class="form-control">
                                 @error('ongkir')
                                     <small class="text-danger">{{ $message }}</small>

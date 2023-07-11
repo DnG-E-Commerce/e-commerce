@@ -6,11 +6,11 @@
             <div class="col-lg-6 mb-lg-0 mb-4">
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
-                        <a href="{{ route('product') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Edit Data Product</h6>
+                        <a href="{{ route('su.area') }}" class="btn btn-close bg-danger p-2 float-end"></a>
+                        <h6>Edit Data Area</h6>
                     </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('area.update', ['area' => $area->id]) }}" method="post"
+                        <form action="{{ route('su.area.update', ['area' => $area->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

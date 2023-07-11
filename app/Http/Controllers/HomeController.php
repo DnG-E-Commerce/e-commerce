@@ -35,14 +35,23 @@ class HomeController extends Controller
         }
         $query = $request->search;
         if ($query) {
-            $top_resellers = User::select('users.*', DB::raw('SUM(orders.qty) as total_order'))
-                ->join('orders', 'users.id', '=', 'orders.user_id')
-                ->join('products', 'products.id', '=', 'orders.product_id')
-                ->where('role', '=', 'Reseller')
-                ->groupBy('users.id', 'users.name')
-                ->orderByDesc('total_order')
-                ->limit(2)
-                ->get();
+            $top_resellers = DB::raw("SELECT
+            `users`.*,
+            SUM(orders.qty) AS total_order
+          FROM
+            `users`
+            INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id`
+            INNER JOIN `products` ON `products`.`id` = `orders`.`product_id`
+          WHERE
+            `role` = 'Reseller'
+          GROUP BY
+            `users`.`id`,
+            `users`.`name`
+          ORDER BY
+            `total_order` DESC
+          limit
+            2");
+            
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
@@ -51,14 +60,22 @@ class HomeController extends Controller
                 ->paginate(12);
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
         } else {
-            $top_resellers = User::select('users.*', DB::raw('SUM(orders.qty) as total_order'))
-                ->join('orders', 'users.id', '=', 'orders.user_id')
-                ->join('products', 'products.id', '=', 'orders.product_id')
-                ->where('role', '=', 'Reseller')
-                ->groupBy('users.id', 'users.name')
-                ->orderByDesc('total_order')
-                ->limit(2)
-                ->get();
+            $top_resellers = DB::raw("SELECT
+            `users`.*,
+            SUM(orders.qty) AS total_order
+          FROM
+            `users`
+            INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id`
+            INNER JOIN `products` ON `products`.`id` = `orders`.`product_id`
+          WHERE
+            `role` = 'Reseller'
+          GROUP BY
+            `users`.`id`,
+            `users`.`name`
+          ORDER BY
+            `total_order` DESC
+          limit
+            2");
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')

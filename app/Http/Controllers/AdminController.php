@@ -179,7 +179,7 @@ class AdminController extends Controller
             'title'    => 'DnG Store | Pengiriman Barang',
             'menu'     => ['List Pengiriman'],
             'user'     => $user,
-            'invoices' => $invoices
+            'invoices' => $invoices,
         ]);
     }
 

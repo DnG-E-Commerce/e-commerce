@@ -41,22 +41,21 @@ class AreaController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'ongkir' => 'required|numeric',
-            'provinsi' => 'not_in:pilih',
-            'kabupaten' => 'not_in:pilih',
-            'kecamatan' => 'not_in:pilih',
-            'kelurahan' => 'not_in:pilih',
+            'provinsi'   => 'required|not_in:pilih',
+            'kabupaten'  => 'required|not_in:pilih',
+            'kecamatan'  => 'required|not_in:pilih',
+            'kelurahan'  => 'required|not_in:pilih',
+            'ongkir'     => 'required|numeric',
         ]);
         DB::table('areas')->insert([
-            'provinsi'  => $request->provinsi,
-            'kabupaten' => $request->kabupaten,
-            'kecamatan' => $request->kecamatan,
-            'kelurahan' => $request->kelurahan,
-            'ongkir'    => $request->ongkir,
-            'created_at' => now('Asia/Jakarta'),
-        ]);
+                'provinsi'   => $request->provinsi,
+                'kabupaten'  => $request->kabupaten,
+                'kecamatan'  => $request->kecamatan,
+                'kelurahan'  => $request->kelurahan,
+                'ongkir'     => $request->ongkir,
+            ]);
         $session = [
-            'message' => 'Berhasil menambahkan area pengiriman!',
+            'message' => 'Berhasil menambah area pengiriman!',
             'type' => 'Tambah Area',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
@@ -64,12 +63,14 @@ class AreaController extends Controller
         return redirect()->route('su.area')->with($session);
     }
 
-    /**
+     /**
      * Display the specified resource.
      *
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
+
+  
     public function show(Area $area)
     {
         //
@@ -116,12 +117,12 @@ class AreaController extends Controller
                 'ongkir'     => $request->ongkir
             ]);
         $session = [
-            'message' => 'Berhasil mengedir area pengiriman!',
+            'message' => 'Berhasil mengubah area pengiriman!',
             'type' => 'Edit Area',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('area')->with($session);
+        return redirect()->route('su.area')->with($session);
     }
 
     /**
@@ -139,6 +140,6 @@ class AreaController extends Controller
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];
-        return redirect()->route('area')->with($session);
+        return redirect()->route('su.area')->with($session);
     }
 }

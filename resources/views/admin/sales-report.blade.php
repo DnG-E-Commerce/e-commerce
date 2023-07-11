@@ -67,7 +67,7 @@
                                                     class="text-xs font-weight-bold">{{ substr($order->created_at, 0, 10) }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $order->user->name }}</span>
+                                                <span class="text-xs font-weight-bold">{{ $order->user->name ? $order->user->name : '-' }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">Rp.

@@ -53,9 +53,9 @@
                                                     {{ number_format($data->ongkir, 0, '.', ',') }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <a href="{{ route('area.edit', ['area' => $data->id]) }}"
+                                                <a href="{{ route('su.area.edit', ['area' => $data->id]) }}"
                                                     class="btn btn-sm bg-gradient-warning">Edit</a>
-                                                <a href="{{ route('area.delete', ['area' => $data->id]) }}"
+                                                <a href="{{ route('su.area.delete', ['area' => $data->id]) }}"
                                                     class="btn btn-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda ingin menghapus data ini?')">Hapus</a>
                                             </td>
