@@ -1,5 +1,4 @@
 @extends('templates.main')
-
 @section('content')
     @if (Session::get('message'))
         <script>
@@ -7,22 +6,22 @@
                 $('#modal-notification').modal("show");
             })
         </script>
-        @production
-            <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
-                style="background-image: url('https://i.ibb.co/WpK2ThV/Whats-App-Image-2023-06-23-at-01-12-19-1.jpg'); background-position: cover;">
-                <span class="mask bg-gradient-dark opacity-6"></span>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5 text-center mx-auto">
-                            <h1 class="text-white mb-2 mt-5">Selamat datang </h1>
-                            <h2 class="text-white mb-2">{{ $user->name }}!</h2>
-                            <p class="text-lead text-white">Di Sistem Informasi E-Commerce D&G Store, Selamat Berbelanja</p>
-                        </div>
-                    </div>
+    @endif
+    <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg"
+        style="background-image: url('https://i.ibb.co/WpK2ThV/Whats-App-Image-2023-06-23-at-01-12-19-1.jpg'); background-position: cover;">
+        <span class="mask bg-gradient-dark opacity-6"></span>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-5 text-center mx-auto">
+                    <h1 class="text-white mb-2 mt-5">Selamat datang </h1>
+                    @if ($user)
+                        <h2 class="text-white mb-2">{{ $user->name }}</h2>
+                    @endif
+                    <p class="text-lead text-white">Di Sistem Informasi E-Commerce D&G Store, Selamat Berbelanja</p>
                 </div>
             </div>
-        @endonce
-    @endif
+        </div>
+    </div>
     <div class="container">
         @if ($user)
             @foreach ($top_resellers as $tr)

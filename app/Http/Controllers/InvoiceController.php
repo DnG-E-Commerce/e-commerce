@@ -316,15 +316,15 @@ class InvoiceController extends Controller
         );
         curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
 
-       //for debug only!
+        //for debug only!
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
 
         curl_exec($curl);
         curl_close($curl);
-     }
-     
+    }
+
     public function sendWhatsapp($id)
     {
         $invoice = Invoice::where('id', $id)->first();
@@ -492,5 +492,38 @@ class InvoiceController extends Controller
         $pdf = App::make('dompdf.wrapper');
         $pdf->loadHTML($html);
         return $pdf->stream();
+    }
+
+    public function delete(Invoice $invoice)
+    {
+        if (in_array($invoice->status, ['Pending', 'Belum Lunas'])) {
+            foreach ($invoice->order as $key => $order) {
+                if ($order->status != 'Dipesan') {
+                    $session = [
+                        'message' => "Anda tidak dapat menghapus pesanan yang telah $order->status!",
+                        'type' => 'Menghapus Orderan',
+                        'alert' => 'Notifikasi gagal!',
+                        'class' => 'danger'
+                    ];
+                    return redirect()->route('us.invoice')->with($session);
+                }
+                if (in_array($invoice->payment_method, ['cod', 'transfer'])) {
+                    $product = Product::where('id', $order->product_id)->first();
+                    DB::table('products')->where('id', $product->id)
+                        ->update([
+                            'qty' => $product->qty + $order->qty
+                        ]);
+                }
+                DB::table('orders')->delete($order->id);
+            }
+            DB::table('invoices')->delete($invoice->id);
+            $session = [
+                'message' => 'Berhasil membatalkan orderan!',
+                'type' => 'Menghapus Orderan',
+                'alert' => 'Notifikasi berhasil!',
+                'class' => 'success'
+            ];
+            return redirect()->route('us.order')->with($session);
+        }
     }
 }

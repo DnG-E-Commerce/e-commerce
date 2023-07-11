@@ -32,6 +32,10 @@ class DriverController extends Controller
             'photo' => 'required|image|max:8149',
         ]);
         $photo = $request->file('photo')->store('confirmation');
+        DB::table('invoices')->where('id', $invoice->id)
+            ->update([
+                'status' => 'Lunas'
+            ]);
         DB::table('orders')->where('invoice_id', $invoice->id)
             ->update([
                 'status' => 'Diterima'
