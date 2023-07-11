@@ -33,7 +33,7 @@
                                 @enderror
                             </div>
                             <div class="form-group mb-3">
-                                <label for="desc">Harga Produk (Untuk Reseller) <span
+                                <label for="desc">Harga Produk Untuk Reseller) <span
                                         class="text-danger">*</span></label>
                                 <input type="number" name="reseller_price" class="form-control"
                                     value="{{ old('price') }}">

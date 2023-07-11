@@ -143,7 +143,8 @@ class AdminController extends Controller
     {
         $user = auth()->user();
         if ($request->fromDate_transaction) {
-            $order = Order::whereBetween('created_at', [$request->fromDate_transaction, $request->toDate_transaction])->get();
+            $order = Order::whereBetween('orders.created_at', [$request->fromDate_transaction, $request->toDate_transaction])
+                ->get();
         } else {
             $order = Order::all();
         }
@@ -154,13 +155,15 @@ class AdminController extends Controller
                 ->where('orders.status', '!=', null)
                 ->whereBetween('orders.created_at', [$request->fromDate_product, $request->toDate_product])
                 ->groupBy('products.id', 'products.name')
+                ->orderBy('products.name', 'asc')
                 ->get();
         } else {
             $product = Product::select('products.name', DB::raw('SUM(orders.qty) as total_penjualan'))
                 ->join('orders', 'products.id', '=', 'orders.product_id')
                 ->where('orders.status', '!=', null)
                 ->groupBy('products.id', 'products.name')
-                ->get();;
+                ->orderBy('products.name', 'asc')
+                ->get();
         }
         return view('admin.sales-report', [
             'title' => 'DnG Store | Laporan Penjualan',

@@ -286,7 +286,6 @@ class InvoiceController extends Controller
                 'qty_status' => $product->qty - $order->qty == 0 ? 'Habis' : $product->qty_status,
             ]);
         }
-        
         $this->sendWhatsappp($invoice->id);
     }
 
@@ -325,7 +324,7 @@ class InvoiceController extends Controller
         curl_exec($curl);
         curl_close($curl);
      }
-
+     
     public function sendWhatsapp($id)
     {
         $invoice = Invoice::where('id', $id)->first();
