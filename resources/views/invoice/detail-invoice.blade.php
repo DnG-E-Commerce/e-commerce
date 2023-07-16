@@ -108,7 +108,7 @@
                         </div>
                     </div>
                     @foreach ($invoice->order as $key => $order)
-                        @if ($order->status == 'Dikirim' && !$invoice->is_recive)
+                        @if ($order->status == 'Dikirim' && !$invoice->is_recive || $order->status == 'Diterima' && !$invoice->is_recive)
                             <a href="{{ route('us.invoice.recive', ['invoice' => $invoice->id]) }}"
                                 class="btn btn-sm bg-gradient-success"
                                 onclick="return confirm('Apakah betul anda telah menerima pesanan?')">Menerima

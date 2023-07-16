@@ -31,26 +31,40 @@
                     @endif
                     @foreach ($invoices as $key => $invoice)
                         <div class="card shadow-lg mb-3">
+                            <div class="card-header">
+                                <div class="float-end">
+                                    <div class="dropdown">
+                                        <button class="fa-solid fa-ellipsis-vertical" type="button"
+                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                        </button>
+                                        <ul class="dropdown-menu">
+                                            <li><a class="dropdown-item"
+                                                    href="{{ route('us.invoice.delete', ['invoice' => $invoice->id]) }}"
+                                                    onclick="return confirm('Apakah anda ingin membatalkan pesanan ini?')">Batalkan</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="d-flex gap-3">
+                                    <h5 class="card-title">{{ $invoice->invoice_code }}</h5>
+                                    @if ($invoice->status == 'Pending')
+                                        <label for="status" class="badge badge-sm bg-gradient-secondary">Pending</label>
+                                    @else
+                                        @if ($invoice->status == 'Belum Lunas')
+                                            <label for="status" class="badge badge-sm bg-gradient-danger">Belum
+                                                Lunas</label>
+                                        @else
+                                            @if ($invoice->status == 'Lunas')
+                                                <label for="status"
+                                                    class="badge badge-sm bg-gradient-success">Lunas</label>
+                                            @endif
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-lg-8">
-                                        <div class="d-flex gap-3">
-                                            <h5 class="card-title">{{ $invoice->invoice_code }}</h5>
-                                            @if ($invoice->status == 'Pending')
-                                                <label for="status"
-                                                    class="badge badge-sm bg-gradient-secondary">Pending</label>
-                                            @else
-                                                @if ($invoice->status == 'Belum Lunas')
-                                                    <label for="status" class="badge badge-sm bg-gradient-danger">Belum
-                                                        Lunas</label>
-                                                @else
-                                                    @if ($invoice->status == 'Lunas')
-                                                        <label for="status"
-                                                            class="badge badge-sm bg-gradient-success">Lunas</label>
-                                                    @endif
-                                                @endif
-                                            @endif
-                                        </div>
                                         </p>
                                         <div class="row gap-3 g-3 align-items-center mb-3">
                                             <div class="col-4">

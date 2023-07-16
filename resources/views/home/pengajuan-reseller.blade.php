@@ -36,6 +36,31 @@
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-sm bg-gradient-success">Ajukan</button>
                             </div>
+                            <p><small class="text-danger">*</small> Syarat & Ketentuan</p>
+                            <ul class="list-group-numbered">
+                                <li class="list-group-item">
+                                    Pengajuan Reseller hanya akan di approve apabila customer telah melakuakan pembelian
+                                    lebih dari 20x serta tiap pembeliannya melebihi Rp. 200.000
+                                </li>
+                                <li class="list-group-item">
+                                    Customer WAJIB mengirim foto tampak depan toko apabila ingin mengajukan sebagai reseller
+                                </li>
+                                <li class="list-group-item">
+                                    Customer WAJIB mengirim nama daro toko apabila ingin mengajukan sebagai reseller
+                                </li>
+                                <li class="list-group-item">
+                                    Apabila customer pernah mengajukan pengajuan menjadi reseller, maka data terbaru yang
+                                    akan dijadikan patokan untuk direview
+                                </li>
+                                <li class="list-group-item">
+                                    Setiap Customer yang mendapatkan rekomendasi untuk menjadi reseller hanya dapat
+                                    mengajukannya sekali!
+                                </li>
+                                <li class="list-group-item">
+                                    Apabila pengajuan ditolak, maka customer dapat mengajukan kembali pengajuan menjadi
+                                    reseller pada lain waktu
+                                </li>
+                            </ul>
                         </form>
                     </div>
                 </div>
