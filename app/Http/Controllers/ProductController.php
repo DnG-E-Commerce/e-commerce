@@ -217,7 +217,7 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function delete($id)
+    public function destroy($id)
     {
         DB::table('products')->delete($id);
         $session = [
@@ -227,5 +227,35 @@ class ProductController extends Controller
             'class' => 'success'
         ];
         return redirect()->route('su.product')->with($session);
+    }
+
+    public function delete($id)
+    {
+        try {
+            $Produk = Product::findOrFail($id);
+            
+            // Cek apakah ada relasi produk yang terhubung dengan kategori ini
+            if ($Produk->order()->exists()) {
+                throw new \Exception('Tidak dapat menghapus kategori ini karena masih terhubung dengan produk.');
+                
+            }
+            
+            $Produk->delete();
+            $session = [
+                'message' => 'Berhasil menghapus produk!',
+                'type' => 'Hapus Produk',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            return redirect()->route('su.product')->with($session);
+        } catch (\Exception) {
+            $session= [
+                'message' => 'Tidak dapat menghapus produk ini karena masih terhubung dengan pesanan',
+                'type' => 'Hapus Produk',
+                'alert' => 'Notifikasi Gagal!',
+                'class' => 'success'
+            ];
+            return redirect()->back()->with($session);
+        }
     }
 }

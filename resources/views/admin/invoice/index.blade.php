@@ -26,6 +26,9 @@
                                             Invoice Code</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                           Tanggal</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Grand Total</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -49,6 +52,9 @@
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
+                                            </td>
+                                            <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{ $invoice->created_at }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">Rp.
@@ -77,7 +83,7 @@
                                         </td>
                                         <td class="align-middle text-sm">
                                             <a href="{{ route('su.invoice.detail', ['invoice' => $invoice->id]) }}"
-                                                class="btn btn-sm bg-gradient-primary">Detail</a>
+                                                class="btn btn-sm bg-gradient-primary">Tracking</a>
                                             <a href="{{ route('su.invoice.print_pdf', ['invoice' => $invoice->id]) }}"
                                                 class="btn btn-sm bg-gradient-primary" target="_blank">Cetak Invoice</a>
                                         </td>

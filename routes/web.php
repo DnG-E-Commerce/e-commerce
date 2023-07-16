@@ -172,12 +172,12 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::get('/us/invoice/recive/{invoice}', 'confirmRecive')->name('us.invoice.recive');
 });
 
+Route::post('/su/area/simpan', [AreaController::class, 'simpan'])->name('su.area.simpan');
 Route::controller(AreaController::class)->group(function () {
     Route::get('/su/area/create', 'create')->name('su.area.create');
     Route::get('/su/area/{area}', 'edit')->name('su.area.edit');
     Route::get('/su/area/delete/{area}', 'destroy')->name('su.area.delete');
-
-    Route::post('/su/area/store', 'store')->name('su.area.store');
+    
     Route::put('/su/area/edit/{area}', 'update')->name('su.area.update');
 });
 

@@ -53,6 +53,9 @@
                                             Nama Pelanggan</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Status Pelanggan</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Total Harga</th>
                                     </tr>
                                 </thead>
@@ -68,9 +71,14 @@
                                             </td>
                                             <td class="align-middle text-sm">
                                             <span class="text-xs font-weight-bold">{{ $order->user->name }}
-                                                    ({{ $order->user->role }})
+                                                    
                                                 </span>
                                             </td>
+                                            <td class="align-middle text-sm">
+                                            <span class="text-xs font-weight-bold">{{ $order->user->role }}    
+                                                </span>
+                                            </td>
+                                            
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">Rp.
                                                     {{ number_format($order->total, 0, ',', '.') }}</span>
@@ -86,7 +94,8 @@
                                     array_push($salesReportTotal, $order->total);
                                 }
                             @endphp
-                            <h5>Total : Rp. {{ array_sum($salesReportTotal) }}</h5>
+                            
+                            <h5>Total : Rp. {{ number_format(array_sum($salesReportTotal), 0, ',', '.')  }}</h5>
                         </div>
                     </div>
                 </div>

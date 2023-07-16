@@ -12,6 +12,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 class Product extends Model
 {
     use HasFactory;
+    protected $table = 'products';
     protected $guarded = [];
 
     public function category(): BelongsTo
@@ -21,6 +22,17 @@ class Product extends Model
 
     public function order(): HasMany
     {
-        return $this->hasMany(Order::class);
+        return $this->hasMany(Order::class, 'product_id');
+    }
+
+    public function delete()
+    {
+        // Cek apakah ada relasi produk yang terhubung dengan kategori ini
+        if ($this->order()->exists()) {
+            throw new \Exception('Tidak dapat menghapus kategori ini karena masih terhubung dengan produk.');
+        }
+
+        // Hapus data master jika tidak ada relasi
+        return parent::delete();
     }
 }

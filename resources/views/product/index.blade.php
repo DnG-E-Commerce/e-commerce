@@ -41,6 +41,10 @@
                                             Harga Reseller</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            Status</th>
+                                        <th
+                                        <th
+                                            class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                             Kategori</th>
                                         <th
                                             class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -48,17 +52,22 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                
                                     @foreach ($products as $key => $data)
                                         <tr>
                                             <td>
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
-                                            <td>
-                                                <h6 class="mb-0 text-sm">{{ $data->name }}</h6>
+                                            
+                                            <td class="align-middle text-sm">
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ $data->name }}</span>
                                             </td>
-                                            <td>
-                                                <p class="text-xs font-weight-bold">{{ !$data->qty ? '-' : $data->qty }}</p>
+                                            <td class="align-middle text-sm">
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ !$data->qty ? '-' : $data->qty }}</span>
                                             </td>
+                                            
                                             <td class="align-middle text-center text-sm">
                                                 <span
                                                     class="text-secondary text-xs font-weight-bold">{{ !$data->uom ? '-' : $data->uom }}</span>
@@ -71,6 +80,11 @@
                                                 <span class="text-secondary text-xs font-weight-bold">Rp.
                                                     {{ number_format($data->reseller_price, 0, ',', '.') }}</span>
                                             </td>
+                                            <td class="align-end text-center text-sm">
+                                                <span
+                                                    class="text-secondary text-xs font-weight-bold">{{ $data->special_status }}</span>
+                                            </td>
+                                            
                                             <td class="align-end text-center text-sm">
                                                 <span
                                                     class="text-secondary text-xs font-weight-bold">{{ $data->category }}</span>

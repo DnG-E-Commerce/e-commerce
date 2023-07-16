@@ -38,8 +38,17 @@ class AreaController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+
+    // public function store1(Request $request){
+    //     return dd('hi');
+    // }
+    // public function simpan(Request $request)
+    // {
+    //     return dd($request->all());
+    // }
+    public function simpan(Request $request)
     {
+        // return dd($request->all());
         $request->validate([
             'provinsi'   => 'required|not_in:pilih',
             'kabupaten'  => 'required|not_in:pilih',
@@ -131,7 +140,7 @@ class AreaController extends Controller
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Area $area)
+    public function delete(Area $area)
     {
         DB::table('areas')->delete($area->id);
         $session = [
@@ -141,5 +150,35 @@ class AreaController extends Controller
             'class' => 'success'
         ];
         return redirect()->route('su.area')->with($session);
+    }
+
+    public function destroy($id)
+    {
+        try {
+            $Area = Area::findOrFail($id);
+            
+            // Cek apakah ada relasi produk yang terhubung dengan kategori ini
+            if ($Area->invoice()->exists()) {
+                throw new \Exception('Tidak dapat menghapus kategori ini karena masih terhubung dengan produk.');
+                
+            }
+            
+            $Area->delete();
+            $session = [
+                'message' => 'Berhasil menghapus area!',
+                'type' => 'Hapus Area',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            return redirect()->route('su.area')->with($session);
+        } catch (\Exception) {
+            $session= [
+                'message' => 'Tidak dapat menghapus data area ini karena masih terhubung dengan invoice',
+                'type' => 'Hapus Area',
+                'alert' => 'Notifikasi Gagal!',
+                'class' => 'success'
+            ];
+            return redirect()->back()->with($session);
+        }
     }
 }

@@ -7,11 +7,13 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('su.area') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h4>Tambah Data Area</h4>
+                        <h4>Tambah Data Area Pengiriman</h4>
                     </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('su.area.store') }}" method="post" enctype="multipart/form-data">
+                    
+                        <form action="{{ route('su.area.simpan') }}" method="POST">
                             @csrf 
+
                             <label for="status">Alamat<span class="text-danger">*</span></label>
                             <hr class="border border-1 border-dark">
                             <div class="row">
@@ -65,7 +67,7 @@
                                 @enderror
                             </div>
                             <div class="d-grid">
-                                <button type="submit" class="btn btn-sm btn-success">Tambah</button>
+                                <input type="submit" value="submit" class="btn btn-sm btn-success"/>
                             </div>
                             <small>
                                 <ul>

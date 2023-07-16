@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Category;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -128,7 +129,8 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+
+    public function delete($id)
     {
         DB::table('categories')->delete($id);
         $session = [
@@ -139,4 +141,35 @@ class CategoryController extends Controller
         ];
         return redirect()->route('su.category')->with($session);
     }
+
+    public function destroy($id)
+    {
+        try {
+            $kategoriProduk = Category::findOrFail($id);
+            
+            // Cek apakah ada relasi produk yang terhubung dengan kategori ini
+            if ($kategoriProduk->products()->exists()) {
+                throw new \Exception('Tidak dapat menghapus kategori ini karena masih terhubung dengan produk.');
+                
+            }
+            
+            $kategoriProduk->delete();
+            $session = [
+                'message' => 'Berhasil menghapus kategori!',
+                'type' => 'Hapus Kategori',
+                'alert' => 'Notifikasi Sukses!',
+                'class' => 'success'
+            ];
+            return redirect()->route('su.category')->with($session);
+        } catch (\Exception) {
+            $session= [
+                'message' => 'Tidak dapat menghapus kategori ini karena masih terhubung dengan produk',
+                'type' => 'Hapus Kategori',
+                'alert' => 'Notifikasi Gagal!',
+                'class' => 'success'
+            ];
+            return redirect()->back()->with($session);
+        }
+    }
+    
 }

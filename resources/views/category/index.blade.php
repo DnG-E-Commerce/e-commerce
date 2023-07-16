@@ -46,9 +46,9 @@
                                                 <a class="btn btn-sm bg-gradient-warning"
                                                     href="{{ route('su.category.edit', ['category' => $data->id]) }}">Edit</a>
                                                 <a href="{{ route('su.category.delete', ['category' => $data->id]) }}"
-                                                    class="btn btn-sm bg-gradient-danger">
+                                                    class="btn btn-sm bg-gradient-danger"
+                                                    onclick="return confirm('Apakah anda yakin ingin menghapus data {{ $data->category }} ?')">
                                                     Hapus
-                                                </a>
                                             </td>
                                         </tr>
                                     @endforeach

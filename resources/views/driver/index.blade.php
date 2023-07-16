@@ -19,7 +19,7 @@
                 <div class="table-responsive p-0">
                     <table class="table table-stripped table-hover" id="table_driver">
                         <thead>
-                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 No</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Invoice Code</th>
@@ -33,18 +33,21 @@
                                 Opsi</th>
                         </thead>
                         <tbody>
+                        <?php $no=1;?>
                             @foreach ($invoices as $key => $invoice)
                                 @foreach ($invoice->order as $i => $order)
                                     @if (in_array($order->status, ['Dikirim', 'Diterima']))
                                         <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
+                                           
+                                            <td class="align-middle text-sm">
+                                                <span class="text-center font-weight-bold ">{{$no++}}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $invoice->grand_total }}</span>
+                                                <span class="text-xs font-weight-bold"> Rp.
+                                                    {{ number_format($invoice->grand_total, 0, ',', '.') }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $invoice->status }}</span>
