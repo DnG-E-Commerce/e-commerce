@@ -48,6 +48,8 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/us/cart', 'cart')->name('us.cart');
     Route::get('/us/order', 'order')->name('us.order');
     Route::get('/us/notification', 'notification')->name('us.notification');
+
+    Route::post('/us/notification/read', 'hasBeenRead')->name('us.notification.read');
 });
 
 Route::controller(AdminController::class)->group(function () {
@@ -178,7 +180,7 @@ Route::controller(AreaController::class)->group(function () {
     Route::get('/su/area/create', 'create')->name('su.area.create');
     Route::get('/su/area/{area}', 'edit')->name('su.area.edit');
     Route::get('/su/area/delete/{area}', 'destroy')->name('su.area.delete');
-    
+
     Route::put('/su/area/edit/{area}', 'update')->name('su.area.update');
 });
 

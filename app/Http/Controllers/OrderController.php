@@ -250,6 +250,29 @@ class OrderController extends Controller
             ->update([
                 'status' => $request->status
             ]);
+        if ($request->status == 'Dikonfirmasi/Dikemas') {
+            DB::table('notifications')->insert([
+                'user_id' => $invoice->user_id,
+                'title' => 'Pesanan Dikonfirmasi/Dikemas',
+                'message' => "Pesanan anda telah dikonfirmasi oleh admin! dan pesanan anda sedang disiapkan",
+                'is_read' => 0,
+                'created_at' => now('Asia/Jakarta'),
+            ]);
+        } else if ($request->status == 'Dikirim') {
+            DB::table('notifications')->insert([
+                'user_id' => $invoice->user_id,
+                'title' => 'Pesanan telah dikirim',
+                'message' => "Pesanan anda telah dikirim oleh admin! harap menunggu dengan sabar",
+                'is_read' => 0,
+                'created_at' => now('Asia/Jakarta'),
+            ]);
+        }
+        // switch ($request->status) {
+        //     case 'Dikonfimasi/Dikemas':
+        //         break;
+        //     case 'Dikirim':
+        //         break;
+        // }
         $session = [
             'message' => 'Berhasil mengupdate status pesanan!',
             'type' => 'Update Status Pesanan',

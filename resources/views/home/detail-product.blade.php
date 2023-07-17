@@ -36,8 +36,22 @@
                                             <span
                                                 class="badge badge-sm bg-gradient-danger">{{ $product->qty_status }}</span>
                                         @endif
-                                        <span
-                                            class="badge badge-sm bg-gradient-primary">{{ $product->special_status }}</span>
+                                        @switch($product->special_status)
+                                            @case('Biasa')
+                                                <span
+                                                    class="badge badge-sm bg-gradient-success">{{ $product->special_status }}</span>
+                                            @break
+
+                                            @case('Pre Order')
+                                                <span
+                                                    class="badge badge-sm bg-gradient-primary">{{ $product->special_status }}</span>
+                                            @break
+
+                                            @case('Limited Edition')
+                                                <span
+                                                    class="badge badge-sm bg-gradient-secondary">{{ $product->special_status }}</span>
+                                            @break
+                                        @endswitch
                                     </div>
                                 </h4>
                                 <hr class="border border-1 border-dark">

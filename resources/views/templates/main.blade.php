@@ -34,7 +34,7 @@
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg position-sticky top-0 z-index-3 w-100 shadow-none bg-dark">
+    {{-- <nav class="navbar navbar-expand-lg position-sticky top-0 z-index-3 w-100 shadow-none bg-dark">
         <div class="container">
             <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-white" href="{{ route('us.home') }}">
                 DnG Store
@@ -83,7 +83,6 @@
                                             <a class="dropdown-item" href="{{ route('us.notification') }}">Lihat
                                                 lebih...</a>
                                         </li>
-
                                     </ol>
                                 </div>
                                 <div class="dropdown">
@@ -121,7 +120,81 @@
                 </ul>
             </div>
         </div>
+    </nav> --}}
+
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark position-sticky top-0 z-index-3 shadow">
+        <div class="container">
+            <a class="navbar-brand text-white" href="#">D&G Store | E Commerce</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('us.home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('us.profile') }}">Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('us.invoice') }}">Pesanan</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('us.cart') }}">Keranjang</a>
+                    </li>
+                </ul>
+                @if ($menu == 'home')
+                    <form action="" method="get" class="border border-dark me-5">
+                        <div class="input-group">
+                            <input class="form-control border-none" type="search" placeholder="Search" name="search"
+                                aria-label="Search">
+                            <button class="input-group-text bg-success" type="submit">Search</button>
+                        </div>
+                    </form>
+                @endif
+                <div class="d-flex gap-3">
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                        @if ($user->role == 'Customer')
+                            @if (!$notifications->where('title', 'Tawaran Menjadi Reseller'))
+                                <li class="nav-item me-4">
+                                    <a class="nav-link text-white" href="{{ route('us.apply-request-reseller') }}">
+                                        <i class="fa-solid fa-angles-up"></i></a>
+                                </li>
+                            @endif
+                        @endif
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                <i class="fa-solid fa-bell text-white"></i>
+                            </a>
+                            <ol class="dropdown-menu dropdown-menu-dark">
+                                @foreach ($notifications as $key => $n)
+                                    <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                        <div class="ms-2 me-auto">
+                                            <div class="fw-bold">{{ $n->title }}</div>
+                                            {{ substr($n->message, 0, 15) }} ...
+                                        </div>
+                                        <span class="badge bg-primary rounded-pill">New</span>
+                                    </li>
+                                @endforeach
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('us.notification') }}">Lihat
+                                        lebih...</a>
+                                </li>
+                            </ol>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('logout') }}"><i
+                                    class="fa-solid fa-right-from-bracket"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </nav>
+
     <!-- End Navbar -->
     <main class="main-content mt-0">
         @yield('content')

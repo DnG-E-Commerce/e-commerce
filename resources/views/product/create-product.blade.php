@@ -58,10 +58,6 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
-                            <!-- <div class="form-group mb-3">
-                                <label for="weight">Ukuran Produk<span class="text-danger">*</span></label>
-                                <input type="number" name="weight" class="form-control">
-                            </div> -->
                             <div class="form-group mb-3">
                                 <label for="qty">Stok Produk</label><span class="text-danger">*</span></label>
                                 <input type="number" name="qty" class="form-control">

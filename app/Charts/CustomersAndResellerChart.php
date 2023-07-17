@@ -30,11 +30,10 @@ class CustomersAndResellerChart
         $data = [];
         foreach ($users as $u => $user) {
             array_push($XAxis, $user->name);
-            array_push($data, $user->total_order);
+            array_push($data, intval($user->total_order));
         }
         return $this->chart->pieChart()
-            ->addData($data)
-            ->setLabels($XAxis)
-            ->setXAxis($XAxis);
+            ->addPieces($data)
+            ->setLabels($XAxis);
     }
 }

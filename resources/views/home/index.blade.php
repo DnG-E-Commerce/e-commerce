@@ -39,8 +39,7 @@
                                             <h3>{{ $sp->name }}</h3>
                                             <p class="fst-italic">{{ substr($sp->desc, 0, 50) . '.....' }}</p>
                                             <a href="{{ route('us.product.detail', ['product' => $sp->id]) }}"
-                                                class="text-primary">Lihat Lebih Detail <i
-                                                    class="fa fa-arrow-right"></i></a>
+                                                class="btn btn-sm bg-gradient-primary">Detail</a>
                                         </div>
                                     </div>
                                 @endforeach
@@ -66,7 +65,7 @@
                                     <h3>{{ $product->name }}</h3>
                                     <p class="fst-italic">{{ substr($product->desc, 0, 50) . '.....' }}</p>
                                     <a href="{{ route('us.product.detail', ['product' => $product->id]) }}"
-                                        class="text-primary">Lihat Lebih Detail <i class="fa fa-arrow-right"></i></a>
+                                        class="btn btn-sm bg-gradient-primary">Detail</a>
                                 </div>
                             </div>
                         @endif
@@ -96,4 +95,26 @@
             </div>
         </div>
     </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#reject_request').click(function() {
+                const id = $('#reject_request').data('id-been-rejected')
+                $.ajax({
+                    url: `{{ route('us.notification.read') }}`,
+                    type: `POST`,
+                    data: {
+                        _token: `{{ csrf_token() }}`,
+                        id: id
+                    },
+                    success: function(response) {
+                        $('#modal-notification').modal('hide')
+                    },
+                    error: function(error) {
+                        console.log(error)
+                    }
+                })
+            })
+        })
+    </script>
 @endsection

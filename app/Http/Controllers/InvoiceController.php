@@ -59,27 +59,6 @@ class InvoiceController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Invoice  $invoice
@@ -179,10 +158,28 @@ class InvoiceController extends Controller
                 break;
 
             case 'cod':
+                if ($request->provinsi == 'Pilih') {
+                    $session = [
+                        'message' => 'Harap lengkapi data alamat!',
+                        'type' => 'Proses Gagal!',
+                        'alert' => 'Notifikasi gagal!',
+                        'class' => 'danger'
+                    ];
+                    return redirect()->back()->with($session);
+                }
                 $this->handleCOD($request->all(), $invoice->id);
                 break;
 
             case 'transfer':
+                if ($request->provinsi == 'Pilih') {
+                    $session = [
+                        'message' => 'Harap lengkapi data alamat!',
+                        'type' => 'Proses Gagal!',
+                        'alert' => 'Notifikasi gagal!',
+                        'class' => 'danger'
+                    ];
+                    return redirect()->back()->with($session);
+                }
                 $this->handleTransfer($request->all(), $invoice->id);
                 break;
         }
@@ -371,12 +368,6 @@ class InvoiceController extends Controller
         return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
     }
 
-
-    public function destroy(Invoice $invoice)
-    {
-        //
-    }
-
     public function confirmCash(Invoice $invoice)
     {
         foreach ($invoice->order as $order) {
@@ -402,7 +393,7 @@ class InvoiceController extends Controller
             'alert' => 'Notifikasi berhasil!',
             'class' => 'success'
         ];
-        return redirect()->route('su.order')->with($session);
+        return redirect()->route('su.invoice.detail', ['invoice' => $invoice->id])->with($session);
     }
 
     public function print_pdf(Invoice $invoice)

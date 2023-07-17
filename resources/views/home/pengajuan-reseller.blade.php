@@ -12,8 +12,8 @@
                     <div class="card-body mt-0">
                         <div class="row justify-content-center">
                             <div class="d-grid p-2 col-6">
-                                <img src="" style="object-fit: cover; border:1px solid black" class="img-fluid"
-                                    id="instance_photo">
+                                <img src="{{ asset('storage/image/blank.jpg') }}"
+                                    style="object-fit: cover; border:1px solid black" class="img-fluid" id="instance_photo">
                             </div>
                         </div>
                         <form action="{{ route('su.customer.request.store', ['user' => $user->id]) }}" method="post"

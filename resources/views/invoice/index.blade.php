@@ -33,105 +33,104 @@
                         <div class="card shadow-lg mb-3">
                             <div class="card-header">
                                 <div class="float-end">
-                                    <div class="dropdown">
-                                        <button class="fa-solid fa-ellipsis-vertical" type="button"
-                                            data-bs-toggle="dropdown" aria-expanded="false">
-                                        </button>
-                                        <ul class="dropdown-menu">
-                                            <li><a class="dropdown-item"
-                                                    href="{{ route('us.invoice.delete', ['invoice' => $invoice->id]) }}"
+                                    @if ($invoice->payment_method != 'transfer')
+                                        @foreach ($invoice->order as $order)
+                                            @if ($order->status == 'Dipesan')
+                                                <a href="{{ route('us.invoice.delete', ['invoice' => $invoice->id]) }}"
+                                                    class="btn btn-sm bg-gradient-danger"
                                                     onclick="return confirm('Apakah anda ingin membatalkan pesanan ini?')">Batalkan</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <div class="d-flex gap-3">
-                                    <h5 class="card-title">{{ $invoice->invoice_code }}</h5>
-                                    @if ($invoice->status == 'Pending')
-                                        <label for="status" class="badge badge-sm bg-gradient-secondary">Pending</label>
-                                    @else
-                                        @if ($invoice->status == 'Belum Lunas')
-                                            <label for="status" class="badge badge-sm bg-gradient-danger">Belum
-                                                Lunas</label>
-                                        @else
-                                            @if ($invoice->status == 'Lunas')
-                                                <label for="status"
-                                                    class="badge badge-sm bg-gradient-success">Lunas</label>
                                             @endif
+                                        @break
+                                    @endforeach
+                                @endif
+                            </div>
+                            <div class="d-flex gap-3">
+                                <h5 class="card-title">{{ $invoice->invoice_code }}</h5>
+                                @if ($invoice->status == 'Pending')
+                                    <label for="status" class="badge badge-sm bg-gradient-secondary">Pending</label>
+                                @else
+                                    @if ($invoice->status == 'Belum Lunas')
+                                        <label for="status" class="badge badge-sm bg-gradient-danger">Belum
+                                            Lunas</label>
+                                    @else
+                                        @if ($invoice->status == 'Lunas')
+                                            <label for="status"
+                                                class="badge badge-sm bg-gradient-success">Lunas</label>
                                         @endif
                                     @endif
-                                </div>
+                                @endif
                             </div>
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-lg-8">
-                                        </p>
-                                        <div class="row gap-3 g-3 align-items-center mb-3">
-                                            <div class="col-4">
-                                                <label for="total" class="col-form-label">Ongkir</label>
-                                            </div>
-                                            <div class="col-4">
-                                                <h5>Rp. {{ number_format($invoice->ongkir, 0, ',', '.') }}</h5>
-                                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    </p>
+                                    <div class="row gap-3 g-3 align-items-center mb-3">
+                                        <div class="col-4">
+                                            <label for="total" class="col-form-label">Ongkir</label>
                                         </div>
-                                        <div class="row gap-3 g-3 align-items-center mb-3">
-                                            <div class="col-4">
-                                                <label for="total" class="col-form-label">Grand Total</label>
-                                            </div>
-                                            <div class="col-4">
-                                                <h5>Rp. {{ number_format($invoice->grand_total, 0, ',', '.') }}</h5>
-                                            </div>
+                                        <div class="col-4">
+                                            <h5>Rp. {{ number_format($invoice->ongkir, 0, ',', '.') }}</h5>
                                         </div>
-                                        <div class="row gap-3 g-3 align-items-center mb-3">
-                                            <div class="col-4">
-                                                <label for="total" class="col-form-label">Status Barang</label>
-                                            </div>
-                                            <div class="col-4">
-                                                @foreach ($invoice->order as $key => $o)
-                                                    @if ($key == 0)
-                                                        <h5>{{ $o->status }}</h5>
-                                                    @break
-                                                @endif
-                                            @endforeach
+                                    </div>
+                                    <div class="row gap-3 g-3 align-items-center mb-3">
+                                        <div class="col-4">
+                                            <label for="total" class="col-form-label">Grand Total</label>
                                         </div>
+                                        <div class="col-4">
+                                            <h5>Rp. {{ number_format($invoice->grand_total, 0, ',', '.') }}</h5>
+                                        </div>
+                                    </div>
+                                    <div class="row gap-3 g-3 align-items-center mb-3">
+                                        <div class="col-4">
+                                            <label for="total" class="col-form-label">Status Barang</label>
+                                        </div>
+                                        <div class="col-4">
+                                            @foreach ($invoice->order as $key => $o)
+                                                @if ($key == 0)
+                                                    <h5>{{ $o->status }}</h5>
+                                                @break
+                                            @endif
+                                        @endforeach
                                     </div>
                                 </div>
                             </div>
-                            <div class="float-end">
-                                @if ($invoice->status == 'Pending')
-                                    <a href="{{ route('us.invoice.edit', ['invoice' => $invoice->id]) }}"
-                                        class="btn btn-sm bg-gradient-warning">Lakukan
-                                        Pembayaran</a>
-                                @endif
-                                <a href="{{ route('us.invoice.show', ['invoice' => $invoice->id]) }}"
-                                    class="btn btn-sm bg-gradient-primary">Detail
-                                    Invoice</a>
-                            </div>
+                        </div>
+                        <div class="float-end">
+                            @if ($invoice->status == 'Pending')
+                                <a href="{{ route('us.invoice.edit', ['invoice' => $invoice->id]) }}"
+                                    class="btn btn-sm bg-gradient-warning">Lakukan
+                                    Pembayaran</a>
+                            @endif
+                            <a href="{{ route('us.invoice.show', ['invoice' => $invoice->id]) }}"
+                                class="btn btn-sm bg-gradient-primary">Detail
+                                Invoice</a>
                         </div>
                     </div>
-                @endforeach
-            </form>
-        </div>
+                </div>
+            @endforeach
+        </form>
     </div>
+</div>
 </div>
 {{-- Modal Notification --}}
 <div class="modal fade" id="modal-notification" tabindex="-1" role="dialog" aria-labelledby="modal-notification"
-    aria-hidden="true">
-    <div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h6 class="modal-title" id="modal-title-notification">{{ Session::get('type') }}</h6>
-                <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="py-3 text-center">
-                    <i class="ni ni-bell-55 ni-3x"></i>
-                    <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
-                    <p>{{ Session::get('message') }}</p>
-                </div>
+aria-hidden="true">
+<div class="modal-dialog modal-danger modal-dialog-centered modal-" role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h6 class="modal-title" id="modal-title-notification">{{ Session::get('type') }}</h6>
+            <button type="button" class="bg-danger btn-close" data-bs-dismiss="modal" aria-label="Close">
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="py-3 text-center">
+                <i class="ni ni-bell-55 ni-3x"></i>
+                <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
+                <p>{{ Session::get('message') }}</p>
             </div>
         </div>
     </div>
+</div>
 </div>
 @endsection
