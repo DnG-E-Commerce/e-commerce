@@ -26,6 +26,7 @@ class CustomersAndResellerChart
             ->orderByDesc('total_order')
             ->limit(10)
             ->get();
+            
         $XAxis = [];
         $data = [];
         foreach ($users as $u => $user) {

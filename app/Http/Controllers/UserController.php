@@ -83,8 +83,8 @@ class UserController extends Controller
             'email_verified_at' => $email_verif
         ]);
         $session = [
-            'message' => 'Berhasil menambahkan customer baru!',
-            'type' => 'Tambah Customer',
+            'message' => 'Berhasil menambahkan data baru!',
+            'type' => 'Tambah Data',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'
         ];

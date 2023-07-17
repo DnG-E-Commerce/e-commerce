@@ -10,7 +10,7 @@
                         <h6>Edit Data Product</h6>
                     </div>
                     <div class="card-body p-3">
-                        <form action="{{ route('su.product.update', ['product' => $product->id]) }}" method="post"
+                        <form action="{{ route('su.product.ubah', ['product' => $product->id]) }}" method="post"
                             enctype="multipart/form-data">
                             @csrf
                             @method('PUT')

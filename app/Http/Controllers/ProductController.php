@@ -179,19 +179,18 @@ class ProductController extends Controller
      * @param  \App\Models\Product  $product
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function ubah(Request $request, Product $product)
     {
         $request->validate([
             'name' => 'required',
             'desc' => 'required',
-            'uom' => 'required',
-           
-            'qty' => 'required',
+            'uom' => 'required|not_in:pilih',
+            
             'weight' => 'required',
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',
-            'uom' => 'required|not_in:pilih',
-            'status' => 'required|not_in:pilih',
+          
+            'special_status' => 'required|not_in:pilih',
             'category' => 'required|not_in:pilih',
            
         ]);

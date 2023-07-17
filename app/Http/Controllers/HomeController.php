@@ -35,23 +35,12 @@ class HomeController extends Controller
         }
         $query = $request->search;
         if ($query) {
-            $top_resellers = DB::raw("SELECT
-            `users`.*,
-            SUM(orders.qty) AS total_order
-          FROM
-            `users`
-            INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id`
-            INNER JOIN `products` ON `products`.`id` = `orders`.`product_id`
-          WHERE
-            `role` = 'Reseller'
-          GROUP BY
-            `users`.`id`,
-            `users`.`name`
-          ORDER BY
-            `total_order` DESC
-          limit
-            2");
-            
+            $top_resellers = Order::select('users.id', DB::raw('SUM(orders.qty) as total_order'))
+                ->join('users', 'orders.user_id', 'users.id')
+                ->where('users.role', '=', 'Reseller')
+                ->groupBy('users.id')
+                ->limit(2)
+                ->paginate(3);
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
@@ -60,22 +49,12 @@ class HomeController extends Controller
                 ->paginate(12);
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
         } else {
-            $top_resellers = DB::raw("SELECT
-            `users`.*,
-            SUM(orders.qty) AS total_order
-          FROM
-            `users`
-            INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id`
-            INNER JOIN `products` ON `products`.`id` = `orders`.`product_id`
-          WHERE
-            `role` = 'Reseller'
-          GROUP BY
-            `users`.`id`,
-            `users`.`name`
-          ORDER BY
-            `total_order` DESC
-          limit
-            2");
+            $top_resellers = Order::select('users.id', DB::raw('SUM(orders.qty) as total_order'))
+            ->join('users', 'orders.user_id', 'users.id')
+            ->where('users.role', '=', 'Reseller')
+            ->groupBy('users.id')
+            ->limit(2)
+            ->paginate(3);
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
@@ -92,6 +71,7 @@ class HomeController extends Controller
             'notifications' => $notification
         ]);
     }
+   
 
     public function cart()
     {

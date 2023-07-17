@@ -121,7 +121,7 @@ Route::controller(ProductController::class)->group(function () {
     Route::get('/su/product/delete/{product}', 'delete')->name('su.product.delete');
     Route::get('/su/product/edit/{product}', 'edit')->name('su.product.edit');
     Route::get('/su/product/{product}', 'suDetailProduct')->name('su.product.detail');
-    Route::put('/su/product/edit/{product}', 'update')->name('su.product.update');
+    Route::put('/su/product/ubah/{product}', 'ubah')->name('su.product.ubah');
     Route::post('/su/product', 'store')->name('su.store.product');
     Route::put('/su/product/stock/{product}', 'stockStore')->name('su.stock.store');
 });
