@@ -7,7 +7,7 @@
                 <div class="card z-index-2 mb-4">
                     <div class="card-header pb-0">
                         <a href="{{ route('su.customer') }}" class="btn btn-close bg-danger p-2 float-end"></a>
-                        <h6>Request Upgrade</h6>
+                        <h6>Pengajuan Reseller</h6>
                     </div>
                     <div class="card-body p-3">
                         <div style="display: grid;" class="justify-content-center">

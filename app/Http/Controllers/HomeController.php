@@ -144,14 +144,17 @@ class HomeController extends Controller
             ['user_id', $user->id],
             ['title', '=', 'Tawaran Menjadi Reseller']
         ])->first();
-        if ($detect > 20 && $user->role == 'Customer') {
+        if ($detect >= 2 && $user->role == 'Customer') {
             $message = "Anda telah memenuhi persyaratan untuk menjadi reseller
         <br>
         Apakah anda ingin menjadi reseller?
         <br>
+        Keuntungan menjadi reseller adalah 
+        <br>mendapatkan harga di bawah customer. <br>Ayo klik Ya untuk bisa jadi reseller kami!
         <div class='d-flex justify-content-evenly'>
-        <a class='btn btn-sm btn-success' href='/us/apply-request-reseller'>Ya</a>
-        <a class='btn btn-sm btn-danger' data-bs-dismiss='modal'>Tidak</a>
+        <a class='btn btn-sm btn-success' href='/us/become-reseller'>Ya</a>
+        <a class='btn btn-sm btn-warning' data-bs-dismiss='modal'>Ingatkan Nanti</a>
+        <a class='btn btn-sm btn-danger' data-bs-dismiss='modal' href='/us/reject-reseller'>Tidak</a>
         </div>";
             session()->flash('message', $message);
             session()->flash('type', 'Tawaran Upgrade');
@@ -167,7 +170,45 @@ class HomeController extends Controller
                 ]);
             }
         }
+        
     }
+
+    // Tambahkan aksi untuk mengubah peran pengguna menjadi 'Reseller'
+    public function becomeReseller()
+    {
+        $user = auth()->user();
+    
+        if ($user->role == 'Customer') {
+            $user->role = 'Reseller';
+            $user->save();
+         }
+         $session = [
+            'message' => "Selamat, Anda Sekarang telah menjadi reseller kami.",
+            'type' => 'Menerima Tawaran Reseller',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+       
+    // Tambahkan logika lain yang diperlukan setelah pengguna menjadi reseller
+
+     return redirect()->back()->with($session);
+    }
+
+    public function rejectReseller()
+    {
+    $user = auth()->user();
+    
+    if ($user->role == 'Customer') {
+        // Tidak ada tindakan khusus yang perlu dilakukan
+    }
+    $session = [
+        'message' => "Anda berhasil menolak tawaran menjadi reseller",
+        'type' => 'Menolak Tawaran Reseller',
+        'alert' => 'Notifikasi Sukses!',
+        'class' => 'success'
+    ];
+    return redirect()->back()->with($session);
+}
 
     public function requestReseller()
     {

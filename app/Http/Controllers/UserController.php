@@ -52,7 +52,7 @@ class UserController extends Controller
             'kabupaten' => 'required',
             'kecamatan' => 'required',
             'kelurahan' => 'required',
-            'phone' => 'required|numeric',
+            'phone' => 'required|numeric|unique:users',
             'photo' => 'image|file|required|max:8192'
         ]);
         $photo = $request->file('photo')->store('image');

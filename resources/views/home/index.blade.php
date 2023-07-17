@@ -1,6 +1,6 @@
 @extends('templates.main')
 @section('content')
-    @if (Session::get('message'))
+    @if (Session::get('message','message1'))
         <script>
             $(document).ready(function() {
                 $('#modal-notification').modal("show");
@@ -90,7 +90,7 @@
                     <div class="py-3 text-center">
                         <i class="ni ni-bell-55 ni-3x"></i>
                         <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
-                        <p>{!! Session::get('message') !!}</p>
+                        <p>{!! Session::get('message', 'message1') !!}</p>
                     </div>
                 </div>
             </div>
