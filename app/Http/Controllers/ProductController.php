@@ -62,7 +62,6 @@ class ProductController extends Controller
             'uom' => 'required',
             'photo' => 'required',
             'qty' => 'required',
-            'weight' => 'required',
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',
             'uom' => 'required|not_in:pilih',
@@ -78,7 +77,6 @@ class ProductController extends Controller
             'reseller_price' => $request->reseller_price,
             'photo' => $photo,
             'uom' => $request->uom,
-            'weight' => $request->weight ? $request->weight : 0,
             'qty' => $request->qty ? $request->qty : 0,
             'qty_status' => $request->qty ? 'Ready' : 'Habis',
             'special_status' => $request->status,
@@ -209,6 +207,7 @@ class ProductController extends Controller
             'special_status' => $request->special_status,
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
+            'special_status' => $request->special_status,
             'category_id' => $request->category,
         ]);
         $session = [
@@ -242,13 +241,12 @@ class ProductController extends Controller
     {
         try {
             $Produk = Product::findOrFail($id);
-            
+
             // Cek apakah ada relasi produk yang terhubung dengan kategori ini
             if ($Produk->order()->exists()) {
                 throw new \Exception('Tidak dapat menghapus kategori ini karena masih terhubung dengan produk.');
-                
             }
-            
+
             $Produk->delete();
             $session = [
                 'message' => 'Berhasil menghapus produk!',
@@ -258,7 +256,7 @@ class ProductController extends Controller
             ];
             return redirect()->route('su.product')->with($session);
         } catch (\Exception) {
-            $session= [
+            $session = [
                 'message' => 'Tidak dapat menghapus produk ini karena masih terhubung dengan pesanan',
                 'type' => 'Hapus Produk',
                 'alert' => 'Notifikasi Gagal!',

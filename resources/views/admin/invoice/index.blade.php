@@ -23,10 +23,13 @@
                                             No</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Pelanggan</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Invoice Code</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                           Tanggal</th>
+                                            Tanggal</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Grand Total</th>
@@ -51,6 +54,9 @@
                                                 <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
                                             </td>
                                             <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{ $invoice->user->name }}</span>
+                                            </td>
+                                            <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
@@ -61,14 +67,9 @@
                                                     {{ number_format($invoice->grand_total, 0, ',', '.') }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                @if ($invoice->payment_method == 'cash' && $invoice->status != 'Lunas')
-                                                    <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $invoice->id]) }}"
-                                                        class="btn btn-sm bg-gradient-warning">Konfirmasi</a>
-                                                @else
-                                                    <span class="text-xs font-weight-bold">
-                                                        {{ $invoice->status }}
-                                                    </span>
-                                                @endif
+                                                <span class="text-xs font-weight-bold">
+                                                    {{ $invoice->status }}
+                                                </span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">

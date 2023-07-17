@@ -34,8 +34,7 @@ class CustomersAndResellerChart
             array_push($data, intval($user->total_order));
         }
         return $this->chart->pieChart()
-            ->addData($data)
-            ->setLabels($XAxis)
-            ->setXAxis($XAxis);
+            ->addPieces($data)
+            ->setLabels($XAxis);
     }
 }

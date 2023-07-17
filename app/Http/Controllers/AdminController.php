@@ -104,7 +104,7 @@ class AdminController extends Controller
     public function order()
     {
         $user = auth()->user();
-        $invoices = Invoice::all();
+        $invoices = Invoice::orderBy('created_at', 'desc')->get();
         return view('admin.invoice.index', [
             'title' => 'DnG Store | Menu Invoice',
             'menu' => ['Pesanan'],
@@ -133,7 +133,6 @@ class AdminController extends Controller
             'title' => 'DnG Store | Grafik Penjualan',
             'menu' => ['Grafik Penjualan'],
             'user' => $user,
-            'orderChart' => $ordersChart->build(),
             'productChart' => $productsChart->build(),
             'CustomerResellerChart' => $customersAndResellerChart->build(),
         ]);

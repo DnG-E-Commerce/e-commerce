@@ -88,7 +88,14 @@
                                     <tr>
                                         <th>Status</th>
                                         <td>:</td>
-                                        <td>{{ $invoice->status }}</td>
+                                        <td>
+                                            @if ($invoice->payment_method == 'cash' && $invoice->status != 'Lunas')
+                                                <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $invoice->id]) }}"
+                                                    class="btn btn-sm bg-gradient-warning">Konfirmasi</a>
+                                            @else
+                                                {{ $invoice->status }}
+                                            @endif
+                                        </td>
                                     </tr>
                                     <tr>
                                     <tr>

@@ -59,9 +59,7 @@
             </div>
         </div>
         <script src="{{ $CustomerResellerChart->cdn() }}"></script>
-        <script src="{{ $orderChart->cdn() }}"></script>
         <script src="{{ $productChart->cdn() }}"></script>
         {{ $CustomerResellerChart->script() }}
-        {{ $orderChart->script() }}
         {{ $productChart->script() }}
     @endsection
