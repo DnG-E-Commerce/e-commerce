@@ -183,8 +183,17 @@ class ProductController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'customer_price' => 'required',
-            'reseller_price' => 'required',
+            'desc' => 'required',
+            'uom' => 'required',
+           
+            'qty' => 'required',
+            'weight' => 'required',
+            'customer_price' => 'required|numeric',
+            'reseller_price' => 'required|numeric',
+            'uom' => 'required|not_in:pilih',
+            'status' => 'required|not_in:pilih',
+            'category' => 'required|not_in:pilih',
+           
         ]);
         $photo = $request->file('photo');
         if ($photo) {
@@ -198,6 +207,7 @@ class ProductController extends Controller
             'customer_price' => $request->customer_price,
             'reseller_price' => $request->reseller_price,
             'photo' => $filephoto,
+            'special_status' => $request->special_status,
             'uom' => $request->uom,
             'weight' => $request->weight ? $request->weight : 0,
             'category_id' => $request->category,
