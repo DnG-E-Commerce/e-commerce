@@ -154,6 +154,43 @@ class HomeController extends Controller
         }
     }
 
+    // Tambahkan aksi untuk mengubah peran pengguna menjadi 'Reseller'
+    public function becomeReseller()
+    {
+        $user = auth()->user();
+
+        if ($user->role == 'Customer') {
+            $user->role = 'Reseller';
+            $user->save();
+        }
+        $session = [
+            'message' => "Selamat, Anda Sekarang telah menjadi reseller kami.",
+            'type' => 'Menerima Tawaran Reseller',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+
+        // Tambahkan logika lain yang diperlukan setelah pengguna menjadi reseller
+
+        return redirect()->back()->with($session);
+    }
+
+    public function rejectReseller()
+    {
+        $user = auth()->user();
+
+        if ($user->role == 'Customer') {
+            // Tidak ada tindakan khusus yang perlu dilakukan
+        }
+        $session = [
+            'message' => "Anda berhasil menolak tawaran menjadi reseller",
+            'type' => 'Menolak Tawaran Reseller',
+            'alert' => 'Notifikasi Sukses!',
+            'class' => 'success'
+        ];
+        return redirect()->back()->with($session);
+    }
+
     public function hasBeenRead(Request $request)
     {
         DB::table('notifications')->where('id', $request->id)->update([

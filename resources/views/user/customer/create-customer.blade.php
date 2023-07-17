@@ -68,7 +68,7 @@
                                 <hr class="border border-1 border-dark">
                             </div>
                             <div class="form-group mb-3">
-                                <label for="phone">No. Telp</label>
+                                <label for="phone">No. Telp<span class="text-danger">*</span></label>
                                 <input type="text" name="phone" class="form-control">
                                 @if ($errors->has('phone'))
                                     <small class="text-danger">{{ $errors->first('phone') }}</small>

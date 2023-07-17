@@ -46,13 +46,13 @@ class UserController extends Controller
     {
         $request->validate([
             'name' => 'required',
-            'email' => 'email|required',
+            'email' => 'email|required|unique:users',
             'password' => 'min:6|required',
             'provinsi' => 'required',
             'kabupaten' => 'required',
             'kecamatan' => 'required',
             'kelurahan' => 'required',
-            'phone' => 'required|numeric',
+            'phone' => 'required|numeric|unique:users',
             'photo' => 'image|file|required|max:8192'
         ]);
         $photo = $request->file('photo')->store('image');

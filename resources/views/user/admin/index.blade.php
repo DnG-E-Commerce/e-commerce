@@ -30,6 +30,9 @@
                                         </th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                            Role</th>
+                                        <th
+                                            class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                             Email</th>
                                         <th
                                             class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -40,14 +43,19 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <?php $no=1;?>
                                     @foreach ($admins as $key => $admin)
                                         @if (in_array($admin->role, ['Admin', 'Driver']))
                                             <tr>
                                                 <td>
-                                                    <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
+                                                    <h6 class="mb-0 text-sm text-center">{{$no++}}</h6>
                                                 </td>
                                                 <td class="align-middle text-sm">
                                                     <span class="text-xs font-weight-bold">{{ $admin->name }}</span>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span
+                                                        class="text-xs font-weight-bold">{{ $admin->role }}</span>
                                                 </td>
                                                 <td class="align-middle text-sm">
                                                     <span
@@ -57,6 +65,7 @@
                                                     <span
                                                         class="text-xs font-weight-bold">{{ $admin->phone ? $admin->phone : 'Belum ada' }}</span>
                                                 </td>
+                                                
                                                 <td class="text-center align-end">
                                                     <a href="{{ route('su.user.profile', ['role' => 'reseller', 'user' => $admin->id]) }}"
                                                         class="btn btn-sm bg-gradient-warning">

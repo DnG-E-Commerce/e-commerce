@@ -88,8 +88,8 @@ class InvoiceController extends Controller
         $user = auth()->user();
         $payment_method = [
             ['bank' => 'transfer', 'name' => 'Transfer'],
-            ['bank' => 'cash', 'name' => 'Cash'],
-            ['bank' => 'cod', 'name' => 'Cash On Delivery'],
+            ['bank' => 'cash', 'name' => 'Cash (Bayar Di Toko)'],
+            ['bank' => 'cod', 'name' => 'COD (Cash On Delivery)'],
         ];
         $notification = DB::table('notifications')->where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('invoice.edit-invoice', [
@@ -151,6 +151,8 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $user = auth()->user();
+       
+        
         DB::beginTransaction();
         switch ($request->payment_method) {
             case 'cash':
@@ -224,6 +226,7 @@ class InvoiceController extends Controller
 
     public function handleCOD($data, $id)
     {
+        
         $invoice = Invoice::where('id', $id)->first();
         $area = DB::table('areas')
             ->where([
@@ -491,7 +494,7 @@ class InvoiceController extends Controller
             foreach ($invoice->order as $key => $order) {
                 if ($order->status != 'Dipesan') {
                     $session = [
-                        'message' => "Anda tidak dapat menghapus pesanan yang telah $order->status!",
+                        'message' => "Anda tidak dapat membatalkan pesanan yang telah $order->status!",
                         'type' => 'Menghapus Orderan',
                         'alert' => 'Notifikasi gagal!',
                         'class' => 'danger'
@@ -515,6 +518,15 @@ class InvoiceController extends Controller
                 'class' => 'success'
             ];
             return redirect()->route('us.order')->with($session);
+        }
+        else {
+            $session = [
+                'message' => 'Anda tidak dapat membatalkan pesanan yang sudah lunas dan dikonfirmasi oleh admin!',
+                'type' => 'Menghapus Orderan',
+                'alert' => 'Notifikasi gagal!',
+                'class' => 'danger'
+            ];
+            return redirect()->route('us.invoice')->with($session);
         }
     }
 }

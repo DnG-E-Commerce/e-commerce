@@ -35,5 +35,6 @@ class ProductsChart
             ->setColors(['#FFC107', '#D32F2F'])
             ->addData('Total Penjualan', $qty)
             ->setXAxis($arrProduct);
+        
     }
 }

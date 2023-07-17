@@ -40,6 +40,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/us/profile/edit', 'editProfile')->name('us.edit.profile');
     Route::get('/us/profile/password/change', 'changePassword')->name('us.change.password');
     Route::get('/us/apply-request-reseller', 'requestReseller')->name('us.apply-request-reseller');
+    Route::get('/us/become-reseller', 'becomeReseller')->name('us.become-reseller');
+    Route::get('/us/reject-reseller', 'rejectReseller')->name('us.reject-reseller');
+    
 
     Route::put('/us/profile/update/{user}', 'updateProfile')->name('us.profile.update');
     Route::put('/us/profile/password/update/{user}', 'updatePassword')->name('us.profile.password.update');
