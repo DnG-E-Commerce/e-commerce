@@ -15,6 +15,11 @@ use Twilio\Rest\Client;
 
 class InvoiceController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -151,8 +156,8 @@ class InvoiceController extends Controller
     public function update(Request $request, Invoice $invoice)
     {
         $user = auth()->user();
-       
-        
+
+
         DB::beginTransaction();
         switch ($request->payment_method) {
             case 'cash':
@@ -226,7 +231,7 @@ class InvoiceController extends Controller
 
     public function handleCOD($data, $id)
     {
-        
+
         $invoice = Invoice::where('id', $id)->first();
         $area = DB::table('areas')
             ->where([
@@ -518,8 +523,7 @@ class InvoiceController extends Controller
                 'class' => 'success'
             ];
             return redirect()->route('us.order')->with($session);
-        }
-        else {
+        } else {
             $session = [
                 'message' => 'Anda tidak dapat membatalkan pesanan yang sudah lunas dan dikonfirmasi oleh admin!',
                 'type' => 'Menghapus Orderan',

@@ -19,7 +19,6 @@
                             </div>
                             <div class="col-lg-6">
                                 <form action="" method="get">
-                                    @csrf
                                     <div class="d-flex gap-3 justify-content-end">
                                         <div class="form-group">
                                             <label for="fromDate">Dari Tanggal</label>
@@ -70,15 +69,15 @@
                                                     class="text-xs font-weight-bold">{{ substr($order->created_at, 0, 10) }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                            <span class="text-xs font-weight-bold">{{ $order->user->name }}
-                                                    
+                                                <span class="text-xs font-weight-bold">{{ $order->user->name }}
+
                                                 </span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                            <span class="text-xs font-weight-bold">{{ $order->user->role }}    
+                                                <span class="text-xs font-weight-bold">{{ $order->user->role }}
                                                 </span>
                                             </td>
-                                            
+
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">Rp.
                                                     {{ number_format($order->total, 0, ',', '.') }}</span>
@@ -94,8 +93,8 @@
                                     array_push($salesReportTotal, $order->total);
                                 }
                             @endphp
-                            
-                            <h5>Total : Rp. {{ number_format(array_sum($salesReportTotal), 0, ',', '.')  }}</h5>
+
+                            <h5>Total : Rp. {{ number_format(array_sum($salesReportTotal), 0, ',', '.') }}</h5>
                         </div>
                     </div>
                 </div>

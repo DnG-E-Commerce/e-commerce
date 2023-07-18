@@ -141,15 +141,18 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('us.invoice') }}">Pesanan</a>
                     </li>
-                   
+
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('us.cart') }}">Keranjang</a>
                     </li>
-                    @if ($user->role == 'Customer')
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('us.apply-request-reseller') }}">Pengajuan Reseller</a>
-                    </li>
-                                    
+                    @if ($user)
+                        @if ($user->role == 'Customer')
+                            <li class="nav-item">
+                                <a class="nav-link text-white"
+                                    href="{{ route('us.apply-request-reseller') }}">Pengajuan
+                                    Reseller</a>
+                            </li>
+                        @endif
                     @endif
                 </ul>
                 @if ($menu == 'home')
@@ -163,41 +166,54 @@
                 @endif
                 <div class="d-flex gap-3">
                     <ul class="navbar-nav mb-2 mb-lg-0">
-                        @if ($user->role == 'Customer')
-                            @if (!$notifications->where('title', 'Tawaran Menjadi Reseller'))
-                                <li class="nav-item me-4">
-                                    <a class="nav-link text-white" href="{{ route('us.apply-request-reseller') }}">
-                                        <i class="fa-solid fa-angles-up"></i></a>
-                                </li>
+                        @if ($user)
+                            @if ($user->role == 'Customer')
+                                @if (!$notifications->where('title', 'Tawaran Menjadi Reseller'))
+                                    <li class="nav-item me-4">
+                                        <a class="nav-link text-white" href="{{ route('us.apply-request-reseller') }}">
+                                            <i class="fa-solid fa-angles-up"></i></a>
+                                    </li>
+                                @endif
                             @endif
                         @endif
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                                aria-expanded="false">
-                                <i class="fa-solid fa-bell text-white"></i>
-                            </a>
-                            <ol class="dropdown-menu dropdown-menu-dark">
-                                @foreach ($notifications as $key => $n)
-                                    <li class="dropdown-item d-flex justify-content-between align-items-start">
-                                        <div class="ms-2 me-auto">
-                                            <div class="fw-bold">{{ $n->title }}</div>
-                                            {{ substr($n->message, 0, 15) }} ...
-                                        </div>
-                                        <span class="badge bg-primary rounded-pill">New</span>
+                        @if ($user)
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-bell text-white"></i>
+                                </a>
+                                <ol class="dropdown-menu dropdown-menu-dark">
+                                    @foreach ($notifications as $key => $n)
+                                        <li class="dropdown-item d-flex justify-content-between align-items-start">
+                                            <div class="ms-2 me-auto">
+                                                <div class="fw-bold">{{ $n->title }}</div>
+                                                {{ substr($n->message, 0, 15) }} ...
+                                            </div>
+                                            <span class="badge bg-primary rounded-pill">New</span>
+                                        </li>
+                                    @endforeach
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('us.notification') }}">Lihat
+                                            lebih...</a>
                                     </li>
-                                @endforeach
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('us.notification') }}">Lihat
-                                        lebih...</a>
-                                </li>
-                            </ol>
-                        </li>
-                       
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="{{ route('logout') }}"><i
-                                    class="fa-solid fa-right-from-bracket"
-                                    onclick="return confirm('Apakah anda yakin logout ?')"></i></a>
-                        </li>
+                                </ol>
+                            </li>
+                        @endif
+
+                        @if ($user)
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="{{ route('logout') }}"><i
+                                        class="fa-solid fa-right-from-bracket"
+                                        onclick="return confirm('Apakah anda yakin logout ?')"></i></a>
+                            </li>
+                        @else
+                            <li class="nav-item me-3">
+                                <a class="btn bg-gradient-secondary" href="{{ route('login') }}">Login</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="btn bg-gradient-secondary" href="{{ route('register') }}">Registrasi</a>
+                            </li>
+                        @endif
                     </ul>
                 </div>
             </div>
