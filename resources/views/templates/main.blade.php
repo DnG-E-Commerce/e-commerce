@@ -141,9 +141,16 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('us.invoice') }}">Pesanan</a>
                     </li>
+                   
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('us.cart') }}">Keranjang</a>
                     </li>
+                    @if ($user->role == 'Customer')
+                    <li class="nav-item">
+                        <a class="nav-link text-white" href="{{ route('us.apply-request-reseller') }}">Pengajuan Reseller</a>
+                    </li>
+                                    
+                    @endif
                 </ul>
                 @if ($menu == 'home')
                     <form action="" method="get" class="border border-dark me-5">
@@ -185,9 +192,11 @@
                                 </li>
                             </ol>
                         </li>
+                       
                         <li class="nav-item">
                             <a class="nav-link text-white" href="{{ route('logout') }}"><i
-                                    class="fa-solid fa-right-from-bracket"></i></a>
+                                    class="fa-solid fa-right-from-bracket"
+                                    onclick="return confirm('Apakah anda yakin logout ?')"></i></a>
                         </li>
                     </ul>
                 </div>

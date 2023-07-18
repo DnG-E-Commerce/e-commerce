@@ -15,7 +15,7 @@
                 <div class="col-lg-6 mb-lg-0 mb-4">
                     <div class="card z-index-2 h-100">
                         <div class="card-header pb-0 pt-3 bg-transparent">
-                            <h6 class="text-capitalize">Insight Pelanggan Loyal</h6>
+                            <h6 class="text-capitalize">Insight 10 Pelanggan Terloyal</h6>
                         </div>
                         <div class="card-body p-3">
                             <div class="chart">
@@ -27,7 +27,7 @@
                 <div class="col-lg-6 mb-lg-0 mb-4">
                     <div class="card z-index-2 h-100">
                         <div class="card-header pb-0 pt-3 bg-transparent">
-                            <h6 class="text-capitalize">Grafik Top Sale Product</h6>
+                            <h6 class="text-capitalize">Grafik Top 10 Produk Terjual</h6>
                         </div>
                         <div class="card-body p-3">
                             <div class="chart">

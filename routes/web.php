@@ -40,8 +40,9 @@ Route::controller(HomeController::class)->group(function () {
     Route::get('/us/profile/edit', 'editProfile')->name('us.edit.profile');
     Route::get('/us/profile/password/change', 'changePassword')->name('us.change.password');
     Route::get('/us/apply-request-reseller', 'requestReseller')->name('us.apply-request-reseller');
-    Route::get('/us/become-reseller', 'becomeReseller')->name('us.become-reseller');
-    Route::get('/us/reject-reseller', 'rejectReseller')->name('us.reject-reseller');
+    Route::get('/us/customer/reject-reseller', 'rejectReseller')->name('us.reject-reseller');
+    Route::get('/us/become-reseller', ' becomeReseller')->name('us.become-reseller');
+   
     
 
     Route::put('/us/profile/update/{user}', 'updateProfile')->name('us.profile.update');
@@ -93,6 +94,7 @@ Route::controller(UserController::class)->group(function () {
     Route::get('/su/customer/request-upgrade/{user}', 'review')->name('su.customer.request-upgrade');
     Route::post('/su/customer/request-reseller/{user}', 'storeRequest')->name('su.customer.request.store');
     Route::put('/su/customer/request-upgrade/{user}', 'acceptRequest')->name('su.customer.request.accept');
+   
 
     // Reseller
     Route::get('/su/reseller/create', 'createReseller')->name('su.reseller.create');

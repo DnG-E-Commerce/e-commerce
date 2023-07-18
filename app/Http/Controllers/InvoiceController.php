@@ -173,15 +173,15 @@ class InvoiceController extends Controller
                 break;
 
             case 'transfer':
-                if ($request->provinsi == 'Pilih') {
-                    $session = [
-                        'message' => 'Harap lengkapi data alamat!',
-                        'type' => 'Proses Gagal!',
-                        'alert' => 'Notifikasi gagal!',
-                        'class' => 'danger'
-                    ];
-                    return redirect()->back()->with($session);
-                }
+                // if ($request->provinsi == 'Pilih') {
+                //     $session = [
+                //         'message' => 'Harap lengkapi data alamat!',
+                //         'type' => 'Proses Gagal!',
+                //         'alert' => 'Notifikasi gagal!',
+                //         'class' => 'danger'
+                //     ];
+                //     return redirect()->back()->with($session);
+                // }
                 $this->handleTransfer($request->all(), $invoice->id);
                 break;
         }
@@ -286,13 +286,13 @@ class InvoiceController extends Controller
                 'qty_status' => $product->qty - $order->qty == 0 ? 'Habis' : $product->qty_status,
             ]);
         }
-        $this->sendWhatsappp($invoice->id);
+        $this->notifWA($invoice->id);
     }
 
-    public function sendWhatsappp($id)
+    public function notifWA($id)
     {
         $invoice = Invoice::where('id', $id)->first();
-        $token = '9e6f44d3e1aa6e5609d8d0fb88d635610a531353d1aa95f7d7ab204fc4631ca4';
+        $token = '65a3c12f5cab3d92c213ddf2ae811013372c3852b2dc61d5e6201b885e0c49f8';
         $whatsapp_phone = '+6283138578369';
         $user = User::where('id', $invoice->user_id)->first();
 

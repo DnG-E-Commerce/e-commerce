@@ -139,13 +139,14 @@ class AdminController extends Controller
     }
 
     public function salesReport(Request $request)
-    {
+    {   
         $user = auth()->user();
         if ($request->fromDate_transaction) {
             $order = Order::whereBetween('orders.created_at', [$request->fromDate_transaction, $request->toDate_transaction])
                 ->get();
         } else {
-            $order = Order::all();
+              
+            $order = Order::orderBy('created_at', 'desc')->get()->all();
         }
 
         if ($request->fromDate_product) {

@@ -86,7 +86,7 @@
                                         <td>Rp. {{ number_format($invoice->grand_total, 0, '.', ',') }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Status</th>
+                                        <th>Status Pembayaran</th>
                                         <td>:</td>
                                         <td>
                                             @if ($invoice->payment_method == 'cash' && $invoice->status != 'Lunas')
@@ -99,12 +99,19 @@
                                     </tr>
                                     <tr>
                                     <tr>
-                                        <th>Metore Pembayaran</th>
+                                        <th>Metote Pembayaran</th>
                                         <td>:</td>
                                         <td>{{ $invoice->payment_method }}</td>
                                     </tr>
                                     <tr>
-                                        <th>Status Orderan</th>
+                                         <tr>
+                                        <th>Status Pesanan</th>
+                                        <td>:</td>
+                                        <td>{{ $order->status }}</td>
+                                    </tr>
+                                    <tr>
+
+                                        <th>Update Orderan</th>
                                         <td>:</td>
                                         <td>
                                             @foreach ($invoice->order as $i => $order)
@@ -123,10 +130,17 @@
                                                             @foreach ($status as $s)
                                                                 @foreach ($invoice->order as $key => $io)
                                                                     @if ($key == 0)
+                                                                        @if(($invoice->payment_method == 'cash') && ($s != 'Dikirim'))
+                                                                        <option value="{{ $s }}"
+                                                                            {{ $io->status == $s ? 'selected' : '' }}>
+                                                                            {{ $s }} 
+                                                                        </option>
+                                                                        @elseif($invoice->payment_method != 'cash')
                                                                         <option value="{{ $s }}"
                                                                             {{ $io->status == $s ? 'selected' : '' }}>
                                                                             {{ $s }}
                                                                         </option>
+                                                                        @endif
                                                                     @break
                                                                 @endif
                                                             @endforeach

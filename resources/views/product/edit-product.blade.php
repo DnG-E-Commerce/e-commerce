@@ -55,10 +55,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="form-group mb-3">
-                                <label for="weight">Ukuran Produk</label>
-                                <input type="number" name="weight" class="form-control" value="{{ $product->weight }}">
-                            </div>
+                            
                             <div class="form-group mb-3">
                                 <label for="desc">Foto Produk</label>
                                 <input type="file" name="photo" class="form-control">

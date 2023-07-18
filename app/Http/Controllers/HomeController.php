@@ -39,8 +39,9 @@ class HomeController extends Controller
                 ->join('users', 'orders.user_id', 'users.id')
                 ->where('users.role', '=', 'Reseller')
                 ->groupBy('users.id')
-                ->limit(2)
-                ->paginate(3);
+                ->take(2)
+                ->get();
+               
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
@@ -49,28 +50,19 @@ class HomeController extends Controller
                 ->paginate(12);
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
         } else {
-            $top_resellers = DB::raw("SELECT
-            `users`.*,
-            SUM(orders.qty) AS total_order
-          FROM
-            `users`
-            INNER JOIN `orders` ON `users`.`id` = `orders`.`user_id`
-            INNER JOIN `products` ON `products`.`id` = `orders`.`product_id`
-          WHERE
-            `role` = 'Reseller'
-          GROUP BY
-            `users`.`id`,
-            `users`.`name`
-          ORDER BY
-            `total_order` DESC
-          limit
-            2");
+            $top_resellers = Order::select('users.id', DB::raw('SUM(orders.qty) as total_order'))
+            ->join('users', 'orders.user_id', 'users.id')
+            ->where('users.role', '=', 'Reseller')
+            ->groupBy('users.id')
+            ->take(2)
+            ->get();
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
                 ->paginate(12);
         }
+        // dd($top_resellers);
         return view('home.index', [
             'title' => 'DnG Store',
             'menu' => 'home',
@@ -80,6 +72,8 @@ class HomeController extends Controller
             'top_resellers' => $top_resellers,
             'notifications' => $notification
         ]);
+
+        
     }
    
 
@@ -130,7 +124,7 @@ class HomeController extends Controller
             ->where('user_id', $user->id)
             ->where('total', '>', 200000)
             ->count();
-        if ($detect > 20 && $user->role == 'Customer') {
+        if ($detect >= 2 && $user->role == 'Customer') {
             $notification = Notification::where([
                 ['user_id', $user->id],
                 ['title', '=', 'Tawaran Menjadi Reseller']
@@ -149,9 +143,11 @@ class HomeController extends Controller
             <br>
             Apakah anda ingin menjadi reseller?
             <br>
+            Anda akan mendapatkan produk dengan harga <br> dibawah customer 
+            jika Anda bergabung menjadi reseller kami.
             <div class='d-flex justify-content-evenly'>
-                <a class='btn btn-sm btn-success' href='/us/apply-request-reseller'>Ya</a>
-                <a class='btn btn-sm btn-danger' id='reject_request' data-id-been-rejected='$notification->id'>Tidak</a>
+                <a class='btn btn-sm btn-success' href='/us/become-reseller'>Ya</a>
+                <a class='btn btn-sm btn-danger' href='/us/customer/reject-reseller' data-id-been-rejected='$notification->id'>Tidak</a>
             </div>";
             if ($notification->is_read == 0) {
                 session()->flash('message', $message);
@@ -191,7 +187,7 @@ class HomeController extends Controller
             // Tidak ada tindakan khusus yang perlu dilakukan
         }
         $session = [
-            'message' => "Anda berhasil menolak tawaran menjadi reseller",
+            'message' => "Anda telah menolak tawaran menjadi reseller",
             'type' => 'Menolak Tawaran Reseller',
             'alert' => 'Notifikasi Sukses!',
             'class' => 'success'

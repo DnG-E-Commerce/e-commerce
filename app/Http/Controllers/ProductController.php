@@ -184,7 +184,7 @@ class ProductController extends Controller
             'desc' => 'required',
             'uom' => 'required|not_in:pilih',
             
-            'weight' => 'required',
+           
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',
           
@@ -206,7 +206,7 @@ class ProductController extends Controller
             'photo' => $filephoto,
             'special_status' => $request->special_status,
             'uom' => $request->uom,
-            'weight' => $request->weight ? $request->weight : 0,
+           
             'special_status' => $request->special_status,
             'category_id' => $request->category,
         ]);
