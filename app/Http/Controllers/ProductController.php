@@ -183,14 +183,14 @@ class ProductController extends Controller
             'name' => 'required',
             'desc' => 'required',
             'uom' => 'required|not_in:pilih',
-            
-           
+
+
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',
-          
+
             'special_status' => 'required|not_in:pilih',
             'category' => 'required|not_in:pilih',
-           
+
         ]);
         $photo = $request->file('photo');
         if ($photo) {
@@ -206,7 +206,7 @@ class ProductController extends Controller
             'photo' => $filephoto,
             'special_status' => $request->special_status,
             'uom' => $request->uom,
-           
+
             'special_status' => $request->special_status,
             'category_id' => $request->category,
         ]);
