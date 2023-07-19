@@ -49,47 +49,51 @@
                                 </thead>
                                 <tbody>
                                     @foreach ($invoices as $key => $invoice)
-                                        <tr>
-                                            <td>
-                                                <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $invoice->user->name }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">{{ $invoice->created_at }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">Rp.
-                                                    {{ number_format($invoice->grand_total, 0, ',', '.') }}</span>
-                                            </td>
-                                            <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">
-                                                    {{ $invoice->status }}
+                                        @if ($invoice->status != 'Pending')
+                                            <tr>
+                                                <td>
+                                                    <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span class="text-xs font-weight-bold">{{ $invoice->user->name }}</span>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span
+                                                        class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span class="text-xs font-weight-bold">{{ $invoice->created_at }}</span>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span class="text-xs font-weight-bold">Rp.
+                                                        {{ number_format($invoice->grand_total, 0, ',', '.') }}</span>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span class="text-xs font-weight-bold">
+                                                        {{ $invoice->status }}
+                                                    </span>
+                                                </td>
+                                                <td class="align-middle text-sm">
+                                                    <span class="text-xs font-weight-bold">
+                                                        @foreach ($invoice->order as $key => $order)
+                                                            {{ $order->status }}
+                                                        @break
+                                                    @endforeach
                                                 </span>
                                             </td>
                                             <td class="align-middle text-sm">
-                                                <span class="text-xs font-weight-bold">
-                                                    @foreach ($invoice->order as $key => $order)
-                                                        {{ $order->status }}
-                                                    @break
-                                                @endforeach
-                                            </span>
-                                        </td>
-                                        <td class="align-middle text-sm">
-                                            <span class="text-xs font-weight-bold">{{ $invoice->payment_method }}</span>
-                                        </td>
-                                        <td class="align-middle text-sm">
-                                            <a href="{{ route('su.invoice.detail', ['invoice' => $invoice->id]) }}"
-                                                class="btn btn-sm bg-gradient-primary">Tracking</a>
-                                            <a href="{{ route('su.invoice.print_pdf', ['invoice' => $invoice->id]) }}"
-                                                class="btn btn-sm bg-gradient-primary" target="_blank">Cetak Invoice</a>
-                                        </td>
-
-                                    </tr>
+                                                <span
+                                                    class="text-xs font-weight-bold">{{ $invoice->payment_method }}</span>
+                                            </td>
+                                            <td class="align-middle text-sm">
+                                                <a href="{{ route('su.invoice.detail', ['invoice' => $invoice->id]) }}"
+                                                    class="btn btn-sm bg-gradient-primary">Tracking</a>
+                                                <a href="{{ route('su.invoice.print_pdf', ['invoice' => $invoice->id]) }}"
+                                                    class="btn btn-sm bg-gradient-primary" target="_blank">Cetak
+                                                    Invoice</a>
+                                            </td>
+                                        </tr>
+                                    @endif
                                 @endforeach
                             </tbody>
                         </table>

@@ -41,7 +41,8 @@ class DriverController extends Controller
                 'status' => 'Diterima'
             ]);
         DB::table('shippings')->insert([
-            'user_id' => $user->id,
+            'driver_id' => $user->id,
+            'user_id' => $invoice->user_id,
             'invoice_id' => $invoice->id,
             'photo' => $photo,
             'created_at' => now('Asia/Jakarta'),

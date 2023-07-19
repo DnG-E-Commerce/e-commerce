@@ -38,15 +38,6 @@ class CartController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -110,6 +101,7 @@ class CartController extends Controller
             'invoice_code' => 'INV-1003' . Random::generate(4, '0-9') . date('Y') * date('m') * date('d'),
             'grand_total' => 0,
             'status' => 'Pending',
+            'is_pickup' => 0,
             'created_at' => now('Asia/Jakarta')
         ]);
         $total = 0;

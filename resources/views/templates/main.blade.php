@@ -135,17 +135,16 @@
                     <li class="nav-item">
                         <a class="nav-link text-white" href="{{ route('us.home') }}">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('us.profile') }}">Profile</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('us.invoice') }}">Pesanan</a>
-                    </li>
-
-                    <li class="nav-item">
-                        <a class="nav-link text-white" href="{{ route('us.cart') }}">Keranjang</a>
-                    </li>
                     @if ($user)
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('us.profile') }}">Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('us.invoice') }}">Pesanan</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-white" href="{{ route('us.cart') }}">Keranjang</a>
+                        </li>
                         @if ($user->role == 'Customer')
                             <li class="nav-item">
                                 <a class="nav-link text-white"
@@ -224,6 +223,36 @@
     <main class="main-content mt-0">
         @yield('content')
     </main>
+    {{-- <footer class="footer mt-5" style="height: 6rem;">
+        <div class="container">
+            <div class="row align-items-center justify-content-lg-between">
+                <div class="col-lg-6 mb-lg-0 mb-4">
+                    <div class="copyright text-center text-sm text-muted text-lg-start">
+                        &copy;
+                        <script>
+                            document.write(new Date().getFullYear())
+                        </script>,
+                        made with <i class="fa fa-heart"></i> by
+                        <a href="https://github.com/rissasriag" class="font-weight-bold" target="_blank">Rissa</a>
+                        for a better web.
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <ul class="nav nav-footer justify-content-center justify-content-lg-end">
+                        <li class="nav-item">
+                            <a href="https://goo.gl/maps/5Vqv6okGdomdgtet5" class="nav-link text-muted"
+                                target="_blank"><i class="fa-solid fa-location-dot"></i></a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="https://www.creative-tim.com/blog" class="nav-link text-muted"
+                                target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer> --}}
+
     <!--   Core JS Files   -->
     <script src="{{ asset('argon/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('argon/js/core/bootstrap.min.js') }}"></script>

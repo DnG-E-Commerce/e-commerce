@@ -41,7 +41,7 @@ class HomeController extends Controller
                 ->groupBy('users.id')
                 ->take(2)
                 ->get();
-               
+
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
                 ->join('categories as c', 'p.category_id', '=', 'c.id')
@@ -51,11 +51,11 @@ class HomeController extends Controller
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
         } else {
             $top_resellers = Order::select('users.id', DB::raw('SUM(orders.qty) as total_order'))
-            ->join('users', 'orders.user_id', 'users.id')
-            ->where('users.role', '=', 'Reseller')
-            ->groupBy('users.id')
-            ->take(2)
-            ->get();
+                ->join('users', 'orders.user_id', 'users.id')
+                ->where('users.role', '=', 'Reseller')
+                ->groupBy('users.id')
+                ->take(2)
+                ->get();
             $special_products = Product::where('special_status', '=', 'Limited Edition')->paginate(3);
             $products = DB::table('products as p')
                 ->select('p.id as product_id', 'p.*', 'c.category')
@@ -72,10 +72,8 @@ class HomeController extends Controller
             'top_resellers' => $top_resellers,
             'notifications' => $notification
         ]);
-
-        
     }
-   
+
 
     public function cart()
     {
@@ -139,15 +137,16 @@ class HomeController extends Controller
                 ]);
             }
             $notification = DB::table('notifications')->latest('id')->first();
+            // dd($notification);
             $message = "Anda telah memenuhi persyaratan untuk menjadi reseller
             <br>
             Apakah anda ingin menjadi reseller?
             <br>
-            Anda akan mendapatkan produk dengan harga <br> dibawah customer 
+            Anda akan mendapatkan produk dengan harga <br> dibawah customer
             jika Anda bergabung menjadi reseller kami.
             <div class='d-flex justify-content-evenly'>
                 <a class='btn btn-sm btn-success' href='/us/become-reseller'>Ya</a>
-                <a class='btn btn-sm btn-danger' href='/us/customer/reject-reseller' data-id-been-rejected='$notification->id'>Tidak</a>
+                <a class='btn btn-sm btn-danger' id='reject_request' data-id-been-rejected='$notification->id'>Tidak</a>
             </div>";
             if ($notification->is_read == 0) {
                 session()->flash('message', $message);
@@ -162,11 +161,9 @@ class HomeController extends Controller
     public function becomeReseller()
     {
         $user = auth()->user();
-
-        if ($user->role == 'Customer') {
-            $user->role = 'Reseller';
-            $user->save();
-        }
+        User::where('id', $user->id)->update([
+            'role' => 'Reseller'
+        ]);
         $session = [
             'message' => "Selamat, Anda Sekarang telah menjadi reseller kami.",
             'type' => 'Menerima Tawaran Reseller',
@@ -176,23 +173,7 @@ class HomeController extends Controller
 
         // Tambahkan logika lain yang diperlukan setelah pengguna menjadi reseller
 
-        return redirect()->back()->with($session);
-    }
-
-    public function rejectReseller()
-    {
-        $user = auth()->user();
-
-        if ($user->role == 'Customer') {
-            // Tidak ada tindakan khusus yang perlu dilakukan
-        }
-        $session = [
-            'message' => "Anda telah menolak tawaran menjadi reseller",
-            'type' => 'Menolak Tawaran Reseller',
-            'alert' => 'Notifikasi Sukses!',
-            'class' => 'success'
-        ];
-        return redirect()->back()->with($session);
+        return redirect()->route('us.home')->with($session);
     }
 
     public function hasBeenRead(Request $request)
@@ -206,6 +187,13 @@ class HomeController extends Controller
     public function requestReseller()
     {
         $user = auth()->user();
+        $session = [
+            'message' => "Anda tidak dapat mengakses halaman ini! Karena anda bukan Customer",
+            'type' => 'Menjadi Reseller',
+            'alert' => 'Notifikasi Gagal!',
+            'class' => 'danger'
+        ];
+        if ($user->role != 'Customer') return redirect()->route('us.home')->with($session);
         $notification = Notification::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(5);
         return view('home.pengajuan-reseller', [
             'title' => 'DnG Store | Form Pengajuan Reseller',
