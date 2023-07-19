@@ -41,9 +41,17 @@ class DriverController extends Controller
                 'status' => 'Diterima'
             ]);
         DB::table('shippings')->insert([
-            'user_id' => $user->id,
+            'driver_id' => $user->id,
+            'user_id' => $invoice->user_id,
             'invoice_id' => $invoice->id,
             'photo' => $photo,
+            'created_at' => now('Asia/Jakarta'),
+        ]);
+        DB::table('notifications')->insert([
+            'user_id' => $invoice->user_id,
+            'title' => 'Barang Telah Sampai Tujuan!',
+            'message' => "Pesanan dengan Invoice $invoice->invoice_code telah sampai tujuan! terimakasih telah berbelanja di D&G Store",
+            'is_read' => 0,
             'created_at' => now('Asia/Jakarta'),
         ]);
         $session = [

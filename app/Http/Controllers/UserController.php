@@ -93,11 +93,6 @@ class UserController extends Controller
         return redirect()->route('su.customer')->with($session);
     }
 
-    public function store(Request $request)
-    {
-        //
-    }
-
     public function profileUser($role, User $user)
     {
         return view('user.detail-user', [

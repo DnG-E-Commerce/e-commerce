@@ -33,14 +33,14 @@
                                 Opsi</th>
                         </thead>
                         <tbody>
-                        <?php $no=1;?>
+                            <?php $no = 1; ?>
                             @foreach ($invoices as $key => $invoice)
                                 @foreach ($invoice->order as $i => $order)
                                     @if (in_array($order->status, ['Dikirim', 'Diterima']))
                                         <tr>
-                                           
+
                                             <td class="align-middle text-sm">
-                                                <span class="text-center font-weight-bold ">{{$no++}}</span>
+                                                <span class="text-center font-weight-bold ">{{ $no++ }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>

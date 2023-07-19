@@ -23,10 +23,21 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group" id="pickup_method">
+                        <label for="is_pickup">Pilih metode pengambilan pesanan</label>
+                        <br>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_pickup" id="opsi1" value="diambil">
+                            <label class="form-check-label" for="is_pickup">Diambil ke Toko</label>
+                        </div>
+                        <div class="form-check form-check-inline">
+                            <input class="form-check-input" type="radio" name="is_pickup" id="opsi2" value="dikirim">
+                            <label class="form-check-label" for="is_pickup">Di kirim</label>
+                        </div>
+                    </div>
 
-                    <label for="">Isi Alamat Jika Produk Anda ingin di Kirim</label>
-
-                    <div class="row">
+                    <div class="row" id="address_check">
+                        <small>Isi Alamat Jika Produk Anda ingin di Kirim</small>
                         <div class="col-lg-6">
                             <div class="form-group">
                                 <label for="provinsi" class="form-label">Provinsi</label>
@@ -105,6 +116,27 @@
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            $('#payment_method').change(function() {
+                let payment_method = $('#payment_method').val()
+                switch (payment_method) {
+                    case 'transfer':
+                        $('#address_check').attr('hidden', false)
+                        $('#pickup_method').attr('hidden', false)
+                        break
+                    case 'cod':
+                        $('#address_check').attr('hidden', false)
+                        $('#pickup_method').attr('hidden', true)
+                        break
+                    case 'cash':
+                        $('#address_check').attr('hidden', true)
+                        $('#pickup_method').attr('hidden', true)
+                        break
+                }
+            })
+        })
+    </script>
     <script>
         $(document).ready(function() {
             $('#btn-pay').click(function(e) {

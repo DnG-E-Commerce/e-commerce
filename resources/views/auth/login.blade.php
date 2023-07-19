@@ -36,7 +36,7 @@
                                         @endif
                                     </div>
                                     <div class="form-check form-switch">
-                                        <input class="form-check-input" type="checkbox" id="rememberMe"
+                                        <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe"
                                             {{ old('remember') ? 'checked' : '' }}>
                                         <label class="form-check-label" for="rememberMe">Ingat Saya</label>
                                     </div>

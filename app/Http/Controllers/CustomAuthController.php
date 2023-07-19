@@ -29,6 +29,7 @@ class CustomAuthController extends Controller
 
     public function credentials(Request $request)
     {
+        // dd($request->rememberMe);
         $user = DB::table('users')->where('email', $request->email)->first();
         $credentials = $request->validate([
             'email' => 'required',

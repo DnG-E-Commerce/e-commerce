@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Product;
+use App\Models\Shipping;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
@@ -47,7 +48,6 @@ class InvoiceController extends Controller
             'menu' => ['Pesanan', 'Detail Pesanan'],
             'user' => $user,
             'invoice' => $invoice,
-            'status' => ['Diterima', 'Dikirim', 'Dikonfirmasi/Dikemas', 'Dipesan'],
         ]);
     }
 
@@ -146,17 +146,9 @@ class InvoiceController extends Controller
         return response()->json($snapToken);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Invoice  $invoice
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, Invoice $invoice)
     {
         $user = auth()->user();
-
 
         DB::beginTransaction();
         switch ($request->payment_method) {
@@ -165,7 +157,7 @@ class InvoiceController extends Controller
                 break;
 
             case 'cod':
-                if ($request->provinsi == 'Pilih') {
+                if ($request->kelurahan == 'Pilih') {
                     $session = [
                         'message' => 'Harap lengkapi data alamat!',
                         'type' => 'Proses Gagal!',
@@ -178,15 +170,15 @@ class InvoiceController extends Controller
                 break;
 
             case 'transfer':
-                // if ($request->provinsi == 'Pilih') {
-                //     $session = [
-                //         'message' => 'Harap lengkapi data alamat!',
-                //         'type' => 'Proses Gagal!',
-                //         'alert' => 'Notifikasi gagal!',
-                //         'class' => 'danger'
-                //     ];
-                //     return redirect()->back()->with($session);
-                // }
+                if ($request->is_pickup == 'dikirim' && $request->kelurhaan == 'Pilih') {
+                    $session = [
+                        'message' => 'Harap lengkapi data alamat!',
+                        'type' => 'Proses Gagal!',
+                        'alert' => 'Notifikasi gagal!',
+                        'class' => 'danger'
+                    ];
+                    return redirect()->back()->with($session);
+                }
                 $this->handleTransfer($request->all(), $invoice->id);
                 break;
         }
@@ -224,7 +216,9 @@ class InvoiceController extends Controller
                 'ongkir' => 0,
                 'grand_total' => $invoice->grand_total,
                 'payment_method' => $data['payment_method'],
-                'notes' => $data['notes'],
+                'notes' => $data['notes'] ? $data['notes'] : '-',
+                'is_pickup' => 1,
+                'is_recive' => 0,
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
     }
@@ -251,6 +245,8 @@ class InvoiceController extends Controller
                 'grand_total' => $invoice->grand_total + $ongkir,
                 'payment_method' => $data['payment_method'],
                 'notes' => $data['notes'],
+                'is_pickup' => 0,
+                'is_recive' => 0,
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
         foreach ($invoice->order as $order) {
@@ -274,14 +270,17 @@ class InvoiceController extends Controller
             ])->first();
 
         $ongkir = $area ? $area->ongkir : 0;
+        $address = $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'];
         DB::table('invoices')->where('id', $invoice->id)
             ->update([
                 'status' => 'Lunas',
-                'send_to' => $data['kelurahan'] . ', ' . $data['kecamatan'] . ', ' . $data['kabupaten'] . ', ' . $data['provinsi'],
+                'send_to' => $data['is_pickup'] == 'diambil' ? '-' : $address,
                 'ongkir' => $ongkir,
                 'grand_total' => $invoice->grand_total + $ongkir,
                 'payment_method' => $data['payment_method'],
                 'notes' => $data['notes'],
+                'is_pickup' => $data['is_pickup'] == 'diambil' ? 1 : 0,
+                'is_recive' => 0,
                 'updated_at' => date('Y-m-d H:i:s')
             ]);
         foreach ($invoice->order as $order) {
@@ -359,13 +358,20 @@ class InvoiceController extends Controller
      */
     public function confirmRecive(Invoice $invoice)
     {
-
+        $user = auth()->user();
         DB::table('invoices')->where([
             ['id', $invoice->id],
             ['invoice_code', $invoice->invoice_code]
         ])->update([
             'is_recive' => 1,
             'updated_at' => now('Asia/Jakarta'),
+        ]);
+        DB::table('notifications')->insert([
+            'user_id' => $user->id,
+            'title' => 'Barang Telah Diterima!',
+            'message' => "Pesanan dengan Invoice $invoice->invoice_code telah diterima! terimakasih telah berbelanja di D&G Store",
+            'is_read' => 0,
+            'created_at' => now('Asia/Jakarta'),
         ]);
         $session = [
             'message' => 'Pesanan Berhasil diterima! Terimakasih telah berbelanja di D&G Store',

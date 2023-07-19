@@ -100,8 +100,9 @@
         $(document).ready(function() {
             $('#reject_request').click(function() {
                 const id = $('#reject_request').data('id-been-rejected')
+                // console.log(id)
                 $.ajax({
-                    url: `{{ route('us.notification.read') }}`,
+                    url: "{{ route('us.notification.read') }}",
                     type: `POST`,
                     data: {
                         _token: `{{ csrf_token() }}`,
