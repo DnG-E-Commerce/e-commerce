@@ -10,7 +10,7 @@
                 <div class="col-lg-5 text-center mx-auto">
                     <h1 class="text-white mb-2 mt-5">D&G Store</h1>
                     <!-- <p class="text-lead text-white">Use these awesome forms to login or create new account in your project
-                                    for free.</p> -->
+                                        for free.</p> -->
                 </div>
             </div>
         </div>
@@ -23,7 +23,7 @@
                         <h5>Form Register</h5>
                     </div>
                     <div class="card-body">
-                        <form role="form" action="{{ route('register') }}" method="POST">
+                        <form role="form" action="{{ route('register.store') }}" method="POST">
                             @csrf
                             <div class="mb-3">
                                 <input type="text" class="form-control" placeholder="Name" aria-label="Name"
@@ -61,13 +61,13 @@
                                 @enderror
                             </div>
                             <!-- <div class="form-check form-check-info text-start">
-                                            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
-                                                checked>
-                                            <label class="form-check-label" for="flexCheckDefault">
-                                                I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and
-                                                    Conditions</a>
-                                            </label>
-                                        </div> -->
+                                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault"
+                                                    checked>
+                                                <label class="form-check-label" for="flexCheckDefault">
+                                                    I agree the <a href="javascript:;" class="text-dark font-weight-bolder">Terms and
+                                                        Conditions</a>
+                                                </label>
+                                            </div> -->
                             <div class="text-center">
                                 <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit">Register</button>
                             </div>

@@ -146,8 +146,8 @@ Route::controller(CustomAuthController::class)->group(function () {
     Route::get('/email-verification', 'emailVerification')->name('email-verification');
 
     Route::get('/logout', 'logout')->name('logout');
-    Route::post('/login', 'credentials')->name('login');
-    Route::post('/register', 'store')->name('register');
+    Route::post('/login', 'credentials')->name('credentials');
+    Route::post('/register', 'store')->name('register.store');
     Route::post('/email-verification', 'check')->name('email-verification.check');
 });
 
@@ -177,6 +177,8 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::put('/us/invoice/update/{invoice}', 'update')->name('us.invoice.update');
     Route::get('/us/invoice/recive/{invoice}', 'confirmRecive')->name('us.invoice.recive');
     Route::get('/us/invoice/delete/{invoice}', 'delete')->name('us.invoice.delete');
+
+    Route::post('/us/invoice/checkout/{invoice}', 'checkout')->name('us.invoice.checkout');
 });
 
 Route::post('/su/area/simpan', [AreaController::class, 'simpan'])->name('su.area.simpan');

@@ -118,27 +118,6 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#payment_method').change(function() {
-                let payment_method = $('#payment_method').val()
-                switch (payment_method) {
-                    case 'transfer':
-                        $('#address_check').attr('hidden', false)
-                        $('#pickup_method').attr('hidden', false)
-                        break
-                    case 'cod':
-                        $('#address_check').attr('hidden', false)
-                        $('#pickup_method').attr('hidden', true)
-                        break
-                    case 'cash':
-                        $('#address_check').attr('hidden', true)
-                        $('#pickup_method').attr('hidden', true)
-                        break
-                }
-            })
-        })
-    </script>
-    <script>
-        $(document).ready(function() {
             $('#btn-pay').click(function(e) {
                 e.preventDefault()
                 let provinsi = $('#provinsi').val()
@@ -150,9 +129,10 @@
                     $('#form-checkout').submit()
                 } else {
                     $.ajax({
-                        url: "{{ route('api.invoice.checkout', ['invoice' => $invoice->id]) }}",
+                        url: "{{ route('us.invoice.checkout', ['invoice' => $invoice->id]) }}",
                         type: 'POST',
                         data: {
+                            _token: "{{ csrf_token() }}",
                             provinsi: provinsi,
                             kabupaten: kabupaten,
                             kecamatan: kecamatan,
@@ -261,5 +241,26 @@
                     document.getElementById("kelurahan").innerHTML = tampung;
                 });
         });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#payment_method').change(function() {
+                let payment_method = $('#payment_method').val()
+                switch (payment_method) {
+                    case 'transfer':
+                        $('#address_check').attr('hidden', false)
+                        $('#pickup_method').attr('hidden', false)
+                        break
+                    case 'cod':
+                        $('#address_check').attr('hidden', false)
+                        $('#pickup_method').attr('hidden', true)
+                        break
+                    case 'cash':
+                        $('#address_check').attr('hidden', true)
+                        $('#pickup_method').attr('hidden', true)
+                        break
+                }
+            })
+        })
     </script>
 @endsection

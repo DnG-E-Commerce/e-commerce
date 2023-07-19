@@ -16,11 +16,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::post('/api/checkout/{invoice}', [InvoiceController::class, 'checkout'])->name('api.invoice.checkout');
+Route::post('/checkout/{invoice}', [InvoiceController::class, 'checkout'])->name('api.invoice.checkout');
 
 // Route::get('/api/invoice/{invoice}', [InvoiceController::class, 'generateMidtrans'])->name('api.invoice');
 // Route::post('/api/callback', [OrderController::class, 'callback']);

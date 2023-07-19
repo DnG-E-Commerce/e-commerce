@@ -19,7 +19,7 @@
                                 <p class="mb-0">Masukan Email dan Password untuk Login!</p>
                             </div>
                             <div class="card-body">
-                                <form role="form" action="{{ route('login') }}" method="POST">
+                                <form role="form" action="{{ route('credentials') }}" method="POST">
                                     @csrf
                                     <div class="mb-3">
                                         <input type="email" class="form-control form-control-lg" placeholder="Email"
