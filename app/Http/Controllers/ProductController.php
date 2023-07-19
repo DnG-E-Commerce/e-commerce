@@ -60,7 +60,7 @@ class ProductController extends Controller
             'name' => 'required',
             'desc' => 'required',
             'uom' => 'required',
-            'photo' => 'required',
+            'photo' => 'required|mimes:jpg,png,jpeg,bmp|max:1024',
             'qty' => 'required',
             'customer_price' => 'required|numeric',
             'reseller_price' => 'required|numeric',

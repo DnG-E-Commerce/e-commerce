@@ -106,8 +106,8 @@ class CustomAuthController extends Controller
         $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
-            'phone' => 'required|numeric|unique:users',
-            'password' => 'required|min:6',
+            'phone' => 'required|numeric|unique:users|min:11',
+            'password' => 'required|min:8|regex:/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{6,}$/',
             'repeat-password' => 'required|same:password|required_with:password'
         ]);
         DB::table('users')->insert([
@@ -132,7 +132,7 @@ class CustomAuthController extends Controller
         DB::table('notifications')->insert([
             'user_id' => $latest->id,
             'title' => 'Membuat Akun baru',
-            'message' => "Berhasil menbuat akun baru pada " . now('Asia/Jakarta'),
+            'message' => "Berhasil membuat akun baru pada " . now('Asia/Jakarta'),
             'is_read' => 1
         ]);
 
@@ -164,13 +164,13 @@ class CustomAuthController extends Controller
             'otp' => 'required|numeric'
         ]);
         $data = DB::table('email_verifications')->where('otp', $request->otp)->first();
-        if ($request->otp == $data->otp) {
+        if ($data !== null && $request->otp == $data->otp) {
             DB::table('users')->where('email', $data->email)->update([
                 'email_verified_at' => now('Asia/Jakarta')
             ]);
             DB::table('email_verifications')->delete($data->id);
             $session = [
-                'message' => 'Berhasil memverifikasi email! Login untuk mulai berlanja',
+                'message' => 'Berhasil memverifikasi email! Login untuk mulai berbelanja',
                 'type' => 'Email Verifikasi',
                 'alert' => 'Notifikasi Sukses!',
                 'class' => 'success'

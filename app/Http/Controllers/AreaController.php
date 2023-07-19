@@ -53,7 +53,7 @@ class AreaController extends Controller
             'provinsi'   => 'required|not_in:pilih',
             'kabupaten'  => 'required|not_in:pilih',
             'kecamatan'  => 'required|not_in:pilih',
-            'kelurahan'  => 'required|not_in:pilih',
+            'kelurahan'  => 'required|not_in:pilih|unique:areas',
             'ongkir'     => 'required|numeric',
         ]);
         DB::table('areas')->insert([
@@ -114,7 +114,7 @@ class AreaController extends Controller
             'provinsi'   => 'required|not_in:pilih',
             'kabupaten'  => 'required|not_in:pilih',
             'kecamatan'  => 'required|not_in:pilih',
-            'kelurahan'  => 'required|not_in:pilih',
+            'kelurahan'  => 'required|not_in:pilih|unique:areas',
             'ongkir'     => 'required|numeric',
         ]);
         DB::table('areas')->where('id', $area->id)
