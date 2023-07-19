@@ -47,6 +47,13 @@ class DriverController extends Controller
             'photo' => $photo,
             'created_at' => now('Asia/Jakarta'),
         ]);
+        DB::table('notifications')->insert([
+            'user_id' => $invoice->user_id,
+            'title' => 'Barang Telah Sampai Tujuan!',
+            'message' => "Pesanan dengan Invoice $invoice->invoice_code telah sampai tujuan! terimakasih telah berbelanja di D&G Store",
+            'is_read' => 0,
+            'created_at' => now('Asia/Jakarta'),
+        ]);
         $session = [
             'message' => 'Berhasil mengupdate status pesanan!',
             'type' => 'Update Status Pesanan',

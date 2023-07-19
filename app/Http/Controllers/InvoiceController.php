@@ -358,13 +358,20 @@ class InvoiceController extends Controller
      */
     public function confirmRecive(Invoice $invoice)
     {
-
+        $user = auth()->user();
         DB::table('invoices')->where([
             ['id', $invoice->id],
             ['invoice_code', $invoice->invoice_code]
         ])->update([
             'is_recive' => 1,
             'updated_at' => now('Asia/Jakarta'),
+        ]);
+        DB::table('notifications')->insert([
+            'user_id' => $user->id,
+            'title' => 'Barang Telah Diterima!',
+            'message' => "Pesanan dengan Invoice $invoice->invoice_code telah diterima! terimakasih telah berbelanja di D&G Store",
+            'is_read' => 0,
+            'created_at' => now('Asia/Jakarta'),
         ]);
         $session = [
             'message' => 'Pesanan Berhasil diterima! Terimakasih telah berbelanja di D&G Store',
