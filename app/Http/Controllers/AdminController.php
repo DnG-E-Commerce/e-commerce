@@ -222,8 +222,8 @@ class AdminController extends Controller
     {
         $session = [
             'message' => 'Berhasil mengupdate Pesanan!',
-            'type' => 'Edit Pesanan',
-            'alert' => 'Notifikasi Sukses!',
+            'type' => 'Update Pesanan',
+            'alert' => 'Update Sukses!',
             'class' => 'success'
         ];
 
@@ -280,7 +280,7 @@ class AdminController extends Controller
         $session = [
             'message' => 'Berhasil mengupdate Profile!',
             'type' => 'Edit Profile',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Update Profile!',
             'class' => 'success'
         ];
         return redirect()->route('su.profile')->with($session);
@@ -301,7 +301,7 @@ class AdminController extends Controller
             $session = [
                 'message' => 'Berhasil mengubah password!',
                 'type' => 'Ubah Password',
-                'alert' => 'Notifikasi Berhasil!',
+                'alert' => 'Ubah Password berhasil!',
                 'class' => 'success'
             ];
             return redirect()->route('su.profile')->with($session);
@@ -309,7 +309,7 @@ class AdminController extends Controller
         $session = [
             'message' => 'Gagal Mengubah password, pastikan password lama benar!',
             'type' => 'Ubah Password',
-            'alert' => 'Notifikasi Gagal!',
+            'alert' => 'Ubah Password Gagal!',
             'class' => 'danger'
         ];
         return redirect()->route('su.profile.change-password')->with($session);

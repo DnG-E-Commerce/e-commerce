@@ -197,10 +197,12 @@ class InvoiceController extends Controller
             'created_at' => now('Asia/Jakarta'),
         ]);
         DB::commit();
+        $codAndTransfer = htmlspecialchars("Berhasil menyelesaikan transaksi!<br>Untuk Pengiriman Produk hanya untuk wilayah Subang, Indramayu, Sumedang, Bandung, Purwakarta dan sekitarnya. Jika diluar itu harap konfirmasi ke admin dengan menghubungi no <a href='https://wa.me/+6283138578369'>083138578369</a>");
+        $cash = "Berhasil menyelesaikan transaksi! Terimakasih telah berbelanja di D&G Store!";
         $session = [
-            'message' => 'Berhasil menyelesaikan transaksi! Terimakasih telah berbelanja di DnG Store',
+            'message' => $request->payment_method == 'cash' ? $cash : $codAndTransfer,
             'type' => 'Transaksi Berhasil',
-            'alert' => 'Notifikasi berhasil!',
+            'alert' => 'Berhasil menyelesaikan transaksi!',
             'class' => 'success'
         ];
         return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
@@ -376,7 +378,7 @@ class InvoiceController extends Controller
         $session = [
             'message' => 'Pesanan Berhasil diterima! Terimakasih telah berbelanja di D&G Store',
             'type' => 'Penerimaan Pesanan',
-            'alert' => 'Notifikasi berhasil!',
+            'alert' => 'Pesanan Diterima!',
             'class' => 'success'
         ];
         return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
@@ -404,7 +406,7 @@ class InvoiceController extends Controller
         $session = [
             'message' => 'Berhasil mengupdate status pembayaran invoice',
             'type' => 'Status Pembayaran Invoice',
-            'alert' => 'Notifikasi berhasil!',
+            'alert' => 'Update pembayaran berhasil!',
             'class' => 'success'
         ];
         return redirect()->route('su.invoice.detail', ['invoice' => $invoice->id])->with($session);
@@ -524,16 +526,16 @@ class InvoiceController extends Controller
             DB::table('invoices')->delete($invoice->id);
             $session = [
                 'message' => 'Berhasil membatalkan orderan!',
-                'type' => 'Menghapus Orderan',
-                'alert' => 'Notifikasi berhasil!',
+                'type' => 'Membatalkan Orderan',
+                'alert' => 'Berhasil membatalkan!',
                 'class' => 'success'
             ];
             return redirect()->route('us.order')->with($session);
         } else {
             $session = [
                 'message' => 'Anda tidak dapat membatalkan pesanan yang sudah lunas dan dikonfirmasi oleh admin!',
-                'type' => 'Menghapus Orderan',
-                'alert' => 'Notifikasi gagal!',
+                'type' => 'Membatalkan Orderan',
+                'alert' => 'Gagal Membatalkan!',
                 'class' => 'danger'
             ];
             return redirect()->route('us.invoice')->with($session);

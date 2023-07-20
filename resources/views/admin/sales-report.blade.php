@@ -181,7 +181,7 @@
                             <i class="ni ni-bell-55 ni-3x"></i>
                             <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}
                             </h4>
-                            <p>{{ Session::get('message') }}</p>
+                            <p>{!! Session::get('message') !!}</p>
                         </div>
                     </div>
                 </div>
