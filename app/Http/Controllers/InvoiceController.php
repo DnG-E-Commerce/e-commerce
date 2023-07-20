@@ -197,7 +197,7 @@ class InvoiceController extends Controller
             'created_at' => now('Asia/Jakarta'),
         ]);
         DB::commit();
-        $codAndTransfer = htmlspecialchars("Berhasil menyelesaikan transaksi!<br>Untuk Pengiriman Produk hanya untuk wilayah Subang, Indramayu, Sumedang, Bandung, Purwakarta dan sekitarnya. Jika diluar itu harap konfirmasi ke admin dengan menghubungi no <a href='https://wa.me/+6283138578369'>083138578369</a>");
+        $codAndTransfer = "Berhasil menyelesaikan transaksi!<br>Untuk Pengiriman Produk hanya untuk wilayah Subang, Indramayu, Sumedang, Bandung, Purwakarta dan sekitarnya. Jika diluar itu harap konfirmasi ke admin dengan menghubungi no <a href='https://wa.me/+6283138578369'>083138578369</a>";
         $cash = "Berhasil menyelesaikan transaksi! Terimakasih telah berbelanja di D&G Store!";
         $session = [
             'message' => $request->payment_method == 'cash' ? $cash : $codAndTransfer,
