@@ -78,7 +78,7 @@
                                                     readonly>
                                             @endif
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-3">
                                             <h5 id="prices_for" class="form-text">
                                                 @if (!$user)
                                                     Harga Satuan
@@ -134,8 +134,29 @@
                             </div>
                         </div>
                         <hr class="border border-1 border-dark">
-                        <div class="text-break">
+                        <div class="text-break"> 
+                        <strong>Deskripsi Produk:</strong> <br>
                             {!! htmlspecialchars_decode($product->desc) !!}
+                        </div><hr class="border border-1 border-dark">
+                         <div class="class=  text-break">
+                         <strong>Catatan:</strong> <br>
+                         <p>Pengiriman Barang Hanya Untuk Wilayah Subang, Indramayu, Purwakarta, Cirebon, Bandung dan sekitarnya<br>
+                         Jika di luar wilayah tersebut harap menghubungi atau konfirmasi kepada Admin terlebih dahulu. <br>
+                        Klik link WhatsApp di bawah ini untuk konfirmasi.</p>
+                         <div class="col-lg-6">
+    <ul class="nav nav-footer justify-content-center justify-content-lg-start">
+        <li class="nav-item">
+            <a href="https://wa.me/085658270260" class="nav-link text-muted" target="_blank">
+                
+               
+<i class="fa-brands fa-whatsapp"></i> Chat on WhatsApp
+            </a>
+        </li>
+    </ul>
+</div>
+                        
+                    </ul>
+                </div>
                         </div>
                     </div>
                 </div>

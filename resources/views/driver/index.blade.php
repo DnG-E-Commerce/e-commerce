@@ -23,6 +23,10 @@
                                 No</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Invoice Code</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Nama</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Tanggal</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Grand Total</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -44,6 +48,12 @@
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold">{{ $invoice->invoice_code }}</span>
+                                            </td>
+                                            <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{  $invoice->user->name }}</span>
+                                            </td>
+                                             <td class="align-middle text-sm">
+                                                <span class="text-xs font-weight-bold">{{ $invoice->created_at->format('d-m-Y') }}</span>
                                             </td>
                                             <td class="align-middle text-sm">
                                                 <span class="text-xs font-weight-bold"> Rp.

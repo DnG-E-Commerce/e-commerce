@@ -36,10 +36,7 @@ class DriverController extends Controller
             ->update([
                 'status' => 'Lunas'
             ]);
-        DB::table('orders')->where('invoice_id', $invoice->id)
-            ->update([
-                'status' => 'Diterima'
-            ]);
+       
         DB::table('shippings')->insert([
             'driver_id' => $user->id,
             'user_id' => $invoice->user_id,
@@ -50,7 +47,9 @@ class DriverController extends Controller
         DB::table('notifications')->insert([
             'user_id' => $invoice->user_id,
             'title' => 'Barang Telah Sampai Tujuan!',
-            'message' => "Pesanan dengan Invoice $invoice->invoice_code telah sampai tujuan! terimakasih telah berbelanja di D&G Store",
+            'message' => "Pesanan dengan Invoice $invoice->invoice_code telah sampai tujuan! Harap konfirmasi penerimaan barang pada pesanan.
+            Terimakasih telah berbelanja di D&G Store ",
+            
             'is_read' => 0,
             'created_at' => now('Asia/Jakarta'),
         ]);

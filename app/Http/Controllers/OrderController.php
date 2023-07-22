@@ -255,7 +255,7 @@ class OrderController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => $invoice->user_id,
                 'title' => 'Pesanan Dikonfirmasi/Dikemas',
-                'message' => "Pesanan anda telah dikonfirmasi oleh admin! dan pesanan anda sedang disiapkan",
+                'message' => "Pesanan anda invoice $last_invoice->invoice_code telah dikonfirmasi oleh admin! dan pesanan anda sedang disiapkan",
                 'is_read' => 0,
                 'created_at' => now('Asia/Jakarta'),
             ]);
@@ -263,7 +263,7 @@ class OrderController extends Controller
             DB::table('notifications')->insert([
                 'user_id' => $invoice->user_id,
                 'title' => 'Pesanan telah dikirim',
-                'message' => "Pesanan anda telah dikirim oleh admin! harap menunggu dengan sabar",
+                'message' => "Pesanan anda telah dikirim oleh driver! harap menunggu dengan sabar",
                 'is_read' => 0,
                 'created_at' => now('Asia/Jakarta'),
             ]);

@@ -369,6 +369,10 @@ class InvoiceController extends Controller
             'is_recive' => 1,
             'updated_at' => now('Asia/Jakarta'),
         ]);
+        DB::table('orders')->where('invoice_id', $invoice->id)
+        ->update([
+            'status' => 'Diterima'
+        ]);
         DB::table('notifications')->insert([
             'user_id' => $user->id,
             'title' => 'Barang Telah Diterima!',

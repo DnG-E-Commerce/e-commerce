@@ -106,11 +106,13 @@ class HomeController extends Controller
     public function notification()
     {
         $user = auth()->user();
+        $invoices = Invoice::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         $notification = Notification::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
         return view('notification.index', [
             'title' => 'DnG Store | Notifikasi',
             'menu' => ['Notification'],
             'user' => $user,
+            'user' => $invoices,
             'notifications' => $notification
         ]);
     }
@@ -122,7 +124,7 @@ class HomeController extends Controller
             ->where('user_id', $user->id)
             ->where('total', '>', 200000)
             ->count();
-        if ($detect >= 2 && $user->role == 'Customer') {
+        if ($detect >= 20 && $user->role == 'Customer') {
             $notification = Notification::where([
                 ['user_id', $user->id],
                 ['title', '=', 'Tawaran Menjadi Reseller']
