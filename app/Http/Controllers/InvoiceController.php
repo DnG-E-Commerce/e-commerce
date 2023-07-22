@@ -170,7 +170,7 @@ class InvoiceController extends Controller
                 break;
 
             case 'transfer':
-                if ($request->is_pickup == 'dikirim' && $request->kelurhaan == 'Pilih') {
+                if ($request->is_pickup == 'dikirim' && $request->kelurahan == 'Pilih') {
                     $session = [
                         'message' => 'Harap lengkapi data alamat!',
                         'type' => 'Proses Gagal!',
@@ -205,7 +205,8 @@ class InvoiceController extends Controller
         ];
         return redirect()->route('us.invoice.show', ['invoice' => $invoice->id])->with($session);
     }
-
+    
+    
     public function handleCash($data, $id)
     {
         $invoice = Invoice::where('id', $id)->first();

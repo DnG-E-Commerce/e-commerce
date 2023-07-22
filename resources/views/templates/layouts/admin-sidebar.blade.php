@@ -23,7 +23,7 @@
         ],
         3 => [
             'id' => 4,
-            'name' => 'Admin',
+            'name' => 'Admin dan Driver',
             'icon' => 'ni ni-single-02 text-danger',
             'url' => 'su.admin',
             'role' => ['Admin'],

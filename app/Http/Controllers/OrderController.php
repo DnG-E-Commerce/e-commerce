@@ -268,6 +268,7 @@ class OrderController extends Controller
                 'created_at' => now('Asia/Jakarta'),
             ]);
         }
+        
         // switch ($request->status) {
         //     case 'Dikonfimasi/Dikemas':
         //         break;

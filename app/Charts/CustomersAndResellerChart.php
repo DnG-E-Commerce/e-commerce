@@ -17,7 +17,7 @@ class CustomersAndResellerChart
 
     public function build(): \ArielMejiaDev\LarapexCharts\PieChart
     {
-        $users = User::select('users.name', DB::raw('SUM(orders.qty) as total_order'))
+        $users = User::select('users.name', DB::raw('SUM(orders.total) as total_order'))
             ->join('orders', 'users.id', '=', 'orders.user_id')
             ->join('products', 'products.id', '=', 'orders.product_id')
             ->where('role', '=', 'Customer')

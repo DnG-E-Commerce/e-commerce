@@ -48,11 +48,12 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <?php $no = 1; ?>
                                     @foreach ($invoices as $key => $invoice)
                                         @if ($invoice->status != 'Pending')
                                             <tr>
                                                 <td>
-                                                    <h6 class="mb-0 text-sm text-center">{{ $key + 1 }}</h6>
+                                                    <h6 class="mb-0 text-sm text-center">{{ $no++ }}</h6>
                                                 </td>
                                                 <td class="align-middle text-sm">
                                                     <span class="text-xs font-weight-bold">{{ $invoice->user->name }}</span>

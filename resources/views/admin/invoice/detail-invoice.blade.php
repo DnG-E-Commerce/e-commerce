@@ -83,26 +83,7 @@
                                             <td>:</td>
                                             <td>Rp. {{ number_format($invoice->grand_total, 0, '.', ',') }}</td>
                                         </tr>
-                                        <tr>
-                                            <th>Status Pembayaran</th>
-                                            <td>:</td>
-                                            <td>
-                                                {{ $invoice->status }}
-                                            </td>
-                                        </tr>
-                                        @foreach ($invoice->order as $order)
-                                            @if ($invoice->payment_method == 'cash' && $invoice->status != 'Lunas' && $order->status == 'Dikonfirmasi/Dikemas')
-                                                <tr>
-                                                    <th>Update Status Pembayaran</th>
-                                                    <td>:</td>
-                                                    <td>
-                                                        <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $invoice->id]) }}"
-                                                            class="btn btn-sm bg-gradient-warning">Konfirmasi Lunas</a>
-                                                    </td>
-                                                </tr>
-                                            @endif
-                                        @break
-                                    @endforeach
+                                       
                                     <tr>
                                     <tr>
                                         <th>Metode Pengambilan Barang</th>
@@ -150,7 +131,7 @@
 
                                                 </td>
                                             </tr>
-                                        @elseif (in_array($invoice->payment_method, ['cod', 'transfer']) &&
+                                        @elseif ($invoice->payment_method == 'cod' &&
                                                 in_array($order->status, ['Dipesan', 'Dikonfirmasi/Dikemas']))
                                             <tr>
                                                 <th>Update Pesanan</th>
@@ -180,9 +161,86 @@
 
                                                 </td>
                                             </tr>
+                                            @elseif ($invoice->payment_method == 'transfer' && $invoice->status == 'Lunas' && $invoice->is_pickup == 1 && $invoice->is_recive == 0
+                                             &&
+                                                in_array($order->status, ['Dipesan', 'Dikonfirmasi/Dikemas']))
+                                                <tr>
+                                                    <th>Update Pesanan</th>
+                                                        <td>:</td>
+                                                    <td>
+                                                        <form action="{{ route('su.order.update-status', ['invoice' => $invoice->id]) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            @switch($order->status)
+                                                            @case('Dipesan')
+                                                                <input type="hidden" name="status"
+                                                                    value="Dikonfirmasi/Dikemas">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm bg-gradient-warning">Konfirmasi
+                                                                    / Dikemas</button>
+                                                            @break
+
+                                                            @case('Dikonfirmasi/Dikemas')
+                                                                <input type="hidden" name="status" value="Diterima">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm bg-gradient-warning">Diterima</button>
+                                                            @break
+                                                            @endswitch
+                                                        </form>
+                                                    </td>
+                                                </tr>
+                                                
+                                                @elseif ($invoice->payment_method == 'transfer' && $invoice->status == 'Lunas' && $invoice->is_pickup == 0 &&
+                                                in_array($order->status, ['Dipesan', 'Dikonfirmasi/Dikemas']))
+                                                <tr>
+                                                    <th>Update Pesanan</th>
+                                                        <td>:</td>
+                                                    <td>
+                                                        <form action="{{ route('su.order.update-status', ['invoice' => $invoice->id]) }}" method="post">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            @switch($order->status)
+                                                            @case('Dipesan')
+                                                                <input type="hidden" name="status"
+                                                                    value="Dikonfirmasi/Dikemas">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm bg-gradient-warning">Konfirmasi
+                                                                    / Dikemas</button>
+                                                            @break
+
+                                                            @case('Dikonfirmasi/Dikemas')
+                                                                <input type="hidden" name="status" value="Dikirim">
+                                                                <button type="submit"
+                                                                    class="btn btn-sm bg-gradient-warning">Dikirim</button>
+                                                            @break
+                                                            @endswitch
+                                                        </form>
+                                                    </td>
+                                                </tr>
+   
                                         @endif
-                                    @break
+                                    
                                 @endforeach
+                                <tr>
+                                            <th>Status Pembayaran</th>
+                                            <td>:</td>
+                                            <td>
+                                                {{ $invoice->status }}
+                                            </td>
+                                        </tr>
+                                        @foreach ($invoice->order as $order)
+                                            @if ($invoice->payment_method == 'cash' && $invoice->status != 'Lunas' && $order->status == 'Dikonfirmasi/Dikemas')
+                                                <tr>
+                                                    <th>Update Status Pembayaran</th>
+                                                    <td>:</td>
+                                                    <td>
+                                                        <a href="{{ route('su.invoice.confirm-cash', ['invoice' => $invoice->id]) }}"
+                                                            class="btn btn-sm bg-gradient-warning">Konfirmasi Lunas</a>
+                                                    </td>
+                                                </tr>
+                                            @endif
+                                        @break
+                                    @endforeach
                             </table>
                             @if (in_array($invoice->payment_method, ['cod', 'transfer']))
                                 {{-- Comment ini --}}
