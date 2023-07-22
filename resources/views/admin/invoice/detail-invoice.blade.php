@@ -19,7 +19,7 @@
                         <div class="row p-3">
                             <div class="col-lg-6">
                                 <h6>List Pemesanan</h6>
-                                <ol class="list-group list-group-numbered">
+                                <ol class="list-group list-group-numbered mb-3">
                                     @foreach ($invoice->order as $order)
                                         <li class="list-group-item d-flex justify-content-between align-items-start">
                                             <div class="ms-2 me-auto">
@@ -38,6 +38,25 @@
                                         </li>
                                     @endforeach
                                 </ol>
+                                @if (in_array($invoice->payment_method, ['cod', 'transfer']))
+                                    {{-- Comment ini --}}
+                                    <h5 class="text-center">Bukti barang diterima</h5>
+
+                                    <div style="display: grid;" class="justify-content-center">
+                                        @if (!$invoice->shipping)
+                                            <img src="{{ asset('storage/image/blank.jpg') }}"
+                                                style="width: 30rem; object-fit: cover; border: 1px solid black;"
+                                                id="canvas-photo">
+                                        @else
+                                            <a href="{{ asset('storage/' . $invoice->shipping->photo) }}" target="_blank">
+                                                <img src="{{ asset('storage/' . $invoice->shipping->photo) }}"
+                                                    style="width: 30rem; object-fit: cover; border: 1px solid black;"
+                                                    id="canvas-photo">
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endif {{-- Comment ini juga  --}}
+
                             </div>
                             <div class="col-lg-6">
                                 <h6>Invoice</h6>
@@ -242,25 +261,6 @@
                                         @break
                                     @endforeach
                             </table>
-                            @if (in_array($invoice->payment_method, ['cod', 'transfer']))
-                                {{-- Comment ini --}}
-                                <h5 class="text-center">Bukti barang diterima</h5>
-
-                                <div style="display: grid;" class="justify-content-center">
-                                    @if (!$invoice->shipping)
-                                        <img src="{{ asset('storage/image/blank.jpg') }}"
-                                            style="width: 30rem; object-fit: cover; border: 1px solid black;"
-                                            id="canvas-photo">
-                                    @else
-                                        <a href="{{ asset('storage/' . $invoice->shipping->photo) }}"
-                                            target="_blank">
-                                            <img src="{{ asset('storage/' . $invoice->shipping->photo) }}"
-                                                style="width: 30rem; object-fit: cover; border: 1px solid black;"
-                                                id="canvas-photo">
-                                        </a>
-                                    @endif
-                                </div>
-                            @endif {{-- Comment ini juga  --}}
                         </div>
                     </div>
                 </div>
@@ -284,7 +284,7 @@ aria-hidden="true">
             <div class="py-3 text-center">
                 <i class="ni ni-bell-55 ni-3x"></i>
                 <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
-                <p>{{ Session::get('message') }}</p>
+                <p>{!! Session::get('message') !!}</p>
             </div>
         </div>
     </div>

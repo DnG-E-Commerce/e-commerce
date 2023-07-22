@@ -24,19 +24,14 @@
                         </select>
                     </div>
                     <div class="form-group" id="pickup_method">
-                        <label for="is_pickup">Pilih metode pengambilan pesanan</label>
-                        <br>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="is_pickup" id="opsi1" value="diambil">
-                            <label class="form-check-label" for="is_pickup">Diambil ke Toko</label>
-                        </div>
-                        <div class="form-check form-check-inline">
-                            <input class="form-check-input" type="radio" name="is_pickup" id="opsi2" value="dikirim">
-                            <label class="form-check-label" for="is_pickup">Di kirim</label>
-                        </div>
+                        <label for="is_pickup">Pilih metode pengiriman barang</label>
+                        <select name="is_pickup" id="is_pickup" class="form-select">
+                            <option value="diambil">Diambil ke toko</option>
+                            <option value="dikirim">Dikirim sesuai dengan alamat</option>
+                        </select>
                     </div>
 
-                    <div class="row" id="address_check">
+                    <div class="row" id="address_check" hidden>
                         <small>Isi Alamat Jika Produk Anda ingin di Kirim</small>
                         <div class="col-lg-6">
                             <div class="form-group">
@@ -110,7 +105,7 @@
                     <div class="py-3 text-center">
                         <i class="ni ni-bell-55 ni-3x"></i>
                         <h4 class="text-gradient text-{{ Session::get('class') }} mt-4">{{ Session::get('alert') }}</h4>
-                        <p>{{ Session::get('message') }}</p>
+                        <p>{!! Session::get('message') !!}</p>
                     </div>
                 </div>
             </div>
@@ -118,57 +113,120 @@
     </div>
     <script>
         $(document).ready(function() {
-            $('#btn-pay').click(function(e) {
-                e.preventDefault()
+            $('#payment_method').change(function() {
+                let payment_method = $('#payment_method').val()
+                let provinsi = $('#provinsi').val()
+                let kabupaten = $('#kabupaten').val()
+                let kecamatan = $('#kecamatan').val()
+                let kelurahan = $('#kelurahan').val()
+                switch (payment_method) {
+                    case 'transfer':
+                        $('#address_check').attr('hidden', false)
+                        $('#pickup_method').attr('hidden', false)
+                        break
+                    case 'cod':
+                        $('#address_check').attr('hidden', false)
+                        $('#pickup_method').attr('hidden', true)
+                        break
+                    case 'cash':
+                        $('#address_check').attr('hidden', true)
+                        $('#pickup_method').attr('hidden', true)
+                        break
+                }
+            })
+            $('#is_pickup').change(function() {
+                let is_pickup = $('#is_pickup').val()
+                switch (is_pickup) {
+                    case 'dikirim':
+                        $('#address_check').attr('hidden', false)
+                        break
+                    case 'diambil':
+                        $('#address_check').attr('hidden', true)
+                        break
+                }
+            })
+
+            function midtrans() {
                 let provinsi = $('#provinsi').val()
                 let kabupaten = $('#kabupaten').val()
                 let kecamatan = $('#kecamatan').val()
                 let kelurahan = $('#kelurahan').val()
                 let payment_method = $('#payment_method').val()
-                if (payment_method == 'cash' || payment_method == 'cod') {
+                $.ajax({
+                    url: "{{ route('us.invoice.checkout', ['invoice' => $invoice->id]) }}",
+                    type: 'POST',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        provinsi: provinsi,
+                        kabupaten: kabupaten,
+                        kecamatan: kecamatan,
+                        kelurahan: kelurahan,
+                        payment_method: payment_method
+                    },
+                    success: function(response) {
+                        window.snap.pay(response, {
+                            onSuccess: function(result) {
+                                /* You may add your own implementation here */
+                                // alert("payment success!");
+                                $('#form-checkout').submit()
+                                console.log(result)
+                            },
+                            onPending: function(result) {
+                                /* You may add your own implementation here */
+                                alert("wating your payment!");
+                                console.log(result);
+                            },
+                            onError: function(result) {
+                                /* You may add your own implementation here */
+                                alert("payment failed!");
+                                console.log(result);
+                            },
+                            onClose: function() {
+                                /* You may add your own implementation here */
+                                alert(
+                                    'you closed the popup without finishing the payment'
+                                );
+                            }
+                        })
+                    },
+                    error: function(error) {
+                        console.log(error)
+                    }
+                })
+            }
+
+            $('#btn-pay').click(function(e) {
+                e.preventDefault()
+                let pickup_method = $('#is_pickup').val()
+                let provinsi = $('#provinsi').val()
+                let kabupaten = $('#kabupaten').val()
+                let kecamatan = $('#kecamatan').val()
+                let kelurahan = $('#kelurahan').val()
+                let payment_method = $('#payment_method').val()
+                if (payment_method == 'cash') {
                     $('#form-checkout').submit()
+                } else if (payment_method == 'cod') {
+                    if (provinsi != 'Pilih' && kabupaten != 'Pilih' && kecamatan != 'Pilih' &&
+                        kelurahan !=
+                        'Pilih') {
+                        $('#form-checkout').submit()
+                    } else {
+                        alert('Harap isi alamat dengan lengkap!')
+                        window.location.reload()
+                    }
                 } else {
-                    $.ajax({
-                        url: "{{ route('us.invoice.checkout', ['invoice' => $invoice->id]) }}",
-                        type: 'POST',
-                        data: {
-                            _token: "{{ csrf_token() }}",
-                            provinsi: provinsi,
-                            kabupaten: kabupaten,
-                            kecamatan: kecamatan,
-                            kelurahan: kelurahan,
-                            payment_method: payment_method
-                        },
-                        success: function(response) {
-                            window.snap.pay(response, {
-                                onSuccess: function(result) {
-                                    /* You may add your own implementation here */
-                                    // alert("payment success!");
-                                    $('#form-checkout').submit()
-                                    console.log(result)
-                                },
-                                onPending: function(result) {
-                                    /* You may add your own implementation here */
-                                    alert("wating your payment!");
-                                    console.log(result);
-                                },
-                                onError: function(result) {
-                                    /* You may add your own implementation here */
-                                    alert("payment failed!");
-                                    console.log(result);
-                                },
-                                onClose: function() {
-                                    /* You may add your own implementation here */
-                                    alert(
-                                        'you closed the popup without finishing the payment'
-                                    );
-                                }
-                            })
-                        },
-                        error: function(error) {
-                            console.log(error)
+                    if (pickup_method == 'dikirim') {
+                        if (provinsi != 'Pilih' && kabupaten != 'Pilih' && kecamatan != 'Pilih' &&
+                            kelurahan !=
+                            'Pilih') {
+                            midtrans()
+                        } else {
+                            alert('Harap isi alamat dengan lengkap!')
+                            window.location.reload()
                         }
-                    })
+                    } else {
+                        midtrans()
+                    }
                 }
             })
         })
@@ -241,26 +299,5 @@
                     document.getElementById("kelurahan").innerHTML = tampung;
                 });
         });
-    </script>
-    <script>
-        $(document).ready(function() {
-            $('#payment_method').change(function() {
-                let payment_method = $('#payment_method').val()
-                switch (payment_method) {
-                    case 'transfer':
-                        $('#address_check').attr('hidden', false)
-                        $('#pickup_method').attr('hidden', false)
-                        break
-                    case 'cod':
-                        $('#address_check').attr('hidden', false)
-                        $('#pickup_method').attr('hidden', true)
-                        break
-                    case 'cash':
-                        $('#address_check').attr('hidden', true)
-                        $('#pickup_method').attr('hidden', true)
-                        break
-                }
-            })
-        })
     </script>
 @endsection

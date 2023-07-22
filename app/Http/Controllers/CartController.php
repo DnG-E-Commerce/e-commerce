@@ -54,7 +54,7 @@ class CartController extends Controller
         $session = [
             'message' => 'Berhasil menambahkan prodak ke keranjang, Checkout sekarang juga!',
             'type' => 'Tambah ke Keranjang',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Berhasil!',
             'class' => 'success'
         ];
         $cart = DB::table('carts')->where([
@@ -92,7 +92,7 @@ class CartController extends Controller
         $session = [
             'message' => 'Berhasil melakukan checkout, lakukan pembayaran sekarang juga!',
             'type' => 'Checkout!',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Checkout Berhasil!',
             'class' => 'success'
         ];
         DB::beginTransaction();
@@ -114,7 +114,7 @@ class CartController extends Controller
                 $session = [
                     'message' => 'Anda tidak dapat memesan barang melebihi kuantitas yang tersedia!',
                     'type' => 'Checkout!',
-                    'alert' => 'Notifikasi Gagal!',
+                    'alert' => 'Checkout gagal!',
                     'class' => 'danger'
                 ];
                 return redirect()->route('us.cart')->with($session);
@@ -139,47 +139,13 @@ class CartController extends Controller
         return redirect()->route('us.invoice.edit', ['invoice' => $last_invoice->id])->with($session);
     }
 
-    public function show(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Cart $cart)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Cart  $cart
-     * @return \Illuminate\Http\Response
-     */
     public function delete($id)
     {
         DB::table('carts')->delete($id);
         $session = [
             'message' => "Berhasil menghapus data!",
             'type' => 'Hapus barang dikeranjang',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Hapus Berhasil!',
             'class' => 'success'
         ];
         return redirect()->route('cart')->with($session);

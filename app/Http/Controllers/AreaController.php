@@ -57,29 +57,29 @@ class AreaController extends Controller
             'ongkir'     => 'required|numeric',
         ]);
         DB::table('areas')->insert([
-                'provinsi'   => $request->provinsi,
-                'kabupaten'  => $request->kabupaten,
-                'kecamatan'  => $request->kecamatan,
-                'kelurahan'  => $request->kelurahan,
-                'ongkir'     => $request->ongkir,
-            ]);
+            'provinsi'   => $request->provinsi,
+            'kabupaten'  => $request->kabupaten,
+            'kecamatan'  => $request->kecamatan,
+            'kelurahan'  => $request->kelurahan,
+            'ongkir'     => $request->ongkir,
+        ]);
         $session = [
             'message' => 'Berhasil menambah area pengiriman!',
             'type' => 'Tambah Area',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Tambah Berhasil!',
             'class' => 'success'
         ];
         return redirect()->route('su.area')->with($session);
     }
 
-     /**
+    /**
      * Display the specified resource.
      *
      * @param  \App\Models\Area  $area
      * @return \Illuminate\Http\Response
      */
 
-  
+
     public function show(Area $area)
     {
         //
@@ -128,7 +128,7 @@ class AreaController extends Controller
         $session = [
             'message' => 'Berhasil mengubah area pengiriman!',
             'type' => 'Edit Area',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Update Berhasil!',
             'class' => 'success'
         ];
         return redirect()->route('su.area')->with($session);
@@ -146,7 +146,7 @@ class AreaController extends Controller
         $session = [
             'message' => 'Berhasil menghapus area pengiriman!',
             'type' => 'Hapus Area',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Hapus Berhasil!',
             'class' => 'success'
         ];
         return redirect()->route('su.area')->with($session);
@@ -156,26 +156,25 @@ class AreaController extends Controller
     {
         try {
             $Area = Area::findOrFail($id);
-            
+
             // Cek apakah ada relasi produk yang terhubung dengan kategori ini
             if ($Area->invoice()->exists()) {
                 throw new \Exception('Tidak dapat menghapus kategori ini karena masih terhubung dengan produk.');
-                
             }
-            
+
             $Area->delete();
             $session = [
                 'message' => 'Berhasil menghapus area!',
                 'type' => 'Hapus Area',
-                'alert' => 'Notifikasi Sukses!',
+                'alert' => 'Hapus Berhasil!',
                 'class' => 'success'
             ];
             return redirect()->route('su.area')->with($session);
         } catch (\Exception) {
-            $session= [
+            $session = [
                 'message' => 'Tidak dapat menghapus data area ini karena masih terhubung dengan invoice',
                 'type' => 'Hapus Area',
-                'alert' => 'Notifikasi Gagal!',
+                'alert' => 'Gagal Menghapus!',
                 'class' => 'success'
             ];
             return redirect()->back()->with($session);
