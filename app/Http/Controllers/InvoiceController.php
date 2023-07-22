@@ -414,32 +414,73 @@ class InvoiceController extends Controller
     }
 
     public function print_pdf(Invoice $invoice)
-    {
+    {   
         $html = "
         <!doctype html>
         <html lang='en'>
         <head>
             <meta charset='utf-8'>
             <meta name='viewport' content='width=device-width, initial-scale=1'>
-            <title>Bootstrap demo</title>
-            <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css' rel='stylesheet' integrity='sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM' crossorigin='anonymous'>
+            <title>Invoice</title>
+            <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+    
+            .invoice {
+                width: 80%;
+                margin: 0 auto;
+                padding: 20px;
+                border: 1px solid #ccc;
+            }
+    
+            table {
+                width: 100%;
+                border-collapse: collapse;
+                margin-top: 20px;
+            }
+
+            .logo {
+                max-width: 150px; /* Set the maximum width for the logo */
+                margin-bottom: 20px;
+                text-align: center;
+                
+            }
+
+            .address {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+    
+            th, td {
+                padding: 10px;
+                text-align: left;
+                border-bottom: 1px solid #ccc;
+            }
+    
+            th {
+                background-color: #f2f2f2;
+            }
+    
+            .total {
+                text-align: right;
+            }
+        </style> 
         </head>
         <body>
-            <div class='container'>
-                <div class='row justify-content-center mt-5'>
-                    <h1 class='text-center'>Invoice</h1>
-                    <hr class='border border-1 border-dark'>
-                    <div class='col-lg-6'>
-                        <h4>List Pesanan</h4>
-                        <ul class='list-group list-group-flush'>
-                            ";
-        foreach ($invoice->order as $o => $order) {
-            $html .= "<li class='list-group-item'>" . $order->product->name . " ($order->qty) (Rp. $order->total) </li>";
-        }
-        $html .= "
-                        </ul>
-                    </div>
-                    <hr class='border border-1 border-dark'>
+        <div class='invoice'>
+        <div class='logo'>
+    <img src='' >
+</div>
+    <div class='address'>
+    <h2>D&G Store</h2>
+        <p>Gg. Gn. Tangkuban Perahu No.12, Pasirkareumbi, 
+        Kec. Subang, <br> Subang, Jawa Barat 41211 <br> 
+        Phone: 082319244700
+        <br>Instagram: @dapur.jajanan.subang</p>
+    </div>
+        <h2>Invoice</h2>
+        <hr class='border border-1 border-dark'>
                     <div class='col-lg-6'>
                         <table class='table'>
                             <tr>
@@ -463,38 +504,94 @@ class InvoiceController extends Controller
         $html .= "</td>
                             </tr>
                             <tr>
+                            <th>No Telp</th>
+                            <td>:</td>
+                            <td>";
+    foreach ($invoice->order as $key => $order) {
+        $html .= $order->user->phone;
+        break;
+    }
+    $html .= "</td>
+                        </tr>
+                            <tr>
                                 <th>Alamat</th>
                                 <td>:</td>
                                 <td>";
         $invoice->send_to ? $html .= $invoice->send_to : $html .= "-";
         $html .= "</td>
                             </tr>
-                            <tr>
-                                <th>Ongkir</th>
-                                <td>:</td>
-                                <td>Rp. " . number_format($invoice->ongkir, 0, ',', '.') . "</td>
-                            </tr>
-                            <tr>
-                                <th>Total Harga</th>
-                                <td>:</td>
-                                <td>Rp. " . number_format($invoice->grand_total, 0, ',', '.') . "</td>
-                            </tr>
-                            <tr>
-                                <th>Status</th>
-                                <td>:</td>
-                                <td>$invoice->status</td>
-                            </tr>
-                            <tr>
-                                <th>Metode Pembayaran</th>
-                                <td>:</td>
-                                <td>$invoice->payment_method</td>
-                            </tr>
+                            
                         </table>
                     </div>
-                </div>
-            </div>
-            <script src='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js' integrity='sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz' crossorigin='anonymous'></script>
-        </body>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nama Barang</th>
+                    <th>Qty</th>
+                    <th>Harga</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td> ";
+                    foreach ($invoice->order as $o => $order) {
+                        $html .= $order->product->name;
+                    }
+                    $html .= "</td>
+                    <td> ";
+                    foreach ($invoice->order as $o => $order) {
+                        $html .= $order->qty;
+                    }
+                    $html .= "</td>
+                    <td> ";
+                    foreach ($invoice->order as $o => $order) {
+                        $html .= number_format($order->product->reseller_price ? $order->product->reseller_price : $order->product->customer_price, 0, ',', '.' )  ;
+                    }
+                    $html .= "</td>
+                    <td>";
+                    foreach ($invoice->order as $o => $order) {
+                        $html .=  number_format($order->total, 0, ',', '.')    ;
+                    }
+                    $html .= "</td>
+                </tr>
+                
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan='3' class='total'>Ongkir:</td>
+                    <td>" . number_format($invoice->ongkir, 0, ',', '.') . "</td>
+                </tr>
+                <tr>
+                    <td colspan='3' class='total'>Total:</td>
+                    <td>" . number_format($invoice->grand_total, 0, ',', '.') . "</td>
+                </tr>
+            </tfoot>
+            <tfoot>
+            <tr>
+            <tr>
+                <th>Catatan</th>
+                <td>:</td>
+                <td>$invoice->notes </td>
+            </tr>
+            <th>Status</th>
+            <td>:</td>
+            <td>$invoice->status</td>
+        </tr>
+        <tr>
+            <th>Metode Pembayaran</th>
+            <td>:</td>
+            <td>$invoice->payment_method</td>
+        </tr>
+        <tr>
+    
+    </tr>
+    <tr>
+        </tfoot>
+        </table>
+    </div>
+</body>
+
         </html>
         ";
         $pdf = App::make('dompdf.wrapper');

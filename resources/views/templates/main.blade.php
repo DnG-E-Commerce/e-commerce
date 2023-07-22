@@ -108,6 +108,7 @@
                                             </li>
                                         @endif
                                         <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                                        
                                     </ul>
                                 </div>
                             </div>
@@ -223,7 +224,7 @@
     <main class="main-content mt-0">
         @yield('content')
     </main>
-    {{-- <footer class="footer mt-5" style="height: 6rem;">
+    <footer class="footer mt-5" style="height: 6rem;">
         <div class="container">
             <div class="row align-items-center justify-content-lg-between">
                 <div class="col-lg-6 mb-lg-0 mb-4">
@@ -233,25 +234,30 @@
                             document.write(new Date().getFullYear())
                         </script>,
                         made with <i class="fa fa-heart"></i> by
-                        <a href="https://github.com/rissasriag" class="font-weight-bold" target="_blank">Rissa</a>
+                        <a href="https://github.com/rissasriag" class="font-weight-bold" target="_blank">Rissa Sri Agrianti</a>
                         for a better web.
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <ul class="nav nav-footer justify-content-center justify-content-lg-end">
                         <li class="nav-item">
-                            <a href="https://goo.gl/maps/5Vqv6okGdomdgtet5" class="nav-link text-muted"
+                            <a href="https://goo.gl/maps/ZH5QCckhLghQoQi5A" class="nav-link text-muted"
                                 target="_blank"><i class="fa-solid fa-location-dot"></i></a>
                         </li>
                         <li class="nav-item">
-                            <a href="https://www.creative-tim.com/blog" class="nav-link text-muted"
+                            <a href="https://www.instagram.com/dapur.jajanan.subang/" class="nav-link text-muted"
                                 target="_blank"><i class="fa-brands fa-instagram"></i></a>
                         </li>
+                        <li class="nav-item">
+                            <a href="https://wa.me/085658270260" class="nav-link text-muted"
+                                target="_blank"><i class="fa-brands fa-whatsapp">Chat on WhatsApp</i></a>
+                        </li>
+                        
                     </ul>
                 </div>
             </div>
         </div>
-    </footer> --}}
+    </footer> 
 
     <!--   Core JS Files   -->
     <script src="{{ asset('argon/js/core/popper.min.js') }}"></script>

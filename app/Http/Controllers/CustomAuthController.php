@@ -47,7 +47,7 @@ class CustomAuthController extends Controller
                 $session = [
                     'message' => $message,
                     'type' => 'Login',
-                    'alert' => 'Notifikasi Gagal!',
+                    'alert' => 'Gagal!',
                     'class' => 'danger'
                 ];
                 return redirect()->route('login')->with($session);
@@ -56,7 +56,7 @@ class CustomAuthController extends Controller
             $session = [
                 'message' => 'Selamat datang di DnG Store!',
                 'type' => 'Login',
-                'alert' => 'Notifikasi Sukses!',
+                'alert' => 'Sukses!',
                 'class' => 'success'
             ];
             if (in_array($user->role, ['Owner', 'Admin'])) return redirect()->route('su.dashboard')->with($session);
@@ -193,7 +193,7 @@ class CustomAuthController extends Controller
         $session = [
             'message' => 'Berhasil keluar dari DnG Store!',
             'type' => 'Logout Success',
-            'alert' => 'Notifikasi Sukses!',
+            'alert' => 'Sukses!',
             'class' => 'success'
         ];
         return Redirect()->route('login')->with($session);

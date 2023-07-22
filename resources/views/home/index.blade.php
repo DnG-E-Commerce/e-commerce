@@ -13,11 +13,14 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-5 text-center mx-auto">
-                    <h1 class="text-white mb-2 mt-5">Selamat datang </h1>
+                    <h1 class="text-white mb-2 mt-5">Sistem Informasi E-Commerce D&G Store </h1>
                     @if ($user)
                         <h2 class="text-white mb-2">{{ $user->name }}</h2>
                     @endif
-                    <p class="text-lead text-white">Di Sistem Informasi E-Commerce D&G Store, Selamat Berbelanja</p>
+                    
+                    <p class="text-lead text-white">Untuk Pengiriman Barang Hanya Untuk Wilayah Subang, Indramayu, 
+                        <br>Purwakarta, Bandung, Cirebon dan Sekitarnya</p>
+                        <p class="text-lead text-white">DiLuar Wilayah Itu Harap Menghubungi Admin Terlebih Dahulu</p>
                 </div>
             </div>
         </div>

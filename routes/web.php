@@ -168,6 +168,7 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::get('/su/invoice/{invoice}', 'suDetailInvoice')->name('su.invoice.detail');
     Route::get('/su/invoice/confirm-cash/{invoice}', 'confirmCash')->name('su.invoice.confirm-cash');
     Route::get('/su/invoice/print/{invoice}', 'print_pdf')->name('su.invoice.print_pdf');
+    
 
     // Routes Client
     Route::get('/us/invoice', 'index')->name('us.invoice');

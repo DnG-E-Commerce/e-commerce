@@ -27,7 +27,8 @@
                                                 <ul>
                                                     <li>Harga Satuan :
                                                         Rp.
-                                                        {{ number_format(($order->total - $order->invoice->ongkir) / $order->qty, 0, ',', '.') }}
+                                                        {{ number_format($order->product->reseller_price ? $order->product->reseller_price : $order->product->customer_price, 0, ',', '.' ) }}
+                                                        
                                                     </li>
                                                     <li>Total Harga :
                                                         Rp. {{ number_format($order->total, 0, ',', '.') }}
